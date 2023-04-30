@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6470923475735896614}
   - component: {fileID: 271023932042265381}
   - component: {fileID: 4055655732191180827}
+  - component: {fileID: 9098950424710191187}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -66,7 +67,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 247
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -99,9 +100,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unit: {fileID: 0}
-  speed: 5
-  gravity: -9.8
-  jumpHeight: 3
   cam: {fileID: 5081410539584894300}
   xSensitivity: 30
   ySensitivity: 30
@@ -117,3 +115,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d80dbd4ee038c04282ed586783f07f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9098950424710191187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6981912346071725989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a01521e27be754e8d0d8fd5103bde0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 5081410539584894300}
+  distance: 3
+  mask:
+    serializedVersion: 2
+    m_Bits: 128

@@ -8,11 +8,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Surrounding
+  - IgnoreCamera
   - Water
   - UI
-  - 
-  - 
+  - Surrounding
+  - Interactable
   - 
   - 
   - 

@@ -48,18 +48,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraPlace: {fileID: 0}
   Head: {fileID: 0}
-  feetTransform: {fileID: 0}
-  floorCheckRadius: 0.3
-  lm:
-    serializedVersion: 2
-    m_Bits: 8
   maxHP: 10
   dashForce: 2
   dashCooldown: 1
-  weigth: 1
-  jumpCooldown: 1
-  jumpForce: 3
-  speed: 5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  feetTransform: {fileID: 0}
+  floorCheckRadius: 0.3
+  jumpCooldown: 0.2
+  jumpForce: 250
+  speed: 10
+  maxSpeed: 5
 --- !u!54 &5010673274419293860
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -83,7 +83,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043900497151925960}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: ab8777a248f95d9498848bbb9805337d, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5

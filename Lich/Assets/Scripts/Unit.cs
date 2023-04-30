@@ -9,34 +9,35 @@ public class Unit : MonoBehaviour
 
     public Transform Head;
 
-    //
-    public Transform feetTransform;
-    public float floorCheckRadius;
-    //
-
+    //wtf idk
     private bool controled = false;
 
-    [SerializeField]
-    private LayerMask lm;
-
+    //heal points
     [SerializeField]
     private float maxHP;
     private float HP;
-     
+
+    //Dash
     private float dashTimer = 0f;
     public float dashForce = 1f;
     public float dashCooldown = 1f;
 
+    //GroundCheck
     private bool isGrounded;
     private Vector3 normalSurface;
+    [SerializeField]
+    private LayerMask groundLayer;
+    public Transform feetTransform;
+    public float floorCheckRadius;
 
+    //Jump
     private float jumpTimer = 0f;
     public float jumpCooldown = 1f;
     public float jumpForce = 3f;
 
-    //Movement
-    private Vector3 velocity;
-    public float speed = 5f; 
+    //Movement 
+    public float speed = 5f;
+    public float maxSpeed = 10f;
 
     private Rigidbody rb;
 
@@ -59,7 +60,6 @@ public class Unit : MonoBehaviour
             jumpTimer -= Time.deltaTime;
 
         checkGround();
-
     }
 
     private void checkGround()
@@ -74,10 +74,8 @@ public class Unit : MonoBehaviour
 
         RaycastHit hit;
 
-        Debug.Log("check");
-        if (Physics.Raycast(feetTransform.position,  -1f * transform.up, out hit, floorCheckRadius, lm))
+        if (Physics.Raycast(feetTransform.position,  -1f * Vector3.up, out hit, floorCheckRadius, groundLayer))
         {
-            Debug.Log("contact");
             normalSurface = hit.normal;
             isGrounded = true;
         }
@@ -90,8 +88,18 @@ public class Unit : MonoBehaviour
     }
 
     public void Move(Vector3 moveDirection)
-    { 
-        rb.AddForce(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
+    {
+        moveDirection = transform.TransformDirection(moveDirection);
+        if (isGrounded)
+        {
+            moveDirection = Quaternion.FromToRotation(Vector3.up, normalSurface) * moveDirection;
+        } 
+
+        rb.AddForce(moveDirection * speed, ForceMode.Force);
+
+        Vector3 flatVelocity = rb.velocity - Vector3.up * rb.velocity.y;
+        if (flatVelocity.magnitude > maxSpeed)
+            rb.velocity = flatVelocity.normalized * maxSpeed + Vector3.up * rb.velocity.y;
     }
     public void Rotate(Vector3 Euler)
     {
@@ -102,12 +110,9 @@ public class Unit : MonoBehaviour
     {
         if (isGrounded && jumpTimer<=0)
         {  
-            rb.AddForce(Vector3.up * jumpForce);
-            jumpTimer = jumpCooldown;
-
-        }
-        Debug.Log(isGrounded);
-        Debug.Log(jumpTimer);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
+            jumpTimer = jumpCooldown; 
+        } 
     }
 
     public void Dash()
@@ -138,5 +143,11 @@ public class Unit : MonoBehaviour
     {       
         if (feetTransform!=null)
             Gizmos.DrawLine(feetTransform.position, feetTransform.position - Vector3.up*floorCheckRadius);
+
+        if (isGrounded)
+        {
+            Gizmos.color = Color.red; 
+            Gizmos.DrawLine(feetTransform.position, feetTransform.position + Quaternion.FromToRotation(Vector3.up, normalSurface) * transform.forward);
+        }
     }
 }
