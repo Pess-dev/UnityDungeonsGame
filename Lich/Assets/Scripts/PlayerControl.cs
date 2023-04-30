@@ -11,8 +11,15 @@ public class PlayerControl : MonoBehaviour
     private float xRotation = 0f;
     public float xSensitivity = 30f;
     public float ySensitivity = 30f;
-     
-     
+
+    private void Start()
+    {
+        if (unit != null)
+        {
+            unit.setControl();
+        }
+    }
+
     private void Update()
     {
         SyncWithUnit();
@@ -70,6 +77,6 @@ public class PlayerControl : MonoBehaviour
     {
         if (unit == null)
             return;
-        unit.Jump();
+        unit.Jump(); 
     }
 }

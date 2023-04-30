@@ -7,58 +7,91 @@ public class Unit : MonoBehaviour
     //transform to set camera to
     public Transform cameraPlace;
 
-    //public Transform Head;
+    public Transform Head;
+
+    //
+    public Transform feetTransform;
+    public float floorCheckRadius;
+    //
 
     private bool controled = false;
 
     [SerializeField]
+    private LayerMask lm;
+
+    [SerializeField]
     private float maxHP;
     private float HP;
+     
+    private float dashTimer = 0f;
+    public float dashForce = 1f;
+    public float dashCooldown = 1f;
 
-    [SerializeField]
-    private float dashForce;
-    [SerializeField]
-    private float dashCooldown;
-    private float dashTimer=0;
+    private bool isGrounded;
+    private Vector3 normalSurface;
 
-    public float weigth=1;
+    private float jumpTimer = 0f;
+    public float jumpCooldown = 1f;
+    public float jumpForce = 3f;
 
     //Movement
     private Vector3 velocity;
-    private bool isGrounded;
-    public float speed = 5f;
-    public float gravity = -9.8f;
-    public float jumpHeight = 3f;
+    public float speed = 5f; 
 
-    private CharacterController controller;
+    private Rigidbody rb;
 
     void Start()
     {
-        controller = gameObject.GetComponent<CharacterController>();
+        rb = gameObject.GetComponent<Rigidbody>();
         HP = maxHP;
+
+        if (controled)
+            setControl();
+        else
+            releaseControl();
     }
 
     void Update()
     {
         if (dashTimer > 0)
-            dashTimer -= Time.deltaTime;
+            dashTimer -= Time.deltaTime; 
+        if (jumpTimer > 0)
+            jumpTimer -= Time.deltaTime;
 
-        isGrounded = controller.isGrounded;
+        checkGround();
+
+    }
+
+    private void checkGround()
+    {
+        if (feetTransform == null)
+        {
+            isGrounded = false;
+            return;
+        }
+
+        bool lastGrounded = isGrounded;
+
+        RaycastHit hit;
+
+        Debug.Log("check");
+        if (Physics.Raycast(feetTransform.position,  -1f * transform.up, out hit, floorCheckRadius, lm))
+        {
+            Debug.Log("contact");
+            normalSurface = hit.normal;
+            isGrounded = true;
+        }
+        else
+            isGrounded = false;
+
+        if (lastGrounded != isGrounded)
+            jumpTimer = jumpCooldown;
+        
     }
 
     public void Move(Vector3 moveDirection)
-    {
-        controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
-
-        velocity.y += gravity * Time.deltaTime;
-
-        if (isGrounded && velocity.y < 0)
-            velocity.y = gravity / 3;
-
-        //if ((velocity - Vector3.up * velocity.y).magnitude > 0)
-          //  velocity -= (velocity - Vector3.up * velocity.y).normalized * weigth * Time.deltaTime;
-
-        controller.Move(velocity * Time.deltaTime);
+    { 
+        rb.AddForce(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
     }
     public void Rotate(Vector3 Euler)
     {
@@ -67,10 +100,14 @@ public class Unit : MonoBehaviour
 
     public void Jump() 
     {
-        if (isGrounded)
-        {
-            velocity.y = Mathf.Sqrt(-1f * jumpHeight * gravity);
+        if (isGrounded && jumpTimer<=0)
+        {  
+            rb.AddForce(Vector3.up * jumpForce);
+            jumpTimer = jumpCooldown;
+
         }
+        Debug.Log(isGrounded);
+        Debug.Log(jumpTimer);
     }
 
     public void Dash()
@@ -79,21 +116,27 @@ public class Unit : MonoBehaviour
             return;
 
         Debug.Log("Dash");
-        dashTimer = dashCooldown;
-
-        Vector3 dashDirection = (velocity-Vector3.up*velocity.y).normalized;
-        if (dashDirection.magnitude == 0)
-            return;
-        //  velocity += dashDirection * dashForce * Time.deltaTime;
-        
+        dashTimer = dashCooldown;  
     }
 
     public void setControl()
     {
         controled = true;
+
+        if(Head != null)
+            Head.gameObject.SetActive(false);
     }
     public void releaseControl()
     {
         controled = false;
+
+        if (Head != null)
+            Head.gameObject.SetActive(true);
+    }
+
+    private void OnDrawGizmosSelected()
+    {       
+        if (feetTransform!=null)
+            Gizmos.DrawLine(feetTransform.position, feetTransform.position - Vector3.up*floorCheckRadius);
     }
 }
