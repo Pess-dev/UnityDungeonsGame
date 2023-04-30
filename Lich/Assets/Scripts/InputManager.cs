@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour
         onFoot = playerInput.OnFoot;
         control = GetComponent<PlayerControl>();
         onFoot.Jump.performed += ctx => control.Jump();
+        onFoot.Dash.performed += ctx => control.Dash();
     }
      
     void Update()
