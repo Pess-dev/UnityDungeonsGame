@@ -6,9 +6,19 @@ public abstract class Interactable : MonoBehaviour
 {
     public string promptMessage;
 
+    [SerializeField]
+    protected bool canGrab;
+
     public void BaseInteract()
     {
         Interact();
+    }
+
+
+
+    public bool GetCanGrab()
+    {
+        return canGrab;
     }
 
     protected virtual void Interact(){}

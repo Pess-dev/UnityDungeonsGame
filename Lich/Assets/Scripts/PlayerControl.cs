@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -11,6 +12,19 @@ public class PlayerControl : MonoBehaviour
     private float xRotation = 0f;
     public float xSensitivity = 30f;
     public float ySensitivity = 30f;
+
+    //interaction system
+    [SerializeField]
+    private float interactDistance = 3f;
+    [SerializeField]
+    private LayerMask mask;
+
+    //Interactable item player looking at
+    private Interactable visibleItem;
+
+    //UI
+    [SerializeField]
+    private TextMeshProUGUI promptText;
 
     private void Start()
     {
@@ -23,12 +37,27 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     {
         SyncWithUnit();
+        CheckInteractable();
+    }
+
+    private void toggleCursor(bool visible)
+    {
+        Cursor.visible = visible;
+        if (visible)
+            Cursor.lockState = CursorLockMode.None;
+        else
+            Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void SyncWithUnit() 
     {
         if (unit == null)
-            return;
+        { 
+            toggleCursor(true);
+            return; 
+        }
+
+        toggleCursor(false);
 
         Vector3 eye;
 
@@ -65,18 +94,58 @@ public class PlayerControl : MonoBehaviour
         unit.Move(moveDirection);
     }
 
-    public void Dash() 
+    public void Dash(Vector2 input) 
     {
         if (unit == null)
             return;
 
-        unit.Dash();
+        Vector3 moveDirection = Vector3.zero;
+        moveDirection.x = input.x;
+        moveDirection.z = input.y;
+        unit.Dash(moveDirection);
     }
 
     public void Jump()
     {
         if (unit == null)
             return;
-        unit.Jump(); 
+        unit.Jump();
+    }
+    public void Interact()
+    {
+        if (unit == null || visibleItem == null)
+            return;
+
+        visibleItem.BaseInteract();
+
+        if (visibleItem.GetCanGrab()) 
+        {
+            
+        }
+    }
+
+    void CheckInteractable()
+    {
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, interactDistance, mask))
+        {
+            visibleItem = hit.collider.GetComponent<Interactable>();
+        }
+        else 
+            visibleItem = null;
+
+        if (promptText != null)
+            if (visibleItem != null)
+                promptText.text = visibleItem.promptMessage;
+            else
+                promptText.text = "";
+       
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (cam != null)
+            Gizmos.DrawLine(cam.transform.position, cam.transform.position + cam.transform.forward * interactDistance);
     }
 }
