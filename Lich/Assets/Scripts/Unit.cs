@@ -41,8 +41,14 @@ public class Unit : MonoBehaviour
     public float maxFloorAngle = 30;
 
     //weapon and items
+    [SerializeField]
     private Transform hand;
-    private Interactable item;
+    [SerializeField]
+    private Transform back;
+    [SerializeField]
+    private Interactable firstItem;
+    [SerializeField]
+    private Interactable secondItem;
 
     //animation system
     private Animator anim;
@@ -71,6 +77,10 @@ public class Unit : MonoBehaviour
 
         checkGround();
         UpdateAnimation();
+    }
+    private void LateUpdate()
+    {
+        MoveItems();
     }
 
     private void checkGround()
@@ -113,6 +123,12 @@ public class Unit : MonoBehaviour
                 anim.SetBool("walking", true);
             else
                 anim.SetBool("walking", false);
+
+            if (firstItem != null)
+                anim.SetBool("melee", true);
+            else
+                anim.SetBool("melee", false);
+
         }
     }
     
@@ -140,9 +156,49 @@ public class Unit : MonoBehaviour
         if (isGrounded)            
             moveDirection = Quaternion.FromToRotation(Vector3.up, normalSurface) * moveDirection;
         
-        rb.AddForce(moveDirection * dashForce, ForceMode.Force);
+        rb.AddForce(moveDirection * dashForce, ForceMode.Impulse);
 
         dashTimer = dashCooldown;  
+    }
+
+    public void GrabInteractable(Interactable item)
+    {
+        ClearItem();
+        if (item.GetCanGrab())
+        {
+            firstItem = item;
+            firstItem.Deactivate();
+        }
+    }
+
+    public void ClearItem()
+    {
+        if (firstItem != null)
+        {
+            firstItem.Activate();
+            firstItem = null;
+        }
+    }
+
+    public void SwitchItems()
+    {
+        Interactable temp = firstItem;
+        firstItem = secondItem;
+        secondItem = temp;
+    }
+
+    private void MoveItems()
+    {
+        if (firstItem != null)
+        {
+            firstItem.transform.position = hand.position;
+            firstItem.transform.rotation = hand.rotation;
+        }
+        if (secondItem != null)
+        {
+            secondItem.transform.position = back.position;
+            secondItem.transform.rotation = back.rotation;
+        }
     }
 
     public void setControl()

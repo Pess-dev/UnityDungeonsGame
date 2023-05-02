@@ -16,11 +16,17 @@ public class PlayerControl : MonoBehaviour
     //interaction system
     [SerializeField]
     private float interactDistance = 3f;
+    private float interactRadius = 1f;
     [SerializeField]
     private LayerMask mask;
 
     //Interactable item player looking at
     private Interactable visibleItem;
+
+    //altInteract timer
+    public float longAltInteract = 0.5f;
+    [SerializeField]
+    private float timerAltInteract = 0;
 
     //UI
     [SerializeField]
@@ -35,9 +41,13 @@ public class PlayerControl : MonoBehaviour
     }
 
     private void Update()
+    { 
+        if (timerAltInteract > 0) timerAltInteract -= Time.deltaTime;
+        CheckInteractable();
+    }
+    private void LateUpdate()
     {
         SyncWithUnit();
-        CheckInteractable();
     }
 
     private void toggleCursor(bool visible)
@@ -120,21 +130,79 @@ public class PlayerControl : MonoBehaviour
 
         if (visibleItem.GetCanGrab()) 
         {
-            
+            unit.GrabInteractable(visibleItem);
         }
     }
 
-    void CheckInteractable()
+    public void AltInteractPushed()
     {
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, interactDistance, mask))
-        {
-            visibleItem = hit.collider.GetComponent<Interactable>();
-        }
-        else 
-            visibleItem = null;
+        if (unit == null || visibleItem == null)
+            return;
 
+        if (visibleItem.GetCanGrab())
+        {
+
+        }
+
+        timerAltInteract = longAltInteract;
+    }
+
+    public void AltInteractReleased()
+    {
+        if (unit == null || visibleItem == null)
+            return;
+
+        if (visibleItem.GetCanGrab())
+        {
+
+        }
+
+        if (timerAltInteract <= 0) unit.ClearItem();
+    }
+
+    public void Switch()
+    {
+        if (unit == null)
+            return;
+
+        unit.SwitchItems();
+    }
+
+    void CheckInteractable()
+    { 
+        if (unit == null)
+            return;
+ 
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        RaycastHit[] hits = Physics.SphereCastAll(ray, interactRadius, interactDistance, mask);
+
+        visibleItem = null;
+         
+        foreach (RaycastHit hit in hits)
+        { 
+            if (hit.collider.transform.GetComponent<Interactable>() == null)
+                continue;
+              
+            Interactable item = hit.collider.transform.GetComponent<Interactable>();
+
+            if (!item.getActive())
+                continue;
+             
+            if (visibleItem == null)
+            { 
+                visibleItem = item;
+                continue;
+            }
+             
+            Vector3 center = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
+            Vector3 lastItem = cam.WorldToScreenPoint(visibleItem.transform.position);
+            Vector3 currentItem = cam.WorldToScreenPoint(item.transform.position);
+
+            if ((currentItem-center).magnitude< (lastItem- center).magnitude)
+                visibleItem = item; 
+        }
+
+        Debug.Log("post_contact1");
         if (promptText != null)
             if (visibleItem != null)
                 promptText.text = visibleItem.promptMessage;
@@ -146,6 +214,10 @@ public class PlayerControl : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (cam != null)
+        {
             Gizmos.DrawLine(cam.transform.position, cam.transform.position + cam.transform.forward * interactDistance);
+            Gizmos.DrawWireSphere(cam.transform.position, interactRadius);
+            Gizmos.DrawWireSphere(cam.transform.position + cam.transform.forward * interactDistance, interactRadius);
+        }
     }
 }

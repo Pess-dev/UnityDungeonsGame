@@ -17,11 +17,18 @@ public class InputManager : MonoBehaviour
         onFoot.Jump.performed += ctx => control.Jump();
         onFoot.Dash.performed += ctx => control.Dash(onFoot.Movement.ReadValue<Vector2>());
         onFoot.Interact.performed += ctx => control.Interact();
+        onFoot.AltInteract.performed += ctx => control.AltInteractPushed();
+        onFoot.AltInteract.canceled += ctx => control.AltInteractReleased(); 
+        onFoot.Switch.performed += ctx => control.Switch();
+     //   onFoot.Throw.canceled += ctx => control.Interact();
     }
      
     void Update()
     {
         control.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
+    }
+    private void LateUpdate()
+    {
         control.ProcessLook(onFoot.Look.ReadValue<Vector2>());
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class door : Interactable
+public class Door : Interactable
 {
     bool opened = false;
 
@@ -17,6 +17,8 @@ public class door : Interactable
     protected override void Interact()
     {
         opened = !opened;
+
+        active = false;
 
         if (anim != null)
             anim.SetBool("opened", opened);

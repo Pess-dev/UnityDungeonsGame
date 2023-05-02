@@ -9,17 +9,25 @@ public abstract class Interactable : MonoBehaviour
     [SerializeField]
     protected bool canGrab;
 
+    [SerializeField]
+    protected bool active = false;
+
     public void BaseInteract()
     {
         Interact();
     }
-
-
 
     public bool GetCanGrab()
     {
         return canGrab;
     }
 
-    protected virtual void Interact(){}
+    public bool getActive()
+    {
+        return active;
+    }
+
+    protected virtual void Interact() { }
+    public virtual void Activate() { }
+    public virtual void Deactivate() { }
 }
