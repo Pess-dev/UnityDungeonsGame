@@ -10,15 +10,16 @@ public class Door : Interactable
     private Animator anim;
 
     private void Start()
-    { 
+    {
         canGrab = false;
+        canDrag = false;
     }
 
-    protected override void Interact()
+    public override void Interact()
     {
         opened = !opened;
 
-        active = false;
+        Deactivate();
 
         if (anim != null)
             anim.SetBool("opened", opened);

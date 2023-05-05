@@ -10,13 +10,8 @@ public class Unit : MonoBehaviour
     //head to disable when player controls unit
     public Transform Head;
 
-    //wtf idk
+    //control unit
     private bool controled = false;
-
-    //heal points
-    [SerializeField]
-    private float maxHP;
-    private float HP;
 
     //Dash
     private float dashTimer = 0f;
@@ -25,7 +20,8 @@ public class Unit : MonoBehaviour
 
     //GroundCheck
     private bool isGrounded;
-    private Vector3 normalSurface;
+    private Vector3 normalAllSurfaces;
+    private Vector3 normalFloor;
     [SerializeField]
     private LayerMask groundLayer;
 
@@ -37,35 +33,52 @@ public class Unit : MonoBehaviour
     //Movement 
     public float speedForce = 5f;
     public float airSpeedModifier = 0.1f;
+    public float rbDrag = 1f;
+    public float rbAirDrag = 0f;
     public float maxSpeed = 5f; 
     public float maxFloorAngle = 30;
 
-    //weapon and items
+    //items
     [SerializeField]
     private Transform hand;
     [SerializeField]
     private Transform back;
     [SerializeField]
-    private Interactable firstItem;
+    private Item firstItem;
     [SerializeField]
-    private Interactable secondItem;
+    private Item secondItem;
+
+    //fight system
+    [SerializeField]
+    private Transform attackPoint;
+    public float attackRadius; 
 
     //animation system
     private Animator anim;
-    public float walkingAnimationSpeed = 0.5f;
+    public float walkingAnimationVelocity = 0.5f;
+
+    private Health health;
 
     private Rigidbody rb;
 
     void Start()
     {
-        anim = gameObject.GetComponent<Animator>();
-        rb = gameObject.GetComponent<Rigidbody>();
-        HP = maxHP;
+        anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+        health = GetComponent<Health>();
+
+        health.hit.AddListener(Damaged);
 
         if (controled)
-            setControl();
+            SetControl();
         else
-            releaseControl();
+            ReleaseControl();
+
+        if (firstItem != null)
+            firstItem.Grab(tag);
+
+        if (secondItem != null)
+            secondItem.Grab(tag);
     }
 
     void Update()
@@ -73,7 +86,7 @@ public class Unit : MonoBehaviour
         if (dashTimer > 0)
             dashTimer -= Time.deltaTime;
         if (jumpTimer > 0)
-            jumpTimer -= Time.deltaTime;
+            jumpTimer -= Time.deltaTime;  
 
         checkGround();
         UpdateAnimation();
@@ -86,11 +99,14 @@ public class Unit : MonoBehaviour
     private void checkGround()
     {
         bool lastGrounded = isGrounded;
-
-        if (normalSurface.magnitude > 0)
+        if (normalFloor.magnitude > 0)
+        {
             isGrounded = true;
+        }
         else
+        {
             isGrounded = false;
+        }
 
         if (lastGrounded != isGrounded)
             jumpTimer = jumpCooldown; 
@@ -100,7 +116,7 @@ public class Unit : MonoBehaviour
     {
         moveDirection = transform.TransformDirection(moveDirection);
         if (isGrounded)
-            moveDirection = Quaternion.FromToRotation(Vector3.up, normalSurface) * moveDirection;
+            moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
         else
             moveDirection *= airSpeedModifier;
 
@@ -112,24 +128,23 @@ public class Unit : MonoBehaviour
             speedLimitModifier = maxSpeed / currentSpeed;
         }
 
-        rb.AddForce(moveDirection * speedForce * speedLimitModifier * Time.deltaTime, ForceMode.VelocityChange);
-    }
-
-    private void UpdateAnimation() 
-    {
-        if (anim != null)
+        if (isGrounded)
         {
-            if (rb.velocity.magnitude > walkingAnimationSpeed)
-                anim.SetBool("walking", true);
-            else
-                anim.SetBool("walking", false);
-
-            if (firstItem != null)
-                anim.SetBool("melee", true);
-            else
-                anim.SetBool("melee", false);
-
+            rb.drag = rbDrag;
         }
+        else
+        {
+            rb.drag = rbAirDrag;
+        }
+
+        float k = 1;
+        if (normalAllSurfaces.magnitude > 0 && !isGrounded)
+        {
+            k = Vector3.Dot(moveDirection.normalized, normalAllSurfaces.normalized);
+        }
+
+        rb.AddForce(moveDirection * speedForce * speedLimitModifier * Time.deltaTime * k, ForceMode.VelocityChange);
+        
     }
     
     public void Rotate(Vector3 Euler)
@@ -137,6 +152,21 @@ public class Unit : MonoBehaviour
         transform.Rotate(Euler);
     }
 
+    private void UpdateAnimation() 
+    {
+        if (anim != null)
+        {
+            if (rb.velocity.magnitude > walkingAnimationVelocity)
+                anim.SetBool("walking", true);
+            else
+                anim.SetBool("walking", false);
+
+            anim.SetBool("grounded", isGrounded);
+
+            anim.SetBool("grabbed", CheckGrabbed()); 
+        }
+    }
+    
     public void Jump() 
     {
         if (isGrounded && jumpTimer<=0)
@@ -148,75 +178,132 @@ public class Unit : MonoBehaviour
 
     public void Dash(Vector3 moveDirection)
     {
-        if (dashTimer > 0)
+        if (dashTimer > 0 )
             return;
 
         moveDirection = transform.TransformDirection(moveDirection);
-
-        if (isGrounded)            
-            moveDirection = Quaternion.FromToRotation(Vector3.up, normalSurface) * moveDirection;
+          
+        moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
         
-        rb.AddForce(moveDirection * dashForce, ForceMode.Impulse);
+        rb.AddForce(moveDirection * airSpeedModifier * dashForce, ForceMode.Impulse);
 
         dashTimer = dashCooldown;  
     }
 
-    public void GrabInteractable(Interactable item)
+    public void UseItem()
+    { 
+        if (firstItem == null) 
+            return;
+
+        bool result = firstItem.Use();
+        if (!result)
+            return; 
+        anim.SetTrigger("attack");
+        anim.SetInteger("grabbedUse", Random.Range(1, 4));
+        MeleeAttack(firstItem.damage, firstItem.knockback);  
+    }
+
+    public void MeleeAttack(float damage, float knockback)
     {
-        ClearItem();
-        if (item.GetCanGrab())
+        Collider[] hits = Physics.OverlapSphere(attackPoint.position,attackRadius);
+        foreach ( Collider collider in hits)
         {
-            firstItem = item;
-            firstItem.Deactivate();
+            if (collider.gameObject.tag == tag) 
+                continue;
+            Health targetHealth = collider.transform.GetComponent<Health>();
+            if (targetHealth == null)
+                continue;
+
+            targetHealth.Damage(damage);
+
+            Rigidbody targetRb = collider.transform.GetComponent<Rigidbody>();
+
+            if (targetRb == null)
+                continue;
+
+            Vector3 knockbackDirection = (collider.transform.position - transform.position).normalized;
+
+            targetRb.AddForce( knockbackDirection * knockback, ForceMode.Force);
         }
     }
 
-    public void ClearItem()
+    private void Damaged()
+    { 
+        anim.SetTrigger("damaged");
+        anim.SetInteger("damage", Random.Range(1,4));
+    }
+
+    public void GrabItem(Item item)
     {
-        if (firstItem != null)
-        {
-            firstItem.Activate();
-            firstItem = null;
-        }
+        if (!item.GetGrabbable())
+            return;
+        DiscardItem();
+
+        firstItem = item;
+        item.Grab(tag);
+    }
+
+    public void DiscardItem()
+    {
+        if (firstItem == null)
+            return;
+
+        firstItem.Release();
+        firstItem = null;
     }
 
     public void SwitchItems()
     {
-        Interactable temp = firstItem;
+        Item temp = firstItem;
         firstItem = secondItem;
         secondItem = temp;
+    }
+
+    public bool CheckGrabbed()
+    {
+        if (firstItem != null)
+            return true;
+        else
+            return false;
     }
 
     private void MoveItems()
     {
         if (firstItem != null)
         {
-            firstItem.transform.position = hand.position;
-            firstItem.transform.rotation = hand.rotation;
+            MoveBy(firstItem.transform, firstItem.GetGrabTransform(), hand);
         }
         if (secondItem != null)
         {
-            secondItem.transform.position = back.position;
-            secondItem.transform.rotation = back.rotation;
+            MoveBy(secondItem.transform, secondItem.GetGrabTransform(), back);
         }
+        
+    }
+    private void MoveBy(Transform obj, Transform by, Transform to)
+    {
+        Quaternion rotationOffset = Quaternion.Inverse(obj.rotation * by.localRotation) * to.rotation;
+        obj.rotation = obj.rotation * rotationOffset;
+
+        Vector3 positionOffset = to.position - by.position;
+        obj.position = obj.position + positionOffset;
     }
 
-    public void setControl()
+    public void SetControl()
     {
         controled = true;
 
         if (Head != null)
-            toggleHeadVisible(false);
+            ToggleHeadVisible(false);
     }
-    public void releaseControl()
+    public void ReleaseControl()
     {
         controled = false;
 
         if (Head != null)
-            toggleHeadVisible(true);
+            ToggleHeadVisible(true);
     }
 
-    public void toggleHeadVisible(bool visible = true)
+    public void ToggleHeadVisible(bool visible = true)
     {
         UnityEngine.Rendering.ShadowCastingMode mode;
         if (visible)
@@ -246,24 +333,23 @@ public class Unit : MonoBehaviour
         int layer = collision.gameObject.layer;
 
         if (groundLayer != (groundLayer | (1 << layer))) return;
-
-        Vector3 resultNormal = Vector3.zero;
+         
+        normalAllSurfaces = Vector3.zero;
+        normalFloor = Vector3.zero;
 
         for (int i = 0; i < collision.contactCount; i++)
         {
             Vector3 normal = collision.contacts[i].normal;
-            
-            //is floor?
-            if (Vector3.Angle(Vector3.up,normal) <= maxFloorAngle)
-            {
-                resultNormal += normal;
-            }
-        }
+            float angle = Vector3.Angle(Vector3.up, normal);
 
-        if (resultNormal.magnitude != 0)
-            normalSurface = resultNormal.normalized;
-        else
-            normalSurface = resultNormal;
+            if (angle <= maxFloorAngle)
+            {
+                normalFloor += normal;
+            }
+            normalAllSurfaces += normal; 
+        }
+        normalAllSurfaces.Normalize();
+        normalFloor.Normalize();
     }
     private void OnCollisionExit(Collision collision)
     {
@@ -271,15 +357,27 @@ public class Unit : MonoBehaviour
 
         if (groundLayer != (groundLayer | (1 << layer))) return;
 
-        normalSurface = Vector3.zero;
-
+        normalFloor = Vector3.zero;
+        normalAllSurfaces = Vector3.zero;
     }
 
 
     private void OnDrawGizmosSelected()
     {         
         Gizmos.color = Color.red; 
-        Gizmos.DrawLine(transform.position, transform.position + Quaternion.FromToRotation(Vector3.up, normalSurface) * transform.forward);
-        
+        if (attackPoint != null)
+            Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + normalFloor); 
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + normalAllSurfaces); 
+    }
+
+    private void OnDestroy()
+    {
+        if (firstItem != null)
+            firstItem.Release();
+        if (secondItem != null)
+            secondItem.Release();
     }
 }

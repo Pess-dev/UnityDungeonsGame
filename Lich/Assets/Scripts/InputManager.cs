@@ -16,11 +16,12 @@ public class InputManager : MonoBehaviour
         control = GetComponent<PlayerControl>();
         onFoot.Jump.performed += ctx => control.Jump();
         onFoot.Dash.performed += ctx => control.Dash(onFoot.Movement.ReadValue<Vector2>());
+        onFoot.Fire.performed += ctx => control.Fire();
         onFoot.Interact.performed += ctx => control.Interact();
         onFoot.AltInteract.performed += ctx => control.AltInteractPushed();
         onFoot.AltInteract.canceled += ctx => control.AltInteractReleased(); 
-        onFoot.Switch.performed += ctx => control.Switch();
-     //   onFoot.Throw.canceled += ctx => control.Interact();
+        onFoot.Switch.performed += ctx => control.Switch(); 
+        
     }
      
     void Update()

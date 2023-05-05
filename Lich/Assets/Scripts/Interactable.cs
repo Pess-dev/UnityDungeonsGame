@@ -6,20 +6,34 @@ public abstract class Interactable : MonoBehaviour
 {
     public string promptMessage;
 
-    [SerializeField]
-    protected bool canGrab;
+    protected bool canGrab = false;
+
+    protected bool canDrag = false;
 
     [SerializeField]
     protected bool active = false;
 
-    public void BaseInteract()
+    public float cooldown = 1f;
+    protected float timer = 0f;
+
+    private void Update()
     {
-        Interact();
+        if (timer > 0) 
+            timer -= Time.deltaTime;
+    }
+
+    public float GetTimer()
+    {
+        return timer;
     }
 
     public bool GetCanGrab()
     {
         return canGrab;
+    }
+    public bool GetCanDrag()
+    {
+        return canDrag;
     }
 
     public bool getActive()
@@ -27,7 +41,15 @@ public abstract class Interactable : MonoBehaviour
         return active;
     }
 
-    protected virtual void Interact() { }
-    public virtual void Activate() { }
-    public virtual void Deactivate() { }
+    public void Activate()
+    {
+        active = true;
+    }
+
+    public void Deactivate()
+    {
+        active = false;
+    }
+
+    public virtual void Interact() {}
 }

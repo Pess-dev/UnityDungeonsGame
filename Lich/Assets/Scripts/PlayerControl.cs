@@ -27,6 +27,7 @@ public class PlayerControl : MonoBehaviour
     public float longAltInteract = 0.5f;
     [SerializeField]
     private float timerAltInteract = 0;
+    bool altInteractShort = false;
 
     //UI
     [SerializeField]
@@ -36,13 +37,22 @@ public class PlayerControl : MonoBehaviour
     {
         if (unit != null)
         {
-            unit.setControl();
+            unit.SetControl();
         }
     }
 
     private void Update()
     { 
-        if (timerAltInteract > 0) timerAltInteract -= Time.deltaTime;
+        if (altInteractShort) 
+            timerAltInteract += Time.deltaTime;
+        if (timerAltInteract >= longAltInteract)
+        {
+            altInteractShort = false; 
+            if (unit != null)
+                if (unit.CheckGrabbed()) unit.DiscardItem();
+        }
+        
+
         CheckInteractable();
     }
     private void LateUpdate()
@@ -90,7 +100,7 @@ public class PlayerControl : MonoBehaviour
         cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
 
         unit.Rotate(Vector3.up * (input.x * Time.deltaTime) * xSensitivity);
-
+        
     }
 
     public void ProcessMove(Vector2 input) 
@@ -121,43 +131,48 @@ public class PlayerControl : MonoBehaviour
             return;
         unit.Jump();
     }
+
+    public void Fire()
+    {
+        if (unit == null)
+            return;
+
+        unit.UseItem();
+    }
+
     public void Interact()
     {
         if (unit == null || visibleItem == null)
             return;
 
-        visibleItem.BaseInteract();
-
         if (visibleItem.GetCanGrab()) 
         {
-            unit.GrabInteractable(visibleItem);
+            unit.GrabItem(visibleItem.transform.GetComponent<Item>());
+        }
+        else
+        {
+            visibleItem.Interact();
         }
     }
 
     public void AltInteractPushed()
     {
-        if (unit == null || visibleItem == null)
+        altInteractShort = true;
+        if (unit == null)
             return;
 
-        if (visibleItem.GetCanGrab())
-        {
-
-        }
-
-        timerAltInteract = longAltInteract;
+        if (visibleItem == null)
+            return;
     }
 
     public void AltInteractReleased()
     {
-        if (unit == null || visibleItem == null)
+        altInteractShort = false; 
+        if (unit == null)
             return;
 
-        if (visibleItem.GetCanGrab())
-        {
-
-        }
-
-        if (timerAltInteract <= 0) unit.ClearItem();
+        if (visibleItem == null)
+            return;
     }
 
     public void Switch()
@@ -183,32 +198,40 @@ public class PlayerControl : MonoBehaviour
             if (hit.collider.transform.GetComponent<Interactable>() == null)
                 continue;
               
-            Interactable item = hit.collider.transform.GetComponent<Interactable>();
+            Interactable interactable = hit.collider.transform.GetComponent<Interactable>();
 
-            if (!item.getActive())
+            if (!interactable.getActive())
                 continue;
              
             if (visibleItem == null)
             { 
-                visibleItem = item;
+                visibleItem = interactable;
                 continue;
             }
              
             Vector3 center = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
             Vector3 lastItem = cam.WorldToScreenPoint(visibleItem.transform.position);
-            Vector3 currentItem = cam.WorldToScreenPoint(item.transform.position);
+            Vector3 currentItem = cam.WorldToScreenPoint(interactable.transform.position);
 
-            if ((currentItem-center).magnitude< (lastItem- center).magnitude)
-                visibleItem = item; 
+            if ((currentItem-center).magnitude < (lastItem- center).magnitude)
+                visibleItem = interactable; 
         }
 
-        Debug.Log("post_contact1");
+        RaycastHit hitInfo;
         if (promptText != null)
-            if (visibleItem != null)
-                promptText.text = visibleItem.promptMessage;
+        if (Physics.Raycast(ray, out hitInfo, interactDistance, mask))
+        {
+            Interactable lookingAtInteractable = hitInfo.collider.transform.GetComponent<Interactable>();
+            if(lookingAtInteractable == visibleItem)
+                if (visibleItem != null)
+                    promptText.text = visibleItem.promptMessage;
+                else
+                    promptText.text = ""; 
+        }
             else
                 promptText.text = "";
-       
+
+
     }
 
     private void OnDrawGizmosSelected()
