@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 60286296791245820, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: damage
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 990461951418439850, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: promptMessage
       value: Sword, make a salad!
@@ -65,6 +69,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5372615005041016095, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: m_Name
+      value: Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 6832462102182223130, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: promptMessage
       value: Sword
       objectReference: {fileID: 0}
     m_RemovedComponents: []

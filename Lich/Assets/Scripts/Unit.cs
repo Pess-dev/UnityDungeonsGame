@@ -10,6 +10,9 @@ public class Unit : MonoBehaviour
     //head to disable when player controls unit
     public Transform Head;
 
+    //to rotate head and some other things
+    private float xRotation = 0f;
+
     //control unit
     private bool controled = false;
 
@@ -17,6 +20,12 @@ public class Unit : MonoBehaviour
     private float dashTimer = 0f;
     public float dashForce = 1f;
     public float dashCooldown = 1f;
+    private bool dashing = false;
+    public float dashDuration = 0.2f;
+    [SerializeField]
+    private Object dashParticle;
+    private Vector3 dashVelocity = Vector3.zero;
+     
 
     //GroundCheck
     private bool isGrounded;
@@ -30,12 +39,11 @@ public class Unit : MonoBehaviour
     public float jumpCooldown = 1f;
     public float jumpForce = 3f;
 
-    //Movement 
-    public float speedForce = 5f;
+    //Movement
+    public float speed = 1f;
+    public float modifier = 0.1f;
+    public float friction = 0.1f;
     public float airSpeedModifier = 0.1f;
-    public float rbDrag = 1f;
-    public float rbAirDrag = 0f;
-    public float maxSpeed = 5f; 
     public float maxFloorAngle = 30;
 
     //items
@@ -48,10 +56,15 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private Item secondItem;
 
-    //fight system
+    //drop place transform
     [SerializeField]
-    private Transform attackPoint;
-    public float attackRadius; 
+    private Transform drop;
+
+    //fight system 
+    public Transform attackPoint;
+    public float attackRadius;
+    private float attackDurationTimer = 0;
+    private List<Health> attacked = new List<Health>();
 
     //animation system
     private Animator anim;
@@ -85,11 +98,18 @@ public class Unit : MonoBehaviour
     {
         if (dashTimer > 0)
             dashTimer -= Time.deltaTime;
+        if (dashTimer < dashCooldown - dashDuration)
+            dashing = false;
+        else
+            dashing = true;
+
         if (jumpTimer > 0)
-            jumpTimer -= Time.deltaTime;  
+            jumpTimer -= Time.deltaTime;
+        if (attackDurationTimer > 0)
+            attackDurationTimer -= Time.deltaTime;
 
         checkGround();
-        UpdateAnimation();
+        UpdateAnimation(); 
     }
     private void LateUpdate()
     {
@@ -116,55 +136,69 @@ public class Unit : MonoBehaviour
     {
         moveDirection = transform.TransformDirection(moveDirection);
         if (isGrounded)
+        { 
             moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
+        }
         else
+        { 
             moveDirection *= airSpeedModifier;
-
-        float currentSpeed = rb.velocity.magnitude;
-        float speedLimitModifier = 1f;
-
-        if (currentSpeed >= maxSpeed)
-        {
-            speedLimitModifier = maxSpeed / currentSpeed;
         }
 
-        if (isGrounded)
+        //if (normalAllSurfaces.magnitude > 0 && !isGrounded)
+        //{ 
+        //    rb.velocity -= Vector3.Project(rb.velocity, normalAllSurfaces);
+        //    if (dashing)
+        //        dashVelocity -= Vector3.Project(rb.velocity, normalAllSurfaces);
+        //}
+
+        if (rb.velocity.magnitude > speed)
         {
-            rb.drag = rbDrag;
+            moveDirection *= speed / rb.velocity.magnitude;
+            moveDirection -= Vector3.Project(moveDirection, rb.velocity);
         }
+
+        Vector3 addVelocity = moveDirection * speed;
+        Vector3 flatVelocity = rb.velocity - rb.velocity.y * Vector3.up;
+        Vector3 newFlatVelocity = addVelocity + flatVelocity;
+        if (newFlatVelocity.magnitude > speed)
+        {
+            addVelocity = newFlatVelocity * speed / newFlatVelocity.magnitude - flatVelocity; 
+        }
+
+        if (dashing)
+            rb.velocity = Vector3.Lerp(rb.velocity, dashVelocity, 0.7f);
         else
-        {
-            rb.drag = rbAirDrag;
-        }
+            rb.velocity += addVelocity*modifier;
 
-        float k = 1;
-        if (normalAllSurfaces.magnitude > 0 && !isGrounded)
+        if (isGrounded && moveDirection.magnitude == 0)
         {
-            k = Vector3.Dot(moveDirection.normalized, normalAllSurfaces.normalized);
+            rb.velocity += -flatVelocity*friction;
         }
-
-        rb.AddForce(moveDirection * speedForce * speedLimitModifier * Time.deltaTime * k, ForceMode.VelocityChange);
-        
     }
-    
+
     public void Rotate(Vector3 Euler)
     {
         transform.Rotate(Euler);
     }
+    public void setXRotation(float rot)
+    {
+        xRotation = rot;
+        Head.rotation = Quaternion.Euler(Head.rotation.eulerAngles + Vector3.right*(rot - Head.rotation.eulerAngles.x));
+    }
+
 
     private void UpdateAnimation() 
     {
-        if (anim != null)
-        {
-            if (rb.velocity.magnitude > walkingAnimationVelocity)
-                anim.SetBool("walking", true);
-            else
-                anim.SetBool("walking", false);
+        if (rb.velocity.magnitude > walkingAnimationVelocity)
+            anim.SetBool("walking", true);
+        else
+            anim.SetBool("walking", false);
 
-            anim.SetBool("grounded", isGrounded);
+        anim.SetBool("grounded", isGrounded);
 
-            anim.SetBool("grabbed", CheckGrabbed()); 
-        }
+        anim.SetBool("grabbed", CheckGrabbed());
+
+        anim.SetBool("dashing", dashing);
     }
     
     public void Jump() 
@@ -178,16 +212,18 @@ public class Unit : MonoBehaviour
 
     public void Dash(Vector3 moveDirection)
     {
-        if (dashTimer > 0 )
+        if (dashTimer > 0 || moveDirection.magnitude == 0)
             return;
 
         moveDirection = transform.TransformDirection(moveDirection);
-          
-        moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
         
-        rb.AddForce(moveDirection * airSpeedModifier * dashForce, ForceMode.Impulse);
+       if (isGrounded) 
+            moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
 
-        dashTimer = dashCooldown;  
+        dashVelocity = moveDirection.normalized * dashForce;
+        dashTimer = dashCooldown;
+
+        Instantiate(dashParticle, transform.position, transform.rotation);
     }
 
     public void UseItem()
@@ -195,36 +231,15 @@ public class Unit : MonoBehaviour
         if (firstItem == null) 
             return;
 
-        bool result = firstItem.Use();
-        if (!result)
-            return; 
+        if (firstItem.GetTimer()>0)
+            return;
+
+        firstItem.Use(this);
+
+        attacked.Clear();
+
         anim.SetTrigger("attack");
         anim.SetInteger("grabbedUse", Random.Range(1, 4));
-        MeleeAttack(firstItem.damage, firstItem.knockback);  
-    }
-
-    public void MeleeAttack(float damage, float knockback)
-    {
-        Collider[] hits = Physics.OverlapSphere(attackPoint.position,attackRadius);
-        foreach ( Collider collider in hits)
-        {
-            if (collider.gameObject.tag == tag) 
-                continue;
-            Health targetHealth = collider.transform.GetComponent<Health>();
-            if (targetHealth == null)
-                continue;
-
-            targetHealth.Damage(damage);
-
-            Rigidbody targetRb = collider.transform.GetComponent<Rigidbody>();
-
-            if (targetRb == null)
-                continue;
-
-            Vector3 knockbackDirection = (collider.transform.position - transform.position).normalized;
-
-            targetRb.AddForce( knockbackDirection * knockback, ForceMode.Force);
-        }
     }
 
     private void Damaged()
@@ -254,9 +269,13 @@ public class Unit : MonoBehaviour
 
     public void SwitchItems()
     {
+        if (firstItem == null && secondItem == null)
+            return;
+
         Item temp = firstItem;
         firstItem = secondItem;
         secondItem = temp;
+        anim.SetTrigger("switch");
     }
 
     public bool CheckGrabbed()

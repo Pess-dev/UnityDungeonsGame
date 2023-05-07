@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
+    [SerializeField]
     private float HP;
 
     [SerializeField]
@@ -50,13 +51,15 @@ public class Health : MonoBehaviour
         if (HP > 0) return;
         if (!mortal) return;
 
+        if (deathPrefab != null)
+            Instantiate(deathPrefab, transform.position, transform.rotation);
+
         Destroy(gameObject);
     }
 
     private void OnDestroy()
     {
-        if (deathPrefab != null)
-            Instantiate(deathPrefab, transform.position, transform.rotation);
+        
     }
 
 }

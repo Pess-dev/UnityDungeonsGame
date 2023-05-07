@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+public class Item : MonoBehaviour
 {
     public float damage = 1f;
-
-    public float knockback = 1f;
 
     public float damageVelocity= 5f;
 
@@ -17,41 +15,44 @@ public abstract class Item : MonoBehaviour
     public float bounce = 0.1f;
 
     [SerializeField]
-    private bool canDamageByPhysics = true;
+    protected bool canDamageByPhysics = true;
 
     [SerializeField]
-    private bool grabbable = false;
+    protected bool grabbable = false;
 
     [SerializeField]
-    private bool draggable = false;
+    protected bool draggable = false;
 
-    private bool grabbed = false;
+    [SerializeField]
+    protected Transform grab;
 
-    private InteractableItem interactable;
+    protected bool grabbed = false;
 
-    private Rigidbody rb;
+    protected Interactable interactable;
 
-    private List<Health> damaged;
+    protected Rigidbody rb;
 
-    public int idleAnim = 1;
+    protected List<Health> damaged = new List<Health>();
 
-    private string oldTag;
+    protected string oldTag;
 
     private void Awake()
     {
-        if (GetComponent<InteractableItem>() != null)
-            interactable = GetComponent<InteractableItem>();
+        if (GetComponent<Interactable>() != null)
+            interactable = GetComponent<Interactable>();
 
         if (GetComponent<Rigidbody>() != null)
             rb = GetComponent<Rigidbody>();
 
         oldTag = tag;
     }
-    private void Update()
+    protected virtual void Update()
     {
         if (timer > 0 && grabbed)
             timer -= Time.deltaTime;
     }
+
+    
 
     public bool GetGrabbable()
     { return grabbable; }
@@ -66,13 +67,13 @@ public abstract class Item : MonoBehaviour
 
     public Transform GetGrabTransform()
     {
-        if (interactable.grab != null)
-            return interactable.grab; 
+        if (grab != null)
+            return grab; 
         else 
             return transform;
     }
 
-    public void Grab(string newTag) 
+    public virtual void Grab(string newTag) 
     {
         if (!grabbable)
             return;
@@ -85,7 +86,7 @@ public abstract class Item : MonoBehaviour
         grabbed = true;
     }
 
-    public void Release()
+    public virtual void Release()
     {
         if (!grabbable)
             return;
@@ -129,16 +130,6 @@ public abstract class Item : MonoBehaviour
             damaged.Remove(health);
     }
 
-    public virtual bool Use() 
-    {
-        if (timer <= 0)
-        {
-            timer = cooldown;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    public virtual void Use(Unit unit)
+    {}
 }

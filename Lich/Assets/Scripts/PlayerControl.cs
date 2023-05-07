@@ -45,11 +45,12 @@ public class PlayerControl : MonoBehaviour
     { 
         if (altInteractShort) 
             timerAltInteract += Time.deltaTime;
-        if (timerAltInteract >= longAltInteract)
+        if (timerAltInteract >= longAltInteract && altInteractShort)
         {
             altInteractShort = false; 
             if (unit != null)
                 if (unit.CheckGrabbed()) unit.DiscardItem();
+            timerAltInteract = 0f;
         }
         
 
@@ -100,7 +101,7 @@ public class PlayerControl : MonoBehaviour
         cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
 
         unit.Rotate(Vector3.up * (input.x * Time.deltaTime) * xSensitivity);
-        
+        unit.setXRotation(xRotation) ;
     }
 
     public void ProcessMove(Vector2 input) 
@@ -145,7 +146,7 @@ public class PlayerControl : MonoBehaviour
         if (unit == null || visibleItem == null)
             return;
 
-        if (visibleItem.GetCanGrab()) 
+        if (visibleItem.GetComponent<Item>()) 
         {
             unit.GrabItem(visibleItem.transform.GetComponent<Item>());
         }
@@ -157,17 +158,17 @@ public class PlayerControl : MonoBehaviour
 
     public void AltInteractPushed()
     {
-        altInteractShort = true;
         if (unit == null)
             return;
 
         if (visibleItem == null)
-            return;
+        
+        altInteractShort = true;
     }
 
     public void AltInteractReleased()
     {
-        altInteractShort = false; 
+        altInteractShort = false;
         if (unit == null)
             return;
 

@@ -11,8 +11,6 @@ public class Door : Interactable
 
     private void Start()
     {
-        canGrab = false;
-        canDrag = false;
     }
 
     public override void Interact()

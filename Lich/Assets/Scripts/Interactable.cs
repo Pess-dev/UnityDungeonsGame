@@ -2,13 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Interactable : MonoBehaviour
+public class Interactable : MonoBehaviour
 {
     public string promptMessage;
-
-    protected bool canGrab = false;
-
-    protected bool canDrag = false;
 
     [SerializeField]
     protected bool active = false;
@@ -26,16 +22,6 @@ public abstract class Interactable : MonoBehaviour
     {
         return timer;
     }
-
-    public bool GetCanGrab()
-    {
-        return canGrab;
-    }
-    public bool GetCanDrag()
-    {
-        return canDrag;
-    }
-
     public bool getActive()
     {
         return active;

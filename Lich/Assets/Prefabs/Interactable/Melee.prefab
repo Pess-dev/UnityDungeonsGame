@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 947910494680570182}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5372615005041016093}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: -90, z: 0}
 --- !u!23 &2900990097254296160
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -53,8 +53,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 497e88a667424e04fac911bad4225c18, type: 2}
+  - {fileID: 2100000, guid: 9a5b1b421035f4c49881a329b8486806, type: 2}
+  - {fileID: 2100000, guid: 7a0e8f9934e47104f9c3c476fd6dbbb3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,7 +84,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 947910494680570182}
-  m_Mesh: {fileID: 9118224344143562444, guid: 5a090ee6667172247a3f1a3241a122db, type: 3}
+  m_Mesh: {fileID: -6024927828921446175, guid: b877bf28cb4fd004faf604a78981eb67, type: 3}
 --- !u!1 &5372615005041016095
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,9 +96,9 @@ GameObject:
   - component: {fileID: 5372615005041016093}
   - component: {fileID: 5372615005041016092}
   - component: {fileID: 8516158707460566423}
-  - component: {fileID: 990461951418439850}
   - component: {fileID: 60286296791245820}
   - component: {fileID: 2722680650212255435}
+  - component: {fileID: 6832462102182223130}
   m_Layer: 7
   m_Name: Melee
   m_TagString: Untagged
@@ -151,22 +152,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.28, y: 1.594992, z: 0.15}
   m_Center: {x: 0, y: 0.0874961, z: 0}
---- !u!114 &990461951418439850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5372615005041016095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9855acfce5955244aad4529222057eb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  promptMessage: Melee weapon
-  active: 1
-  cooldown: 1
-  grab: {fileID: 6044087564415457690}
 --- !u!114 &60286296791245820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,14 +165,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 2
-  knockback: 100
   damageVelocity: 5
   cooldown: 1
   bounce: 0.1
   canDamageByPhysics: 1
   grabbable: 1
   draggable: 1
-  idleAnim: 1
+  grab: {fileID: 6044087564415457690}
+  knockback: 100
+  attackDuration: 0.3
 --- !u!114 &2722680650212255435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,11 +186,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0887129101dbe354dba3952554894642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HP: 0
   maxHP: 100
   deathPrefab: {fileID: 0}
+  mortal: 1
   hit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6832462102182223130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372615005041016095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f04b35ab5388bf4ab87cae66a82abf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptMessage: Melee weapon
+  active: 1
+  cooldown: 1
 --- !u!1 &7081258746474390700
 GameObject:
   m_ObjectHideFlags: 0
