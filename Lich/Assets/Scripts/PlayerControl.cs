@@ -14,20 +14,8 @@ public class PlayerControl : MonoBehaviour
     public float ySensitivity = 30f;
 
     //interaction system
-    [SerializeField]
-    private float interactDistance = 3f;
-    private float interactRadius = 1f;
-    [SerializeField]
-    private LayerMask mask;
-
-    //Interactable item player looking at
-    private Interactable visibleItem;
-
-    //altInteract timer
-    public float longAltInteract = 0.5f;
-    [SerializeField]
-    private float timerAltInteract = 0;
-    bool altInteractShort = false;
+    public float interactionAngle=30;
+    private Interactable visibleInteractable;
 
     //UI
     [SerializeField]
@@ -43,17 +31,6 @@ public class PlayerControl : MonoBehaviour
 
     private void Update()
     { 
-        if (altInteractShort) 
-            timerAltInteract += Time.deltaTime;
-        if (timerAltInteract >= longAltInteract && altInteractShort)
-        {
-            altInteractShort = false; 
-            if (unit != null)
-                if (unit.CheckGrabbed()) unit.DiscardItem();
-            timerAltInteract = 0f;
-        }
-        
-
         CheckInteractable();
     }
     private void LateUpdate()
@@ -143,16 +120,16 @@ public class PlayerControl : MonoBehaviour
 
     public void Interact()
     {
-        if (unit == null || visibleItem == null)
+        if (unit == null || visibleInteractable == null)
             return;
 
-        if (visibleItem.GetComponent<Item>()) 
+        if (visibleInteractable.GetComponent<Item>()) 
         {
-            unit.GrabItem(visibleItem.transform.GetComponent<Item>());
+            unit.GrabItem(visibleInteractable.transform.GetComponent<Item>());
         }
         else
         {
-            visibleItem.Interact();
+            visibleInteractable.Interact();
         }
     }
 
@@ -161,19 +138,8 @@ public class PlayerControl : MonoBehaviour
         if (unit == null)
             return;
 
-        if (visibleItem == null)
-        
-        altInteractShort = true;
-    }
-
-    public void AltInteractReleased()
-    {
-        altInteractShort = false;
-        if (unit == null)
-            return;
-
-        if (visibleItem == null)
-            return;
+        if (unit.CheckGrabbed()) 
+            unit.DiscardItem();
     }
 
     public void Switch()
@@ -185,63 +151,75 @@ public class PlayerControl : MonoBehaviour
     }
 
     void CheckInteractable()
-    { 
+    {
         if (unit == null)
             return;
- 
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        RaycastHit[] hits = Physics.SphereCastAll(ray, interactRadius, interactDistance, mask);
-
-        visibleItem = null;
          
-        foreach (RaycastHit hit in hits)
-        { 
-            if (hit.collider.transform.GetComponent<Interactable>() == null)
+        Collider[] collisions = Physics.OverlapSphere(unit.cameraPlace.position, unit.interactDistance);
+
+        if (visibleInteractable != null)
+            visibleInteractable.setOutline(false);
+
+        visibleInteractable = null;
+
+        foreach (Collider collision in collisions)
+        {
+            if (collision.transform.GetComponent<Interactable>() == null)
                 continue;
-              
-            Interactable interactable = hit.collider.transform.GetComponent<Interactable>();
+
+            Interactable interactable = collision.transform.GetComponent<Interactable>();
 
             if (!interactable.getActive())
                 continue;
-             
-            if (visibleItem == null)
-            { 
-                visibleItem = interactable;
+
+            if (Vector3.Angle(collision.transform.position - cam.transform.position, cam.transform.forward) >= interactionAngle)
+                continue;
+
+
+            if (visibleInteractable == null)
+            {
+                visibleInteractable = interactable;
                 continue;
             }
-             
+
             Vector3 center = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
-            Vector3 lastItem = cam.WorldToScreenPoint(visibleItem.transform.position);
+            Vector3 lastItem = cam.WorldToScreenPoint(visibleInteractable.transform.position);
             Vector3 currentItem = cam.WorldToScreenPoint(interactable.transform.position);
 
-            if ((currentItem-center).magnitude < (lastItem- center).magnitude)
-                visibleItem = interactable; 
+            if ((currentItem - center).magnitude < (lastItem - center).magnitude)
+                visibleInteractable = interactable;
+
         }
 
-        RaycastHit hitInfo;
+        //RaycastHit hitInfo;
+        //if (promptText != null)
+        //if (Physics.Raycast(ray, out hitInfo, interactDistance, mask))
+        //{
+        //    Interactable lookingAtInteractable = hitInfo.collider.transform.GetComponent<Interactable>();
+        //    if(lookingAtInteractable == visibleItem)
+        //        if (visibleItem != null)
+        //            promptText.text = visibleItem.promptMessage;
+        //        else
+        //            promptText.text = ""; 
+        //}
+        //    else
+        //        promptText.text = "";
+
+        if (visibleInteractable != null)
+            visibleInteractable.setOutline(true);
+
         if (promptText != null)
-        if (Physics.Raycast(ray, out hitInfo, interactDistance, mask))
-        {
-            Interactable lookingAtInteractable = hitInfo.collider.transform.GetComponent<Interactable>();
-            if(lookingAtInteractable == visibleItem)
-                if (visibleItem != null)
-                    promptText.text = visibleItem.promptMessage;
-                else
-                    promptText.text = ""; 
-        }
+            if (visibleInteractable != null)
+                promptText.text = visibleInteractable.promptMessage;
             else
                 promptText.text = "";
-
-
     }
 
     private void OnDrawGizmosSelected()
     {
-        if (cam != null)
-        {
-            Gizmos.DrawLine(cam.transform.position, cam.transform.position + cam.transform.forward * interactDistance);
-            Gizmos.DrawWireSphere(cam.transform.position, interactRadius);
-            Gizmos.DrawWireSphere(cam.transform.position + cam.transform.forward * interactDistance, interactRadius);
+        if (unit != null)
+        { 
+            Gizmos.DrawWireSphere(unit.cameraPlace.position, unit.interactDistance);
         }
     }
 }

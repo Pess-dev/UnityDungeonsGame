@@ -17,7 +17,6 @@ public class Health : MonoBehaviour
 
     public bool mortal = true;
 
-
     public UnityEvent hit;
 
     private void Start()
@@ -51,6 +50,11 @@ public class Health : MonoBehaviour
         if (HP > 0) return;
         if (!mortal) return;
 
+        Kill();
+    }
+
+    public void Kill()
+    {
         if (deathPrefab != null)
             Instantiate(deathPrefab, transform.position, transform.rotation);
 

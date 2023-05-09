@@ -51,10 +51,8 @@ public class Unit : MonoBehaviour
     private Transform hand;
     [SerializeField]
     private Transform back;
-    [SerializeField]
-    private Item firstItem;
-    [SerializeField]
-    private Item secondItem;
+    public Item firstItem;
+    public Item secondItem;
 
     //drop place transform
     [SerializeField]
@@ -62,13 +60,15 @@ public class Unit : MonoBehaviour
 
     //fight system 
     public Transform attackPoint;
-    public float attackRadius;
-    private float attackDurationTimer = 0;
-    private List<Health> attacked = new List<Health>();
+    public float attackRadius; 
 
     //animation system
     private Animator anim;
     public float walkingAnimationVelocity = 0.5f;
+
+    //interaction system
+    [SerializeField]
+    public float interactDistance = 3f;
 
     private Health health;
 
@@ -88,10 +88,10 @@ public class Unit : MonoBehaviour
             ReleaseControl();
 
         if (firstItem != null)
-            firstItem.Grab(tag);
+            firstItem.Grab(this);
 
         if (secondItem != null)
-            secondItem.Grab(tag);
+            secondItem.Grab(this);
     }
 
     void Update()
@@ -104,9 +104,7 @@ public class Unit : MonoBehaviour
             dashing = true;
 
         if (jumpTimer > 0)
-            jumpTimer -= Time.deltaTime;
-        if (attackDurationTimer > 0)
-            attackDurationTimer -= Time.deltaTime;
+            jumpTimer -= Time.deltaTime; 
 
         checkGround();
         UpdateAnimation(); 
@@ -114,6 +112,12 @@ public class Unit : MonoBehaviour
     private void LateUpdate()
     {
         MoveItems();
+        RotateHead();
+    }
+
+    private void RotateHead()
+    { 
+        Head.rotation = Quaternion.Euler(Head.rotation.eulerAngles + Vector3.right * (xRotation - Head.rotation.eulerAngles.x));
     }
 
     private void checkGround()
@@ -144,14 +148,7 @@ public class Unit : MonoBehaviour
             moveDirection *= airSpeedModifier;
         }
 
-        //if (normalAllSurfaces.magnitude > 0 && !isGrounded)
-        //{ 
-        //    rb.velocity -= Vector3.Project(rb.velocity, normalAllSurfaces);
-        //    if (dashing)
-        //        dashVelocity -= Vector3.Project(rb.velocity, normalAllSurfaces);
-        //}
-
-        if (rb.velocity.magnitude > speed)
+        if (rb.velocity.magnitude > speed && isGrounded)
         {
             moveDirection *= speed / rb.velocity.magnitude;
             moveDirection -= Vector3.Project(moveDirection, rb.velocity);
@@ -168,11 +165,11 @@ public class Unit : MonoBehaviour
         if (dashing)
             rb.velocity = Vector3.Lerp(rb.velocity, dashVelocity, 0.7f);
         else
-            rb.velocity += addVelocity*modifier;
+            rb.velocity += addVelocity * modifier;
 
         if (isGrounded && moveDirection.magnitude == 0)
         {
-            rb.velocity += -flatVelocity*friction;
+            rb.velocity += -flatVelocity * friction;
         }
     }
 
@@ -183,7 +180,6 @@ public class Unit : MonoBehaviour
     public void setXRotation(float rot)
     {
         xRotation = rot;
-        Head.rotation = Quaternion.Euler(Head.rotation.eulerAngles + Vector3.right*(rot - Head.rotation.eulerAngles.x));
     }
 
 
@@ -196,8 +192,14 @@ public class Unit : MonoBehaviour
 
         anim.SetBool("grounded", isGrounded);
 
-        anim.SetBool("grabbed", CheckGrabbed());
 
+        if (firstItem != null)
+        {
+            anim.SetInteger("grabbedIdle", firstItem.idleAnimationNumber);
+            anim.SetBool("grabbed", true);
+        }
+        else
+            anim.SetBool("grabbed", false);
         anim.SetBool("dashing", dashing);
     }
     
@@ -223,7 +225,7 @@ public class Unit : MonoBehaviour
         dashVelocity = moveDirection.normalized * dashForce;
         dashTimer = dashCooldown;
 
-        Instantiate(dashParticle, transform.position, transform.rotation);
+        Instantiate(dashParticle, transform.position, Quaternion.LookRotation(-moveDirection.normalized), this.transform);
     }
 
     public void UseItem()
@@ -234,9 +236,7 @@ public class Unit : MonoBehaviour
         if (firstItem.GetTimer()>0)
             return;
 
-        firstItem.Use(this);
-
-        attacked.Clear();
+        firstItem.Use(); 
 
         anim.SetTrigger("attack");
         anim.SetInteger("grabbedUse", Random.Range(1, 4));
@@ -255,7 +255,7 @@ public class Unit : MonoBehaviour
         DiscardItem();
 
         firstItem = item;
-        item.Grab(tag);
+        item.Grab(this);
     }
 
     public void DiscardItem()
@@ -271,6 +271,9 @@ public class Unit : MonoBehaviour
     {
         if (firstItem == null && secondItem == null)
             return;
+
+        if (firstItem != null) firstItem.StopUse();
+        if (secondItem != null) secondItem.StopUse();
 
         Item temp = firstItem;
         firstItem = secondItem;
@@ -300,8 +303,10 @@ public class Unit : MonoBehaviour
     }
     private void MoveBy(Transform obj, Transform by, Transform to)
     {
-        Quaternion rotationOffset = Quaternion.Inverse(obj.rotation * by.localRotation) * to.rotation;
-        obj.rotation = obj.rotation * rotationOffset;
+        //Quaternion rotationOffset = Quaternion.Inverse(obj.rotation * by.localRotation) * to.rotation;
+        //obj.rotation = obj.rotation * rotationOffset;
+        obj.rotation = to.rotation * by.localRotation;
+
 
         Vector3 positionOffset = to.position - by.position;
         obj.position = obj.position + positionOffset;

@@ -3,25 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Item : MonoBehaviour
-{
-    public float damage = 1f;
-
-    public float damageVelocity= 5f;
-
+{ 
     public float cooldown = 1f;
-
+     
     protected float timer = 0f;
-
-    public float bounce = 0.1f;
-
-    [SerializeField]
-    protected bool canDamageByPhysics = true;
 
     [SerializeField]
     protected bool grabbable = false;
-
-    [SerializeField]
-    protected bool draggable = false;
 
     [SerializeField]
     protected Transform grab;
@@ -32,9 +20,11 @@ public class Item : MonoBehaviour
 
     protected Rigidbody rb;
 
-    protected List<Health> damaged = new List<Health>();
+    protected Unit user;
 
-    protected string oldTag;
+    public int idleAnimationNumber = 1;
+
+    private string defaultTag;
 
     private void Awake()
     {
@@ -44,7 +34,7 @@ public class Item : MonoBehaviour
         if (GetComponent<Rigidbody>() != null)
             rb = GetComponent<Rigidbody>();
 
-        oldTag = tag;
+        defaultTag = gameObject.tag;
     }
     protected virtual void Update()
     {
@@ -52,13 +42,8 @@ public class Item : MonoBehaviour
             timer -= Time.deltaTime;
     }
 
-    
-
     public bool GetGrabbable()
     { return grabbable; }
-
-    public bool GetDraggable()
-    { return draggable; }
 
     public bool GetGrabbed()
     { return grabbed; }
@@ -73,14 +58,16 @@ public class Item : MonoBehaviour
             return transform;
     }
 
-    public virtual void Grab(string newTag) 
+    public virtual void Grab(Unit unit) 
     {
         if (!grabbable)
             return;
 
-        gameObject.tag = newTag;
+        user = unit;
 
         rb.isKinematic = true;
+
+        gameObject.tag = user.gameObject.tag;
 
         interactable.Deactivate();
         grabbed = true;
@@ -93,43 +80,17 @@ public class Item : MonoBehaviour
 
         rb.isKinematic = false;
 
-        gameObject.tag = oldTag;
+        gameObject.tag = defaultTag;
+
+        user = null;
 
         interactable.Activate();
         grabbed = false;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (!canDamageByPhysics || grabbed)
-            return;
-        Health health = collision.transform.GetComponent<Health>();
-        if (health == null)
-            return;
+    public virtual void Use()
+    { }
 
-        Vector3 resultVelocity = collision.relativeVelocity;
-
-        Vector3 normal = transform.position - collision.collider.ClosestPoint(transform.position);
-
-        if (resultVelocity.magnitude > damageVelocity)
-        {
-            damaged.Add(health);
-            health.ChangeHP(-damage);
-            rb.velocity = Vector3.Reflect(resultVelocity*bounce, normal);
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (!canDamageByPhysics || grabbed)
-            return;
-        Health health = collision.transform.GetComponent<Health>();
-        if (health == null)
-            return;
-        if (damaged.Contains(health)) 
-            damaged.Remove(health);
-    }
-
-    public virtual void Use(Unit unit)
-    {}
+    public virtual void StopUse()
+    { }
 }

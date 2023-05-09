@@ -19,7 +19,6 @@ public class InputManager : MonoBehaviour
         onFoot.Fire.performed += ctx => control.Fire();
         onFoot.Interact.performed += ctx => control.Interact();
         onFoot.AltInteract.performed += ctx => control.AltInteractPushed();
-        onFoot.AltInteract.canceled += ctx => control.AltInteractReleased(); 
         onFoot.Switch.performed += ctx => control.Switch(); 
         
     }

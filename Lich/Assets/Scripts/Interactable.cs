@@ -12,6 +12,22 @@ public class Interactable : MonoBehaviour
     public float cooldown = 1f;
     protected float timer = 0f;
 
+    private Outline outline;
+
+    private void Awake()
+    {
+        outline = gameObject.AddComponent<Outline>();
+
+        outline.OutlineMode = Outline.Mode.OutlineAll;
+        outline.OutlineColor = Color.white;
+        outline.OutlineWidth = 0f;
+    }
+
+    public void setOutline(bool state)
+    {
+        outline.OutlineWidth = state ? 10f : 0;
+    }
+
     private void Update()
     {
         if (timer > 0) 
