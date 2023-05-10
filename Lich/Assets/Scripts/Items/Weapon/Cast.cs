@@ -16,6 +16,12 @@ public class Cast : Item
     [SerializeField]
     private Transform castPlace;
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        itemType = ItemType.Cast;
+    }
 
     private void Start()
     {
@@ -28,6 +34,8 @@ public class Cast : Item
         mana += manaRecover * Time.deltaTime;
         if (mana > maxMana)
             mana = maxMana;
+
+        UpdateAnimations();
     }
     
     private void UpdateAnimations()
@@ -49,11 +57,22 @@ public class Cast : Item
          
 
         Projectile spawned = ((GameObject)Instantiate(castObject, castPlace.position, castPlace.rotation)).GetComponent<Projectile>();
-        spawned.setDirection(user.Head.forward);
+
+        Vector3 direction = user.Head.forward;
+
+        Ray ray = new Ray(user.Head.position, Quaternion.AngleAxis(-user.xRotation, user.transform.right) * user.transform.forward);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            direction = (hit.point - castPlace.position).normalized;
+        }
+
+        spawned.setDirection(direction);
         spawned.gameObject.tag = gameObject.tag;
         
         timer = cooldown;
-        
     }
 
     private void OnDrawGizmosSelected()

@@ -209,9 +209,9 @@ GameObject:
   - component: {fileID: 5372615005041016092}
   - component: {fileID: 2804618011789301308}
   - component: {fileID: 2722680650212255435}
-  - component: {fileID: 6832462102182223130}
   - component: {fileID: 7223374015250640742}
   - component: {fileID: 957943174715971750}
+  - component: {fileID: 928734647838395654}
   m_Layer: 7
   m_Name: Cast
   m_TagString: Neutral
@@ -253,7 +253,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &2804618011789301308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +270,7 @@ MonoBehaviour:
   grabbable: 1
   grab: {fileID: 6044087564415457690}
   idleAnimationNumber: 2
+  itemType: 0
   maxMana: 1
   manaRecover: 0.1
   mana: 0
@@ -291,25 +292,13 @@ MonoBehaviour:
   HP: 0
   maxHP: 100
   deathPrefab: {fileID: 0}
+  deathPrefabPlace: {fileID: 0}
   mortal: 1
   hit:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6832462102182223130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5372615005041016095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f04b35ab5388bf4ab87cae66a82abf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  promptMessage: Cast weapon
-  active: 1
-  cooldown: 1
+  dyingDuration: 1
+  dyingScaling: 0.5
 --- !u!95 &7223374015250640742
 Animator:
   serializedVersion: 5
@@ -345,6 +334,21 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7526447514586307250, guid: 98a67b50745d364438573c8b788243d4, type: 3}
+--- !u!114 &928734647838395654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372615005041016095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 577503bccd038c04184d798ad6d7330b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptMessage: Cast weapon
+  active: 1
+  cooldown: 1
 --- !u!1 &7081258746474390700
 GameObject:
   m_ObjectHideFlags: 0

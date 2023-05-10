@@ -12,7 +12,18 @@ public class Melee : Item
 
     public float damage = 1f;
 
+    public float attackRadius;
+
+    public float attackAngle;
+
     private List<Health> damaged = new List<Health>();
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        itemType = ItemType.Melee;
+    }
 
     protected override void Update()
     {
@@ -21,7 +32,7 @@ public class Melee : Item
         {
             attackDurationTimer -= Time.deltaTime;
             if (user != null)
-                MeleeAttack(user); 
+                MeleeAttack(); 
         }
     }
     public override void Release()
@@ -46,17 +57,23 @@ public class Melee : Item
         damaged.Clear();
     }
 
-    public void MeleeAttack(Unit unit)
+    public void MeleeAttack()
     {
-        Collider[] hits = Physics.OverlapSphere(unit.attackPoint.position, unit.attackRadius);
+        Collider[] hits = Physics.OverlapSphere(user.attackPoint.position, attackRadius);
+
+        Vector3 endPoint = user.attackPoint.position + user.transform.forward * attackRadius;
+
         foreach (Collider collider in hits)
         {
             if (collider.gameObject.tag == gameObject.tag)
                 continue;
-             
+
             Health targetHealth = collider.transform.GetComponent<Health>();
 
             if (targetHealth == null)
+                continue;
+
+            if (Vector3.Angle(user.transform.forward * attackRadius, collider.ClosestPoint(endPoint) - user.attackPoint.position) > attackAngle)
                 continue;
              
             if (damaged.Contains(targetHealth))
@@ -78,4 +95,17 @@ public class Melee : Item
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        if (user == null)
+            return;
+
+        Vector3 dir = user.transform.forward * attackRadius;
+
+        Gizmos.DrawLine(user.attackPoint.position, user.attackPoint.position + dir);
+        Gizmos.DrawLine(user.attackPoint.position, user.attackPoint.position + Quaternion.Euler(0, attackAngle, 0) * dir);
+        Gizmos.DrawLine(user.attackPoint.position, user.attackPoint.position + Quaternion.Euler(0, -attackAngle, 0) * dir);
+        Gizmos.DrawLine(user.attackPoint.position, user.attackPoint.position + Quaternion.AngleAxis(attackAngle, Vector3.Cross(dir, Vector3.up)) * dir);
+        Gizmos.DrawLine(user.attackPoint.position, user.attackPoint.position + Quaternion.AngleAxis(-attackAngle, Vector3.Cross(dir, Vector3.up)) * dir);
+    }
 }

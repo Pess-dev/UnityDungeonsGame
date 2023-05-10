@@ -129,7 +129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2043900497151925960, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_Name
-      value: UnitGoblin Variant
+      value: AIenemy
       objectReference: {fileID: 0}
     - target: {fileID: 2043900497151925960, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_TagString
@@ -419,8 +419,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8548138591417942222, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+--- !u!1 &1063077713628977325 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2043900497151925960, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+  m_PrefabInstance: {fileID: 1341416417978828389}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &854860659740978695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063077713628977325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e645389794031d44b9d69d3a9e2ca09f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyTag: Skeleton
+  seekRadius: 50
+  retreatRadius: 5
+  xRotatingModifier: 0.1
+  yRotatingModifier: 0.1
+  currentState: 0
 --- !u!4 &3719390503541919346 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2377978483643156503, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}

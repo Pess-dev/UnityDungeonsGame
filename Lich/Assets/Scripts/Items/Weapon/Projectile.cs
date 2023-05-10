@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     public float speed = 10f;
     public float damage = 5f;
     public float lifetime = 10f;
+    private float timer = 0f;
     public float knockback = 1f;
     public Vector3 velocity = Vector3.zero;
     private float damagingRadius = 1;
@@ -32,7 +33,11 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
-        rb.velocity = velocity;  
+        rb.velocity = velocity;
+
+        timer += Time.deltaTime;
+        if (timer > lifetime)
+            Explode();
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -15,14 +15,18 @@ public class Health : MonoBehaviour
     [SerializeField]
     private Object deathPrefab;
 
+    [SerializeField]
+    private Transform deathPrefabPlace;
+
     public bool mortal = true;
 
-    public UnityEvent hit;
+    public UnityEvent hit; 
+     
 
     private void Start()
     {
         HP = maxHP;
-    }
+    } 
 
     public float GetHP() { return HP; }
 
@@ -47,6 +51,7 @@ public class Health : MonoBehaviour
 
     private void CheckDeath()
     {
+        if (HP > maxHP) HP = maxHP;
         if (HP > 0) return;
         if (!mortal) return;
 
@@ -55,8 +60,11 @@ public class Health : MonoBehaviour
 
     public void Kill()
     {
+        Vector3 pos = transform.position;
+        if (deathPrefabPlace != null)
+            pos = deathPrefabPlace.position;
         if (deathPrefab != null)
-            Instantiate(deathPrefab, transform.position, transform.rotation);
+            Instantiate(deathPrefab, pos, transform.rotation);
 
         Destroy(gameObject);
     }

@@ -59,6 +59,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 2943395109716765318, guid: 98a67b50745d364438573c8b788243d4, type: 3}
+    - target: {fileID: 1292973590876741460, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1314515707455558729, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: Head
       value: 
@@ -156,6 +160,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2771705112810848115, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2771705112810848115, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_Materials.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -218,6 +226,10 @@ PrefabInstance:
     - target: {fileID: 5223566664485168905, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_Center.y
       value: 1.1493073
+      objectReference: {fileID: 0}
+    - target: {fileID: 5372234682436494497, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5372234682436494497, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_Materials.Array.size
@@ -302,6 +314,10 @@ PrefabInstance:
     - target: {fileID: 7722001400427726511, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7882324243027740828, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7957320847565075384, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_LocalPosition.x

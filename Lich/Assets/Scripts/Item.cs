@@ -26,7 +26,16 @@ public class Item : MonoBehaviour
 
     private string defaultTag;
 
-    private void Awake()
+    public ItemType itemType = ItemType.NonWeapon;
+
+    public enum ItemType
+    {
+        NonWeapon,
+        Melee,
+        Cast,
+    }
+
+    protected virtual void Awake()
     {
         if (GetComponent<Interactable>() != null)
             interactable = GetComponent<Interactable>();
@@ -87,6 +96,9 @@ public class Item : MonoBehaviour
         interactable.Activate();
         grabbed = false;
     }
+
+    public virtual bool GetUsable()
+    { return timer <= 0 ? true : false; }
 
     public virtual void Use()
     { }

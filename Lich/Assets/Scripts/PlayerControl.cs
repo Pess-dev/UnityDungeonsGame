@@ -9,7 +9,6 @@ public class PlayerControl : MonoBehaviour
 
     //Look
     public Camera cam; 
-    private float xRotation = 0f;
     public float xSensitivity = 30f;
     public float ySensitivity = 30f;
 
@@ -20,6 +19,11 @@ public class PlayerControl : MonoBehaviour
     //UI
     [SerializeField]
     private TextMeshProUGUI promptText;
+    [SerializeField]
+    private bool UI = true;
+    [SerializeField]
+    private Animator uiAnim;
+
 
     private void Start()
     {
@@ -32,10 +36,16 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     { 
         CheckInteractable();
+        updateUI();
     }
     private void LateUpdate()
     {
         SyncWithUnit();
+    }
+
+    private void updateUI()
+    {
+        uiAnim.SetBool("prompt", promptText.text != "" ? true : false);
     }
 
     private void toggleCursor(bool visible)
@@ -64,21 +74,16 @@ public class PlayerControl : MonoBehaviour
         else
             eye = unit.cameraPlace.position;
         cam.transform.position = eye;
-        cam.transform.rotation = Quaternion.Euler(cam.transform.rotation.eulerAngles+Vector3.up*( unit.transform.rotation.eulerAngles.y - cam.transform.rotation.eulerAngles.y));
+        Quaternion newRotation = unit.transform.rotation;
+        newRotation = Quaternion.Euler(newRotation.eulerAngles + Vector3.right * (-unit.xRotation - newRotation.eulerAngles.x));
+        cam.transform.rotation = newRotation;
     }
 
     public void ProcessLook(Vector2 input)
     {
         if (unit == null)
             return; 
-
-        xRotation -= (input.y * Time.deltaTime) * ySensitivity;
-        xRotation = Mathf.Clamp(xRotation, -80f, 80f);
-
-        cam.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-
-        unit.Rotate(Vector3.up * (input.x * Time.deltaTime) * xSensitivity);
-        unit.setXRotation(xRotation) ;
+        unit.RotateLocal(Vector3.up * (input.x * Time.deltaTime) * xSensitivity + Vector3.right * (-input.y * Time.deltaTime) * ySensitivity);
     }
 
     public void ProcessMove(Vector2 input) 
@@ -89,7 +94,7 @@ public class PlayerControl : MonoBehaviour
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.x;
         moveDirection.z = input.y;
-        unit.Move(moveDirection);
+        unit.Move(unit.transform.TransformDirection(moveDirection));
     }
 
     public void Dash(Vector2 input) 
@@ -123,14 +128,8 @@ public class PlayerControl : MonoBehaviour
         if (unit == null || visibleInteractable == null)
             return;
 
-        if (visibleInteractable.GetComponent<Item>()) 
-        {
-            unit.GrabItem(visibleInteractable.transform.GetComponent<Item>());
-        }
-        else
-        {
-            visibleInteractable.Interact();
-        }
+        visibleInteractable.Interact(unit);
+        
     }
 
     public void AltInteractPushed()
@@ -190,20 +189,6 @@ public class PlayerControl : MonoBehaviour
                 visibleInteractable = interactable;
 
         }
-
-        //RaycastHit hitInfo;
-        //if (promptText != null)
-        //if (Physics.Raycast(ray, out hitInfo, interactDistance, mask))
-        //{
-        //    Interactable lookingAtInteractable = hitInfo.collider.transform.GetComponent<Interactable>();
-        //    if(lookingAtInteractable == visibleItem)
-        //        if (visibleItem != null)
-        //            promptText.text = visibleItem.promptMessage;
-        //        else
-        //            promptText.text = ""; 
-        //}
-        //    else
-        //        promptText.text = "";
 
         if (visibleInteractable != null)
             visibleInteractable.setOutline(true);

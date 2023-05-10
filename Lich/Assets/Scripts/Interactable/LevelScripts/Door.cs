@@ -13,7 +13,7 @@ public class Door : Interactable
     {
     }
 
-    public override void Interact()
+    public override void Interact(Unit user = null)
     {
         opened = !opened;
 

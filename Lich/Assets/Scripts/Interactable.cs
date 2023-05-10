@@ -53,5 +53,5 @@ public class Interactable : MonoBehaviour
         active = false;
     }
 
-    public virtual void Interact() {}
+    public virtual void Interact(Unit user = null) {}
 }

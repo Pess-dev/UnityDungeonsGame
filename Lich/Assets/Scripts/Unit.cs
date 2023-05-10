@@ -11,7 +11,7 @@ public class Unit : MonoBehaviour
     public Transform Head;
 
     //to rotate head and some other things
-    private float xRotation = 0f;
+    public float xRotation = 0f;
 
     //control unit
     private bool controled = false;
@@ -24,8 +24,7 @@ public class Unit : MonoBehaviour
     public float dashDuration = 0.2f;
     [SerializeField]
     private Object dashParticle;
-    private Vector3 dashVelocity = Vector3.zero;
-     
+    private Vector3 dashVelocity = Vector3.zero; 
 
     //GroundCheck
     private bool isGrounded;
@@ -60,7 +59,6 @@ public class Unit : MonoBehaviour
 
     //fight system 
     public Transform attackPoint;
-    public float attackRadius; 
 
     //animation system
     private Animator anim;
@@ -109,6 +107,7 @@ public class Unit : MonoBehaviour
         checkGround();
         UpdateAnimation(); 
     }
+
     private void LateUpdate()
     {
         MoveItems();
@@ -138,7 +137,6 @@ public class Unit : MonoBehaviour
 
     public void Move(Vector3 moveDirection)
     {
-        moveDirection = transform.TransformDirection(moveDirection);
         if (isGrounded)
         { 
             moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
@@ -173,15 +171,12 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void Rotate(Vector3 Euler)
+    public void RotateLocal(Vector3 deltaEuler)
     {
-        transform.Rotate(Euler);
+        transform.Rotate(Vector3.up * deltaEuler.y);
+        xRotation -= deltaEuler.x;
+        xRotation = Mathf.Clamp(xRotation, -60f, 60f);
     }
-    public void setXRotation(float rot)
-    {
-        xRotation = rot;
-    }
-
 
     private void UpdateAnimation() 
     {
@@ -207,7 +202,7 @@ public class Unit : MonoBehaviour
     {
         if (isGrounded && jumpTimer<=0)
         {  
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Acceleration);
             jumpTimer = jumpCooldown; 
         } 
     }
@@ -389,8 +384,8 @@ public class Unit : MonoBehaviour
     private void OnDrawGizmosSelected()
     {         
         Gizmos.color = Color.red; 
-        if (attackPoint != null)
-            Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+        //if (attackPoint != null)
+        //    Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + normalFloor); 
         Gizmos.color = Color.green;

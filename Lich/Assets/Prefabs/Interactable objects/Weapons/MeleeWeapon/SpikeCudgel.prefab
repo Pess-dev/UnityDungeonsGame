@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4709158677115536933, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: promptMessage
+      value: Spiked cudgel, goblins are not so original...
+      objectReference: {fileID: 0}
     - target: {fileID: 60286296791245820, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: damage
       value: 4

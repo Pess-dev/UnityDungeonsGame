@@ -97,8 +97,8 @@ GameObject:
   - component: {fileID: 5372615005041016092}
   - component: {fileID: 60286296791245820}
   - component: {fileID: 2722680650212255435}
-  - component: {fileID: 6832462102182223130}
   - component: {fileID: 8223305788989028300}
+  - component: {fileID: -4709158677115536933}
   m_Layer: 7
   m_Name: Melee
   m_TagString: Neutral
@@ -138,7 +138,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &60286296791245820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,9 +155,12 @@ MonoBehaviour:
   grabbable: 1
   grab: {fileID: 6044087564415457690}
   idleAnimationNumber: 1
+  itemType: 0
   knockback: 100
   attackDuration: 0.3
   damage: 2
+  attackRadius: 2
+  attackAngle: 25
 --- !u!114 &2722680650212255435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,25 +176,13 @@ MonoBehaviour:
   HP: 0
   maxHP: 100
   deathPrefab: {fileID: 0}
+  deathPrefabPlace: {fileID: 0}
   mortal: 1
   hit:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6832462102182223130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5372615005041016095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f04b35ab5388bf4ab87cae66a82abf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  promptMessage: Melee weapon
-  active: 1
-  cooldown: 1
+  dyingDuration: 1
+  dyingScaling: 0.5
 --- !u!64 &8223305788989028300
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -206,6 +197,21 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 6687708012848683952, guid: 98a67b50745d364438573c8b788243d4, type: 3}
+--- !u!114 &-4709158677115536933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372615005041016095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 577503bccd038c04184d798ad6d7330b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptMessage: Melee
+  active: 1
+  cooldown: 1
 --- !u!1 &7081258746474390700
 GameObject:
   m_ObjectHideFlags: 0

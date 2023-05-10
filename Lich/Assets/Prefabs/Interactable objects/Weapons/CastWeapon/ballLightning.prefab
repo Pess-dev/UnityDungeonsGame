@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 928734647838395654, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: promptMessage
+      value: Crystal ball spell
+      objectReference: {fileID: 0}
     - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
       propertyPath: castObject
       value: 
