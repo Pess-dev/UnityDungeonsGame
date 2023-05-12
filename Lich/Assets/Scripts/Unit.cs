@@ -20,7 +20,7 @@ public class Unit : MonoBehaviour
     private float dashTimer = 0f;
     public float dashForce = 1f;
     public float dashCooldown = 1f;
-    private bool dashing = false;
+    private bool dashing;
     public float dashDuration = 0.2f;
     [SerializeField]
     private Object dashParticle;
@@ -72,6 +72,15 @@ public class Unit : MonoBehaviour
 
     private Rigidbody rb;
 
+    public Team side = Team.Neutral;
+
+    public enum Team
+    {
+        Neutral,
+        Skeleton,
+        Goblin,
+    }
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -94,8 +103,9 @@ public class Unit : MonoBehaviour
 
     void Update()
     {
-        if (dashTimer > 0)
+        if (dashTimer > 0 && (isGrounded || dashTimer > dashCooldown - dashDuration))
             dashTimer -= Time.deltaTime;
+
         if (dashTimer < dashCooldown - dashDuration)
             dashing = false;
         else
@@ -347,6 +357,9 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public bool GetDashing() { return dashing; }
+
+
     private void OnCollisionStay(Collision collision)
     {
         int layer = collision.gameObject.layer;
@@ -395,8 +408,8 @@ public class Unit : MonoBehaviour
     private void OnDestroy()
     {
         if (firstItem != null)
-            firstItem.Release();
+            firstItem.GetComponent<Health>().Kill();
         if (secondItem != null)
-            secondItem.Release();
+            secondItem.GetComponent<Health>().Kill();
     }
 }

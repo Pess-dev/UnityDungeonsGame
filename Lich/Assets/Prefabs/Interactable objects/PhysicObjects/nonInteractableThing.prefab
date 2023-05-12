@@ -59,7 +59,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3939865711355918826}
   serializedVersion: 2
-  m_Mass: 5
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -82,6 +82,7 @@ MonoBehaviour:
   HP: 0
   maxHP: 5
   deathPrefab: {fileID: 3431656869579231394, guid: 42184918605eed24bbb17a6b8d585b39, type: 3}
+  deathPrefabPlace: {fileID: 0}
   mortal: 1
   hit:
     m_PersistentCalls:

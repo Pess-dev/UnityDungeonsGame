@@ -7,10 +7,6 @@ public class Enemy : MonoBehaviour
 {
     Unit unit;
 
-    [SerializeField]
-    private string enemyTag = "Skeleton";
-    private string alliesTag;
-
     public float seekRadius = 50f;
 
     public float retreatRadius = 4f;
@@ -24,6 +20,8 @@ public class Enemy : MonoBehaviour
 
     public float xRotatingModifier = 0.1f;
     public float yRotatingModifier = 0.1f;
+
+    public bool active = true;
 
     private enum State
     {
@@ -39,7 +37,6 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        alliesTag = gameObject.tag;
         currentState = State.Idle;
 
         path = new NavMeshPath();
@@ -81,7 +78,7 @@ public class Enemy : MonoBehaviour
                 }
         }
 
-        if (targetTransform != null)
+        if (targetTransform != null && active)
         {
             if (path.corners.Length > 1)
                 MoveUnitTo(path.corners[1]);
@@ -220,7 +217,7 @@ public class Enemy : MonoBehaviour
             if (seekUnit == null)
                 continue;
 
-            if (collider.tag != enemyTag)
+            if (seekUnit.side == unit.side)
                 continue;
 
             NavMeshPath newPath = new NavMeshPath();

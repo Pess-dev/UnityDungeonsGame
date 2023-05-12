@@ -19,14 +19,17 @@ public class PlayerControl : MonoBehaviour
     //UI
     [SerializeField]
     private TextMeshProUGUI promptText;
-    [SerializeField]
-    private bool UI = true;
+    //[SerializeField]
+    //private bool UI = true;
     [SerializeField]
     private Animator uiAnim;
+    
+    private Animator cameraAnim;
 
 
     private void Start()
     {
+        cameraAnim = GetComponent<Animator>();
         if (unit != null)
         {
             unit.SetControl();
@@ -36,11 +39,23 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     { 
         CheckInteractable();
-        updateUI();
+        updateUI(); 
+        UpdateAnimation();
     }
     private void LateUpdate()
     {
         SyncWithUnit();
+    }
+
+    private void UpdateAnimation()
+    {
+        if (unit == null)
+        {
+            cameraAnim.SetBool("dash", false);
+        }
+
+        cameraAnim.SetBool("dash", unit.GetDashing());
+
     }
 
     private void updateUI()
@@ -163,17 +178,16 @@ public class PlayerControl : MonoBehaviour
 
         foreach (Collider collision in collisions)
         {
-            if (collision.transform.GetComponent<Interactable>() == null)
-                continue;
+            Interactable interactable = collision.transform.GetComponentInParent<Interactable>();
 
-            Interactable interactable = collision.transform.GetComponent<Interactable>();
+            if (interactable == null)
+                continue;
 
             if (!interactable.getActive())
                 continue;
 
             if (Vector3.Angle(collision.transform.position - cam.transform.position, cam.transform.forward) >= interactionAngle)
                 continue;
-
 
             if (visibleInteractable == null)
             {
@@ -187,7 +201,6 @@ public class PlayerControl : MonoBehaviour
 
             if ((currentItem - center).magnitude < (lastItem - center).magnitude)
                 visibleInteractable = interactable;
-
         }
 
         if (visibleInteractable != null)

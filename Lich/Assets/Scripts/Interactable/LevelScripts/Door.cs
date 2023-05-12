@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Door : Interactable
 {
-    bool opened = false;
+    public bool opened = false;
+    public bool deactivateAfterUse = true;
 
     [SerializeField]
     private Animator anim;
@@ -15,9 +16,12 @@ public class Door : Interactable
 
     public override void Interact(Unit user = null)
     {
+        base.Interact(user);
+
         opened = !opened;
 
-        Deactivate();
+        if (deactivateAfterUse)
+            Deactivate();
 
         if (anim != null)
             anim.SetBool("opened", opened);

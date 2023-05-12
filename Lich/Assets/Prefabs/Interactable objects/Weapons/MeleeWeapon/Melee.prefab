@@ -156,7 +156,7 @@ MonoBehaviour:
   grab: {fileID: 6044087564415457690}
   idleAnimationNumber: 1
   itemType: 0
-  knockback: 100
+  knockback: 1000
   attackDuration: 0.3
   damage: 2
   attackRadius: 2
@@ -181,8 +181,6 @@ MonoBehaviour:
   hit:
     m_PersistentCalls:
       m_Calls: []
-  dyingDuration: 1
-  dyingScaling: 0.5
 --- !u!64 &8223305788989028300
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Interactable : MonoBehaviour
     protected float timer = 0f;
 
     private Outline outline;
+
+    public UnityEvent interacted;
 
     private void Awake()
     {
@@ -53,5 +56,5 @@ public class Interactable : MonoBehaviour
         active = false;
     }
 
-    public virtual void Interact(Unit user = null) {}
+    public virtual void Interact(Unit user = null) { interacted.Invoke(); }
 }

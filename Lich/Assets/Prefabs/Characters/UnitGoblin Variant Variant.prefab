@@ -7,9 +7,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 46076350146941484, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: side
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1063077713628977325, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
       propertyPath: m_Name
-      value: UnitGoblin Variant
+      value: UnitGoblin Variant Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7301622249694705157, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
       propertyPath: m_RootOrder

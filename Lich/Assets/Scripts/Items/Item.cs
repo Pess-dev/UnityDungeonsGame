@@ -35,6 +35,11 @@ public class Item : MonoBehaviour
         Cast,
     }
 
+    public Unit GetUser()
+    {
+        return user;
+    }
+
     protected virtual void Awake()
     {
         if (GetComponent<Interactable>() != null)
