@@ -308,11 +308,7 @@ public class Unit : MonoBehaviour
     }
     private void MoveBy(Transform obj, Transform by, Transform to)
     {
-        //Quaternion rotationOffset = Quaternion.Inverse(obj.rotation * by.localRotation) * to.rotation;
-        //obj.rotation = obj.rotation * rotationOffset;
         obj.rotation = to.rotation * by.localRotation;
-
-
         Vector3 positionOffset = to.position - by.position;
         obj.position = obj.position + positionOffset;
     }
@@ -344,7 +340,7 @@ public class Unit : MonoBehaviour
         q.Enqueue(Head);
         while (q.Count > 0)
         {
-            int childCount = q.Peek().childCount; // получаем количество детей у объекта parent
+            int childCount = q.Peek().childCount;
 
             for (int i = 0; i < childCount; i++)
             {
@@ -411,5 +407,16 @@ public class Unit : MonoBehaviour
             firstItem.GetComponent<Health>().Kill();
         if (secondItem != null)
             secondItem.GetComponent<Health>().Kill();
+    }
+
+
+    public float GetHP()
+    {
+        return health.GetHP();
+    }
+
+    public float GetMaxHP()
+    {
+        return health.GetMaxHP();
     }
 }

@@ -13,11 +13,16 @@ public class Architect : MonoBehaviour
 
     private float timer = 0f;
 
+    //private List<Object> usedLevelVariants = new List<Object>();
+
     public List<ListWrapper> Levels = new List<ListWrapper>();
     [System.Serializable]
     public class ListWrapper
     {
-        public List<Object> LevelVariants;
+        public Object StartChunk;
+        public Object EndChunk;
+        public int ChunkCount = 1;
+        public List<Object> ChunkVariants;
     }
 
     private GameObject currentLevelGameObject = null;
@@ -26,40 +31,65 @@ public class Architect : MonoBehaviour
     
     private void Start()
     {
+        player.SetGameplay(true);
         ToLevel(currentLevel);
     }
 
+
     public void ToLevel(int number)
     {
+        currentLevel = number;
+        if (currentLevel >= Levels.Count)
+            return;
         DestroyNonPlayerObjects();
 
-        int randomLevel = Random.Range(0, Levels[number].LevelVariants.Count);
-        currentLevelGameObject = ((GameObject)Instantiate(Levels[number].LevelVariants[randomLevel]));
-        currentLevelGameObject.GetComponent<LevelLogic>().architect = this;
+        //currentLevelGameObject = ((GameObject)Instantiate(GetRandomChunk()));
+        currentLevelGameObject = ((GameObject)Instantiate(Levels[currentLevel].StartChunk)); 
+        currentLevelGameObject.GetComponent<Chunk>().architect = this;
+        currentLevelGameObject.GetComponent<Chunk>().remainingChunks = Levels[currentLevel].ChunkCount;
+
+        //usedLevelVariants.Add(variants[randomLevel]);
+
         if (player.unit != null)
         {
-            player.unit.transform.position = currentLevelGameObject.GetComponent<LevelLogic>().playerSpawner.position;
+            player.unit.transform.position = currentLevelGameObject.GetComponent<Chunk>().playerSpawner.position;
             player.unit.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            
         }
     }
+
+    private IEnumerator coroutine;
 
     public void NextLevel()
     {
-        if (currentLevel+1 > Levels.Count)
+        if (currentLevel + 1 >= Levels.Count)
         {
-            //final
-            //
-            //
             Debug.Log("Final for now");
-            //
-            //
-
             return;
         }
-
-        ToLevel(currentLevel+1);
+        timer = spawnPlayerDelay;
+        coroutine = SetLevelCoroutine(currentLevel + 1);
+        StartCoroutine(coroutine);
     }
+
+    private IEnumerator SetLevelCoroutine(int number)
+    {
+        player.SetGameplay(false);
+        yield return new WaitForSeconds(spawnPlayerDelay / 2);
+        ToLevel(currentLevel + 1);
+        yield return new WaitForSeconds(spawnPlayerDelay / 2);
+        player.SetGameplay(true);
+    }
+
+
+    public Object GetRandomChunk()
+    {
+        List<Object> variants = new List<Object>(Levels[currentLevel].ChunkVariants);
+
+        int randomLevel = Random.Range(0, variants.Count);
+
+        return variants[randomLevel];
+    }
+
 
     public void DestroyNonPlayerObjects()
     {

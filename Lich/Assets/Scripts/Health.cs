@@ -20,19 +20,23 @@ public class Health : MonoBehaviour
 
     public bool mortal = true;
 
-    public UnityEvent hit; 
+    public UnityEvent hit;
+
+    public Object dropPrefab;
      
 
     private void Start()
     {
         HP = maxHP;
-    } 
+    }
 
     public float GetHP() { return HP; }
+    public float GetMaxHP() { return maxHP; }
 
     public void Damage(float value)
     {
-        HP -= value;
+        if (mortal)
+            HP -= value;
         hit.Invoke();
         CheckDeath();
     }
@@ -65,6 +69,9 @@ public class Health : MonoBehaviour
             pos = deathPrefabPlace.position;
         if (deathPrefab != null)
             Instantiate(deathPrefab, pos, transform.rotation);
+
+        if (dropPrefab != null)
+            Instantiate(dropPrefab, pos, transform.rotation);
 
         Destroy(gameObject);
     }

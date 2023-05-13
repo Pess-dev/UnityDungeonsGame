@@ -123,6 +123,9 @@ MonoBehaviour:
   promptMessage: Bone. Use it to heal!
   active: 1
   cooldown: 1
+  interacted:
+    m_PersistentCalls:
+      m_Calls: []
   hpAdd: 2
 --- !u!1 &7400314256446101337
 GameObject:

@@ -54,14 +54,14 @@ public class Projectile : MonoBehaviour
         {
             if (collider.gameObject.tag == gameObject.tag)
                 continue;
-            Health targetHealth = collider.transform.GetComponent<Health>();
+            Health targetHealth = collider.transform.GetComponentInParent<Health>();
 
             if (targetHealth == null)
                 continue;
 
             targetHealth.Damage(damage);
 
-            Rigidbody targetRb = collider.transform.GetComponent<Rigidbody>();
+            Rigidbody targetRb = collider.transform.GetComponentInParent<Rigidbody>();
 
             if (targetRb == null)
                 continue;

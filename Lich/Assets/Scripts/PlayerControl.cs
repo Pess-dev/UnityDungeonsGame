@@ -22,10 +22,15 @@ public class PlayerControl : MonoBehaviour
     //[SerializeField]
     //private bool UI = true;
     [SerializeField]
+    private CircularProgressBar hpBar;
+    [SerializeField]
+    private CircularProgressBar cooldownBar;
+    [SerializeField]
     private Animator uiAnim;
     
     private Animator cameraAnim;
 
+    private bool isGameplay = false;
 
     private void Start()
     {
@@ -33,14 +38,15 @@ public class PlayerControl : MonoBehaviour
         if (unit != null)
         {
             unit.SetControl();
+            unit.GetComponent<Health>().hit.AddListener(() => uiAnim.SetTrigger("hit")) ;
         }
     }
 
     private void Update()
     { 
         CheckInteractable();
-        updateUI(); 
         UpdateAnimation();
+        updateBars();
     }
     private void LateUpdate()
     {
@@ -56,14 +62,12 @@ public class PlayerControl : MonoBehaviour
 
         cameraAnim.SetBool("dash", unit.GetDashing());
 
-    }
+        uiAnim.SetBool("fade", !isGameplay);
 
-    private void updateUI()
-    {
         uiAnim.SetBool("prompt", promptText.text != "" ? true : false);
     }
 
-    private void toggleCursor(bool visible)
+    private void ToggleCursor(bool visible)
     {
         Cursor.visible = visible;
         if (visible)
@@ -72,15 +76,24 @@ public class PlayerControl : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public void SyncWithUnit() 
+    public void SetGameplay(bool state) 
+    {
+        isGameplay = state;
+        if (unit == null)
+            return;
+        unit.GetComponent<Health>().mortal = state;
+        unit.GetComponent<Rigidbody>().isKinematic = !state;
+    }
+
+    private void SyncWithUnit() 
     {
         if (unit == null)
         { 
-            toggleCursor(true);
+            ToggleCursor(true);
             return; 
         }
 
-        toggleCursor(false);
+        ToggleCursor(false);
 
         Vector3 eye;
 
@@ -92,6 +105,24 @@ public class PlayerControl : MonoBehaviour
         Quaternion newRotation = unit.transform.rotation;
         newRotation = Quaternion.Euler(newRotation.eulerAngles + Vector3.right * (-unit.xRotation - newRotation.eulerAngles.x));
         cam.transform.rotation = newRotation;
+
+    }
+
+    private void updateBars()
+    {
+        if (unit == null)
+        {
+            hpBar.m_FillAmount = 0;
+            cooldownBar.m_FillAmount = 0 ;
+            return;
+        }
+
+        hpBar.m_FillAmount = unit.GetHP() / unit.GetMaxHP();
+
+        if (unit.firstItem != null)
+            cooldownBar.m_FillAmount = 1 - unit.firstItem.GetTimer() / unit.firstItem.cooldown;
+        else
+            cooldownBar.m_FillAmount = 0;
     }
 
     public void ProcessLook(Vector2 input)
@@ -204,13 +235,17 @@ public class PlayerControl : MonoBehaviour
         }
 
         if (visibleInteractable != null)
+        {
             visibleInteractable.setOutline(true);
-
+            visibleInteractable.Viewed();
+        }
         if (promptText != null)
             if (visibleInteractable != null)
                 promptText.text = visibleInteractable.promptMessage;
             else
                 promptText.text = "";
+
+
     }
 
     private void OnDrawGizmosSelected()

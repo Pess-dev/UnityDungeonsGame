@@ -188,6 +188,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -6552593632729132606, guid: 98a67b50745d364438573c8b788243d4, type: 3}
     - target: {fileID: 4218789848314770953, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+      propertyPath: maxHP
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4218789848314770953, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: deathPrefab
       value: 
       objectReference: {fileID: 3431656869579231394, guid: 42184918605eed24bbb17a6b8d585b39, type: 3}
@@ -449,9 +453,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seekRadius: 50
   retreatRadius: 5
-  xRotatingModifier: 0.1
-  yRotatingModifier: 0.1
-  active: 1
+  xRotatingModifier: 0.05
+  yRotatingModifier: 0.05
+  active: 0
   currentState: 0
 --- !u!4 &3719390503541919346 stripped
 Transform:

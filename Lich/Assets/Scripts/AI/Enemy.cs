@@ -49,6 +49,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        
         switch (currentState)
         {
             case State.Idle:
@@ -114,6 +115,9 @@ public class Enemy : MonoBehaviour
         }
 
         SeekTarget();
+        if (targetTransform == null)
+            currentState = State.Idle;
+
     }
 
     private void Idle()
@@ -170,8 +174,8 @@ public class Enemy : MonoBehaviour
             currentState = State.Chase;
             return;
         }
-
-        NavMesh.CalculatePath(transform.position, transform.position+(transform.position - targetTransform.position).normalized * retreatRadius, NavMesh.AllAreas, path);
+        
+        NavMesh.CalculatePath(transform.position, transform.position+(transform.position - targetTransform.position - Vector3.up*(transform.position.y - targetTransform.position.y)).normalized * retreatRadius, NavMesh.AllAreas, path);
     }
 
     private void SeekWeapon()

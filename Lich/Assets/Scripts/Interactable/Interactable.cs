@@ -13,9 +13,11 @@ public class Interactable : MonoBehaviour
     public float cooldown = 1f;
     protected float timer = 0f;
 
-    private Outline outline;
+    protected Outline outline;
 
     public UnityEvent interacted;
+
+    public UnityEvent viewed;
 
     private void Awake()
     {
@@ -54,6 +56,11 @@ public class Interactable : MonoBehaviour
     public void Deactivate()
     {
         active = false;
+    }
+
+    public void Viewed()
+    {
+        viewed.Invoke();
     }
 
     public virtual void Interact(Unit user = null) { interacted.Invoke(); }

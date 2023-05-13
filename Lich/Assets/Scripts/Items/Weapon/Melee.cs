@@ -8,7 +8,8 @@ public class Melee : Item
 
     private float attackDurationTimer = 0;
 
-    public float attackDuration = 0.1f;
+    public float attackDuration = 0.2f;
+    public float attackDelay = 0.1f;
 
     public float damage = 1f;
 
@@ -31,7 +32,7 @@ public class Melee : Item
         if (attackDurationTimer > 0)
         {
             attackDurationTimer -= Time.deltaTime;
-            if (user != null)
+            if (user != null && attackDurationTimer < attackDuration - attackDelay)
                 MeleeAttack(); 
         }
     }
@@ -68,7 +69,7 @@ public class Melee : Item
             if (collider.gameObject.tag == gameObject.tag)
                 continue;
 
-            Health targetHealth = collider.transform.GetComponent<Health>();
+            Health targetHealth = collider.transform.GetComponentInParent<Health>();
 
             if (targetHealth == null)
                 continue;
@@ -83,7 +84,7 @@ public class Melee : Item
 
             damaged.Add(targetHealth);
              
-            Rigidbody targetRb = collider.transform.GetComponent<Rigidbody>();
+            Rigidbody targetRb = collider.transform.GetComponentInParent<Rigidbody>();
 
             if (targetRb == null)
                 continue;

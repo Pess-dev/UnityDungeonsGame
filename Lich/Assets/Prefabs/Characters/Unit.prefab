@@ -67,6 +67,7 @@ Transform:
   - {fileID: 6669929508144417338}
   - {fileID: 7957320847565075384}
   - {fileID: 8679620596096148835}
+  - {fileID: 1086996830110115737}
   m_Father: {fileID: 338364550505184569}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -334,7 +335,6 @@ Transform:
   m_Children:
   - {fileID: 338364550505184569}
   - {fileID: 4376352116991010263}
-  - {fileID: 1086996830110115737}
   - {fileID: 4009020691285706261}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -392,11 +392,12 @@ MonoBehaviour:
   HP: 0
   maxHP: 10
   deathPrefab: {fileID: 3431656869579231394, guid: 42184918605eed24bbb17a6b8d585b39, type: 3}
-  deathPrefabPlace: {fileID: 0}
+  deathPrefabPlace: {fileID: 338364550505184569}
   mortal: 1
   hit:
     m_PersistentCalls:
       m_Calls: []
+  dropPrefab: {fileID: 6570478709837004779, guid: 5e2192ce6baebad4ca8cc366d8783c0d, type: 3}
 --- !u!95 &8267487341689477273
 Animator:
   serializedVersion: 5
@@ -758,7 +759,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8631493795548328032}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5105931223778542024
 GameObject:
@@ -1025,11 +1026,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9094364904521564801}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.616, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.07500005, z: -0.146}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8631493795548328032}
-  m_RootOrder: 2
+  m_Father: {fileID: 2377978483643156503}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
