@@ -193,7 +193,7 @@ public class Enemy : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(transform.position, seekRadius);
         foreach (Collider collider in hits)
         {
-            Item item = collider.GetComponent<Item>();
+            Item item = collider.GetComponentInParent<Item>();
             if (item == null)
                 continue;
             if (!item.GetGrabbable() || item.GetGrabbed())
@@ -207,6 +207,12 @@ public class Enemy : MonoBehaviour
                 path = newPath;
                 targetTransform = item.transform;
             }
+        }
+
+        if (targetTransform == null)
+        {
+            SeekTarget();
+            currentState = State.Retreat;
         }
     }
 
@@ -239,14 +245,14 @@ public class Enemy : MonoBehaviour
     {
         Item item = null;
 
-        Collider[] collisions = Physics.OverlapSphere(unit.cameraPlace.position, unit.interactDistance);
+        Collider[] collisions = Physics.OverlapSphere(unit.Head.position, unit.interactDistance);
 
         foreach (Collider collision in collisions)
         {
-            if (collision.transform.GetComponent<Item>() == null)
+            if (collision.transform.GetComponentInParent<Item>() == null)
                 continue;
 
-            Item collisionItem = collision.transform.GetComponent<Item>();
+            Item collisionItem = collision.transform.GetComponentInParent<Item>();
 
             if (collisionItem.GetGrabbed())
                 continue;
@@ -290,5 +296,6 @@ public class Enemy : MonoBehaviour
         Gizmos.color = Color.blue;
         if (targetTransform!=null)
         Gizmos.DrawSphere(targetTransform.position, 0.5f);
+
     }
 }

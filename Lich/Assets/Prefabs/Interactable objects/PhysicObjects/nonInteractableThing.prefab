@@ -73,6 +73,9 @@ MonoBehaviour:
   hit:
     m_PersistentCalls:
       m_Calls: []
+  death:
+    m_PersistentCalls:
+      m_Calls: []
   dropPrefab: {fileID: 6570478709837004779, guid: 5e2192ce6baebad4ca8cc366d8783c0d, type: 3}
 --- !u!114 &1533977223825008491
 MonoBehaviour:
@@ -117,7 +120,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 0.4, y: 0.5, z: 0.4}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1

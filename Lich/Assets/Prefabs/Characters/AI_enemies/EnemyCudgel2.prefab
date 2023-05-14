@@ -107,9 +107,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyCudgel2
       objectReference: {fileID: 0}
+    - target: {fileID: 7213630540436288399, guid: 9652e0bb67d58f848947b21d9b179470, type: 3}
+      propertyPath: unit
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8026918453816463268, guid: 9652e0bb67d58f848947b21d9b179470, type: 3}
       propertyPath: speed
-      value: 1
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026918453816463268, guid: 9652e0bb67d58f848947b21d9b179470, type: 3}
+      propertyPath: interactDistance
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9652e0bb67d58f848947b21d9b179470, type: 3}

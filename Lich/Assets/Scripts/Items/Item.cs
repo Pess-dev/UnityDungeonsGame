@@ -24,9 +24,11 @@ public class Item : MonoBehaviour
 
     public int idleAnimationNumber = 1;
 
-    private string defaultTag;
+    public float animationModifier = 1;
 
     public ItemType itemType = ItemType.NonWeapon;
+
+    private string oldTag;
 
     public enum ItemType
     {
@@ -48,7 +50,7 @@ public class Item : MonoBehaviour
         if (GetComponent<Rigidbody>() != null)
             rb = GetComponent<Rigidbody>();
 
-        defaultTag = gameObject.tag;
+        oldTag = gameObject.tag;
     }
     protected virtual void Update()
     {
@@ -79,9 +81,9 @@ public class Item : MonoBehaviour
 
         user = unit;
 
-        rb.isKinematic = true;
+        gameObject.tag = user.tag;
 
-        gameObject.tag = user.gameObject.tag;
+        rb.isKinematic = true;
 
         interactable.Deactivate();
         grabbed = true;
@@ -94,9 +96,9 @@ public class Item : MonoBehaviour
 
         rb.isKinematic = false;
 
-        gameObject.tag = defaultTag;
-
         user = null;
+
+        gameObject.tag = oldTag;
 
         interactable.Activate();
         grabbed = false;

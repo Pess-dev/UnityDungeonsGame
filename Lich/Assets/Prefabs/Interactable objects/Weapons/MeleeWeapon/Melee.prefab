@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 3502992364046697321}
   - component: {fileID: 8920194037390572907}
   - component: {fileID: 2900990097254296160}
-  m_Layer: 0
+  - component: {fileID: 8788800686352456253}
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,6 +86,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8788800686352456253
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947910494680570182}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6687708012848683952, guid: 98a67b50745d364438573c8b788243d4, type: 3}
 --- !u!1 &5372615005041016095
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +112,6 @@ GameObject:
   - component: {fileID: 5372615005041016092}
   - component: {fileID: 60286296791245820}
   - component: {fileID: 2722680650212255435}
-  - component: {fileID: 8223305788989028300}
   - component: {fileID: -4709158677115536933}
   m_Layer: 7
   m_Name: Melee
@@ -155,9 +169,10 @@ MonoBehaviour:
   grabbable: 1
   grab: {fileID: 6044087564415457690}
   idleAnimationNumber: 1
-  itemType: 0
+  itemType: 1
   knockback: 1000
   attackDuration: 0.3
+  attackDelay: 0.1
   damage: 1
   attackRadius: 2
   attackAngle: 25
@@ -175,26 +190,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 0
   maxHP: 100
-  deathPrefab: {fileID: 0}
+  deathPrefab: {fileID: 3431656869579231394, guid: 42184918605eed24bbb17a6b8d585b39, type: 3}
   deathPrefabPlace: {fileID: 0}
   mortal: 1
   hit:
     m_PersistentCalls:
       m_Calls: []
---- !u!64 &8223305788989028300
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5372615005041016095}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6687708012848683952, guid: 98a67b50745d364438573c8b788243d4, type: 3}
+  death:
+    m_PersistentCalls:
+      m_Calls: []
+  dropPrefab: {fileID: 0}
 --- !u!114 &-4709158677115536933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,6 +218,9 @@ MonoBehaviour:
   interacted:
     m_PersistentCalls:
       m_Calls: []
+  viewed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7081258746474390700
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6044087564415457690}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Grab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

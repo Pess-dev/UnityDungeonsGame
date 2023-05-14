@@ -107,6 +107,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Quit"",
+                    ""type"": ""Button"",
+                    ""id"": ""d4c02462-88c6-4d42-bca4-d74f00b190a1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -252,6 +261,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Switch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""23eb2fbb-4ef7-430c-92de-f669094917fe"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -269,6 +289,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_OnFoot_Fire = m_OnFoot.FindAction("Fire", throwIfNotFound: true);
         m_OnFoot_AltFire = m_OnFoot.FindAction("AltFire", throwIfNotFound: true);
         m_OnFoot_Switch = m_OnFoot.FindAction("Switch", throwIfNotFound: true);
+        m_OnFoot_Quit = m_OnFoot.FindAction("Quit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -339,6 +360,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_OnFoot_Fire;
     private readonly InputAction m_OnFoot_AltFire;
     private readonly InputAction m_OnFoot_Switch;
+    private readonly InputAction m_OnFoot_Quit;
     public struct OnFootActions
     {
         private @PlayerInput m_Wrapper;
@@ -352,6 +374,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_OnFoot_Fire;
         public InputAction @AltFire => m_Wrapper.m_OnFoot_AltFire;
         public InputAction @Switch => m_Wrapper.m_OnFoot_Switch;
+        public InputAction @Quit => m_Wrapper.m_OnFoot_Quit;
         public InputActionMap Get() { return m_Wrapper.m_OnFoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -388,6 +411,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Switch.started += instance.OnSwitch;
             @Switch.performed += instance.OnSwitch;
             @Switch.canceled += instance.OnSwitch;
+            @Quit.started += instance.OnQuit;
+            @Quit.performed += instance.OnQuit;
+            @Quit.canceled += instance.OnQuit;
         }
 
         private void UnregisterCallbacks(IOnFootActions instance)
@@ -419,6 +445,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Switch.started -= instance.OnSwitch;
             @Switch.performed -= instance.OnSwitch;
             @Switch.canceled -= instance.OnSwitch;
+            @Quit.started -= instance.OnQuit;
+            @Quit.performed -= instance.OnQuit;
+            @Quit.canceled -= instance.OnQuit;
         }
 
         public void RemoveCallbacks(IOnFootActions instance)
@@ -447,5 +476,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnAltFire(InputAction.CallbackContext context);
         void OnSwitch(InputAction.CallbackContext context);
+        void OnQuit(InputAction.CallbackContext context);
     }
 }

@@ -24,6 +24,8 @@ public class Melee : Item
         base.Awake();
 
         itemType = ItemType.Melee;
+
+        animationModifier = 0.5f/attackDuration;
     }
 
     protected override void Update()
@@ -66,12 +68,11 @@ public class Melee : Item
 
         foreach (Collider collider in hits)
         {
-            if (collider.gameObject.tag == gameObject.tag)
-                continue;
-
             Health targetHealth = collider.transform.GetComponentInParent<Health>();
 
-            if (targetHealth == null)
+
+
+            if (targetHealth == null || targetHealth.gameObject.tag == gameObject.tag)
                 continue;
 
             if (Vector3.Angle(user.transform.forward * attackRadius, collider.ClosestPoint(endPoint) - user.attackPoint.position) > attackAngle)

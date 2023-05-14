@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 9202297200199485803}
   - component: {fileID: 45563653353145958}
   m_Layer: 0
-  m_Name: SpikeCudel
+  m_Name: Knife
   m_TagString: Untagged
-  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   randomYRotation: 1
   objectsVariants:
-  - prefab: {fileID: 3982908821018973124, guid: a1e7771591bca5549966231945526386, type: 3}
+  - prefab: {fileID: 3547237479211790609, guid: 2991bb0548250d74aaa8a8cc0fff6226, type: 3}
     probability: 50
   - prefab: {fileID: 0}
     probability: 50

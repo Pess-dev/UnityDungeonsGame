@@ -2,22 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class Architect : MonoBehaviour
 {
     [SerializeField]
     private int currentLevel = 0;
 
-    [SerializeField]
-    private float spawnPlayerDelay = 1f;
-
-    private float timer = 0f;
+    public float changeDelay = 2f;
 
     //private List<Object> usedLevelVariants = new List<Object>();
 
-    public List<ListWrapper> Levels = new List<ListWrapper>();
+    public List<Level> levels = new List<Level>();
     [System.Serializable]
-    public class ListWrapper
+    public class Level
     {
         public Object StartChunk;
         public Object EndChunk;
@@ -27,33 +25,41 @@ public class Architect : MonoBehaviour
 
     private GameObject currentLevelGameObject = null;
 
-    public PlayerControl player;
-    
+    public Unit playerUnit;
+
+    public UnityEvent end;
+    public UnityEvent LevelChangeStart;
+
     private void Start()
     {
-        player.SetGameplay(true);
-        ToLevel(currentLevel);
+        //player.SetGameplay(true);
+        //ToLevel(currentLevel);
     }
 
+    public void NewGame()
+    {
+        currentLevel = -1;
+        NextLevel();
+    }
 
     public void ToLevel(int number)
     {
         currentLevel = number;
-        if (currentLevel >= Levels.Count)
+        if (currentLevel >= levels.Count)
             return;
         DestroyNonPlayerObjects();
 
         //currentLevelGameObject = ((GameObject)Instantiate(GetRandomChunk()));
-        currentLevelGameObject = ((GameObject)Instantiate(Levels[currentLevel].StartChunk)); 
+        currentLevelGameObject = ((GameObject)Instantiate(levels[currentLevel].StartChunk)); 
         currentLevelGameObject.GetComponent<Chunk>().architect = this;
-        currentLevelGameObject.GetComponent<Chunk>().remainingChunks = Levels[currentLevel].ChunkCount;
+        currentLevelGameObject.GetComponent<Chunk>().remainingChunks = levels[currentLevel].ChunkCount;
 
         //usedLevelVariants.Add(variants[randomLevel]);
 
-        if (player.unit != null)
+        if (playerUnit != null)
         {
-            player.unit.transform.position = currentLevelGameObject.GetComponent<Chunk>().playerSpawner.position;
-            player.unit.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            playerUnit.transform.position = currentLevelGameObject.GetComponent<Chunk>().playerSpawner.position;
+            playerUnit.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
 
@@ -61,29 +67,27 @@ public class Architect : MonoBehaviour
 
     public void NextLevel()
     {
-        if (currentLevel + 1 >= Levels.Count)
+        if (currentLevel + 1 >= levels.Count)
         {
-            Debug.Log("Final for now");
+            end.Invoke();
             return;
         }
-        timer = spawnPlayerDelay;
         coroutine = SetLevelCoroutine(currentLevel + 1);
         StartCoroutine(coroutine);
     }
 
     private IEnumerator SetLevelCoroutine(int number)
     {
-        player.SetGameplay(false);
-        yield return new WaitForSeconds(spawnPlayerDelay / 2);
-        ToLevel(currentLevel + 1);
-        yield return new WaitForSeconds(spawnPlayerDelay / 2);
-        player.SetGameplay(true);
+        LevelChangeStart.Invoke();
+        yield return new WaitForSeconds(changeDelay / 2);
+        ToLevel(number);
+        yield return new WaitForSeconds(changeDelay / 2);
     }
 
 
     public Object GetRandomChunk()
     {
-        List<Object> variants = new List<Object>(Levels[currentLevel].ChunkVariants);
+        List<Object> variants = new List<Object>(levels[currentLevel].ChunkVariants);
 
         int randomLevel = Random.Range(0, variants.Count);
 
@@ -99,15 +103,19 @@ public class Architect : MonoBehaviour
             if (obj == gameObject)
                 continue;
             if (obj.GetComponent<Unit>() != null)
-                if (obj.GetComponent<Unit>() == player.unit)
+                if (obj.GetComponent<Unit>() == playerUnit)
                     continue;
             if (obj.GetComponent<Item>() != null)
-                if (obj.GetComponent<Item>().GetUser() == player.unit)
+                if (obj.GetComponent<Item>().GetUser() == playerUnit)
                     continue;
             if (obj.tag == "Player")
                 continue;
-
             Destroy(obj);
         }
+    }
+
+    public Level GetCurrentLevel()
+    {
+        return levels[currentLevel];
     }
 }

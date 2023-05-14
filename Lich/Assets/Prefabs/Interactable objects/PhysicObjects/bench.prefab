@@ -99,6 +99,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bench
       objectReference: {fileID: 0}
+    - target: {fileID: 5353873624346133810, guid: 95a40cea6842b6443aaa97c15ee4b972, type: 3}
+      propertyPath: dropPrefab
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6318402168482863682, guid: 95a40cea6842b6443aaa97c15ee4b972, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1

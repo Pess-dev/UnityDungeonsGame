@@ -87,6 +87,10 @@ MonoBehaviour:
   hit:
     m_PersistentCalls:
       m_Calls: []
+  death:
+    m_PersistentCalls:
+      m_Calls: []
+  dropPrefab: {fileID: 0}
 --- !u!95 &2825947169006419515
 Animator:
   serializedVersion: 5
@@ -126,7 +130,10 @@ MonoBehaviour:
   interacted:
     m_PersistentCalls:
       m_Calls: []
-  hpAdd: 2
+  viewed:
+    m_PersistentCalls:
+      m_Calls: []
+  hpAdd: 1
 --- !u!1 &7400314256446101337
 GameObject:
   m_ObjectHideFlags: 0

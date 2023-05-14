@@ -43,10 +43,11 @@ public class Door : Interactable
 
     public override void Interact(Unit user = null)
     {
-        base.Interact(user);
 
-        if (locked) 
+        if (locked)
             return;
+
+        base.Interact(user);
 
         opened = !opened;
 

@@ -81,14 +81,20 @@ public class Unit : MonoBehaviour
         Goblin,
     }
 
-    void Start()
+    private void Awake()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         health = GetComponent<Health>();
 
         health.hit.AddListener(Damaged);
+        health.death.AddListener(OnDeath);
+        if (cameraPlace == null)
+            cameraPlace = Head;
+    }
 
+    void Start()
+    {
         if (controled)
             SetControl();
         else
@@ -202,9 +208,11 @@ public class Unit : MonoBehaviour
         {
             anim.SetInteger("grabbedIdle", firstItem.idleAnimationNumber);
             anim.SetBool("grabbed", true);
+            anim.SetFloat("attackModifier", firstItem.animationModifier);
         }
         else
             anim.SetBool("grabbed", false);
+
         anim.SetBool("dashing", dashing);
     }
     
@@ -401,7 +409,9 @@ public class Unit : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + normalAllSurfaces); 
     }
 
-    private void OnDestroy()
+
+
+    private void OnDeath()
     {
         if (firstItem != null)
             firstItem.GetComponent<Health>().Kill();
@@ -409,6 +419,13 @@ public class Unit : MonoBehaviour
             secondItem.GetComponent<Health>().Kill();
     }
 
+    private void OnDestroy()
+    {
+        if (firstItem != null)
+            Destroy(firstItem.gameObject);
+        if (secondItem != null)
+            Destroy(secondItem.gameObject);
+    }
 
     public float GetHP()
     {

@@ -366,7 +366,7 @@ MonoBehaviour:
   speed: 5
   modifier: 0.1
   friction: 0.01
-  airSpeedModifier: 0.05
+  airSpeedModifier: 0.1
   maxFloorAngle: 45
   hand: {fileID: 7264636287801554942}
   back: {fileID: 9113840784194839095}
@@ -395,6 +395,9 @@ MonoBehaviour:
   deathPrefabPlace: {fileID: 338364550505184569}
   mortal: 1
   hit:
+    m_PersistentCalls:
+      m_Calls: []
+  death:
     m_PersistentCalls:
       m_Calls: []
   dropPrefab: {fileID: 6570478709837004779, guid: 5e2192ce6baebad4ca8cc366d8783c0d, type: 3}
