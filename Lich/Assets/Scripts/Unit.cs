@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Unit : MonoBehaviour
 {
@@ -18,10 +19,11 @@ public class Unit : MonoBehaviour
 
     //Dash
     private float dashTimer = 0f;
-    public float dashForce = 1f;
+    public float dashVelocityMagnitude = 1f;
     public float dashCooldown = 1f;
     private bool dashing;
     public float dashDuration = 0.2f;
+    public float dashLerp = 0.7f;
     [SerializeField]
     private Object dashParticle;
     private Vector3 dashVelocity = Vector3.zero; 
@@ -40,9 +42,8 @@ public class Unit : MonoBehaviour
 
     //Movement
     public float speed = 1f;
-    public float modifier = 0.1f;
-    public float friction = 0.1f;
-    public float airSpeedModifier = 0.1f;
+    public float speedLerp = 0.1f;
+    public float airSpeedLerp = 0.1f;
     public float maxFloorAngle = 30;
 
     //items
@@ -73,6 +74,9 @@ public class Unit : MonoBehaviour
     private Rigidbody rb;
 
     public Team side = Team.Neutral;
+
+    public UnityEvent attackEvent;
+    public UnityEvent dashEvent;
 
     public enum Team
     {
@@ -113,7 +117,11 @@ public class Unit : MonoBehaviour
             dashTimer -= Time.deltaTime;
 
         if (dashTimer < dashCooldown - dashDuration)
+        {
+            if (dashing)
+                rb.velocity = (rb.velocity - rb.velocity.y*Vector3.up) * speed / rb.velocity.magnitude + rb.velocity.y * Vector3.up;
             dashing = false;
+        }
         else
             dashing = true;
 
@@ -153,38 +161,25 @@ public class Unit : MonoBehaviour
 
     public void Move(Vector3 moveDirection)
     {
+        Vector3 newVelocity = moveDirection * speed;
+
         if (isGrounded)
-        { 
-            moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
-        }
-        else
-        { 
-            moveDirection *= airSpeedModifier;
+        {
+            newVelocity = Quaternion.FromToRotation(Vector3.up, normalFloor) * newVelocity;
         }
 
-        if (rb.velocity.magnitude > speed && isGrounded)
-        {
-            moveDirection *= speed / rb.velocity.magnitude;
-            moveDirection -= Vector3.Project(moveDirection, rb.velocity);
-        }
 
-        Vector3 addVelocity = moveDirection * speed;
-        Vector3 flatVelocity = rb.velocity - rb.velocity.y * Vector3.up;
-        Vector3 newFlatVelocity = addVelocity + flatVelocity;
-        if (newFlatVelocity.magnitude > speed)
-        {
-            addVelocity = newFlatVelocity * speed / newFlatVelocity.magnitude - flatVelocity; 
-        }
+        newVelocity += rb.velocity.y * Vector3.up;
+
 
         if (dashing)
-            rb.velocity = Vector3.Lerp(rb.velocity, dashVelocity, 0.7f);
+            rb.velocity = Vector3.Lerp(rb.velocity, dashVelocity, dashLerp * Time.deltaTime);
         else
-            rb.velocity += addVelocity * modifier;
-
-        if (isGrounded && moveDirection.magnitude == 0)
-        {
-            rb.velocity += -flatVelocity * friction;
-        }
+            if (isGrounded)
+                rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, speedLerp * Time.deltaTime);
+            else
+                if (moveDirection.magnitude != 0)
+                    rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, airSpeedLerp * Time.deltaTime);
     }
 
     public void RotateLocal(Vector3 deltaEuler)
@@ -229,16 +224,15 @@ public class Unit : MonoBehaviour
     {
         if (dashTimer > 0 || moveDirection.magnitude == 0)
             return;
-
-        moveDirection = transform.TransformDirection(moveDirection);
         
        if (isGrounded) 
             moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
 
-        dashVelocity = moveDirection.normalized * dashForce;
+        dashVelocity = moveDirection.normalized * dashVelocityMagnitude;
         dashTimer = dashCooldown;
 
         Instantiate(dashParticle, transform.position, Quaternion.LookRotation(-moveDirection.normalized), this.transform);
+        dashEvent.Invoke();
     }
 
     public void UseItem()
@@ -249,7 +243,9 @@ public class Unit : MonoBehaviour
         if (firstItem.GetTimer()>0)
             return;
 
-        firstItem.Use(); 
+        firstItem.Use();
+
+        attackEvent.Invoke();
 
         anim.SetTrigger("attack");
         anim.SetInteger("grabbedUse", Random.Range(1, 4));
@@ -435,5 +431,10 @@ public class Unit : MonoBehaviour
     public float GetMaxHP()
     {
         return health.GetMaxHP();
+    }
+
+    public float GetDashTimer()
+    {
+        return dashTimer;
     }
 }

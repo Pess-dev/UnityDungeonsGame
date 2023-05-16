@@ -14,6 +14,7 @@ public class Heal : Interactable
 
     public override void Interact(Unit user = null)
     {
+        base.Interact();
         if (user == null)
             return;
 

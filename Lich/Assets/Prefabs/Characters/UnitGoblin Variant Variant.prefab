@@ -15,6 +15,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitGoblin Variant Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 1736431999121037255, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: Loop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736431999121037255, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: aa197c360073baa47890d6ee3e7ba31e, type: 3}
+    - target: {fileID: 1736431999121037255, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7301622249694705157, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
       propertyPath: m_RootOrder
       value: 0

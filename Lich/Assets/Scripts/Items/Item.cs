@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Item : MonoBehaviour
 { 
@@ -36,6 +37,9 @@ public class Item : MonoBehaviour
         Melee,
         Cast,
     }
+
+    public UnityEvent grabbedEvent;
+    public UnityEvent usedEvent;
 
     public Unit GetUser()
     {
@@ -87,6 +91,7 @@ public class Item : MonoBehaviour
 
         interactable.Deactivate();
         grabbed = true;
+        grabbedEvent.Invoke();
     }
 
     public virtual void Release()
@@ -108,7 +113,9 @@ public class Item : MonoBehaviour
     { return timer <= 0 ? true : false; }
 
     public virtual void Use()
-    { }
+    {
+        usedEvent.Invoke();
+    }
 
     public virtual void StopUse()
     { }

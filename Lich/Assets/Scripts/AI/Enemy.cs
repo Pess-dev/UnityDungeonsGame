@@ -23,6 +23,10 @@ public class Enemy : MonoBehaviour
 
     public bool active = true;
 
+    public float attackDelay = 0.5f;
+
+    public Tactic tactic = Tactic.Simple;
+
     private enum State
     {
         Idle,
@@ -32,8 +36,17 @@ public class Enemy : MonoBehaviour
         SeekWeapon
     }
 
+    public enum Tactic
+    {
+        Simple,
+        Dash,
+        SmartDash,
+    }
+
     [SerializeField]
     private State currentState;
+
+    private IEnumerator coroutine;
 
     private void Awake()
     {
@@ -69,7 +82,8 @@ public class Enemy : MonoBehaviour
                 }
             case State.Attack:
                 {
-                    Attack();
+                    coroutine = Attack();
+                    StartCoroutine(coroutine);
                     break;
                 }
             case State.SeekWeapon:
@@ -104,7 +118,7 @@ public class Enemy : MonoBehaviour
 
         Vector3 deltaEuler = new Vector3(dx*xRotatingModifier,dy*yRotatingModifier,0);
 
-        unit.RotateLocal(deltaEuler);
+        unit.RotateLocal(deltaEuler * Time.deltaTime);
     }
     private void UpdateTargets()
     {
@@ -130,8 +144,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Attack()
+    private IEnumerator Attack()
     {
+        yield return new WaitForSeconds(attackDelay);
         unit.UseItem();
         currentState = State.Chase;
     }
@@ -150,6 +165,14 @@ public class Enemy : MonoBehaviour
         {
             currentState = State.Retreat;
             return;
+        }
+
+        if (tactic == Tactic.SmartDash && (targetTransform.position - unit.attackPoint.position).magnitude < attackDistance * 2)
+        {
+            currentState = State.Attack;
+            Vector3 dashDirection = (targetTransform.position - unit.transform.position).normalized;
+            dashDirection -= Vector3.up * dashDirection.y;
+            unit.Dash(dashDirection);
         }
 
         if ((targetTransform.position - unit.attackPoint.position).magnitude < attackDistance)
@@ -174,8 +197,13 @@ public class Enemy : MonoBehaviour
             currentState = State.Chase;
             return;
         }
-        
-        NavMesh.CalculatePath(transform.position, transform.position+(transform.position - targetTransform.position - Vector3.up*(transform.position.y - targetTransform.position.y)).normalized * retreatRadius, NavMesh.AllAreas, path);
+
+        Vector3 retreatDirection = (transform.position - targetTransform.position - Vector3.up * (transform.position.y - targetTransform.position.y)).normalized;
+
+        if (tactic == Tactic.Dash || tactic == Tactic.SmartDash)
+            unit.Dash(retreatDirection);
+
+        NavMesh.CalculatePath(transform.position, transform.position + retreatDirection * retreatRadius, NavMesh.AllAreas, path);
     }
 
     private void SeekWeapon()

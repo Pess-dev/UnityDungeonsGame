@@ -28,7 +28,9 @@ public class PlayerControl : MonoBehaviour
     [SerializeField]
     private CircularProgressBar hpBar;
     [SerializeField]
-    private CircularProgressBar cooldownBar;
+    private CircularProgressBar attackCooldownBar;
+    [SerializeField]
+    private CircularProgressBar dashCooldownBar;
     [SerializeField]
     private Animator uiAnim;
     [SerializeField]
@@ -147,16 +149,19 @@ public class PlayerControl : MonoBehaviour
         if (unit == null)
         {
             hpBar.m_FillAmount = 0;
-            cooldownBar.m_FillAmount = 0 ;
+            attackCooldownBar.m_FillAmount = 0;
+            dashCooldownBar.m_FillAmount = 0;
             return;
         }
 
         hpBar.m_FillAmount = unit.GetHP() / unit.GetMaxHP();
 
         if (unit.firstItem != null)
-            cooldownBar.m_FillAmount = 1 - unit.firstItem.GetTimer() / unit.firstItem.cooldown;
+            attackCooldownBar.m_FillAmount = 1 - unit.firstItem.GetTimer() / unit.firstItem.cooldown;
         else
-            cooldownBar.m_FillAmount = 0;
+            attackCooldownBar.m_FillAmount = 0;
+
+        dashCooldownBar.m_FillAmount = 1 - unit.GetDashTimer() / unit.dashCooldown;
     }
 
     public void ProcessLook(Vector2 input)
@@ -185,7 +190,7 @@ public class PlayerControl : MonoBehaviour
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.x;
         moveDirection.z = input.y;
-        unit.Dash(moveDirection);
+        unit.Dash(unit.transform.TransformDirection(moveDirection));
     }
 
     public void Jump()
@@ -374,6 +379,8 @@ public class PlayerControl : MonoBehaviour
 
         unit.SetControl();
 
+        unit.GetComponent<Health>().hit.AddListener(() => uiAnim.SetTrigger("hit"));
+
         architect.playerUnit = unit;
 
         architect.NewGame();
@@ -397,6 +404,11 @@ public class PlayerControl : MonoBehaviour
 
     public void Pause()
     {
+        if (gameplayState == GameplayState.Pause)
+        {
+            UnPause();
+            return;
+        }
         if (gameplayState != GameplayState.Game)
             return;
         ToggleCursor(true); 

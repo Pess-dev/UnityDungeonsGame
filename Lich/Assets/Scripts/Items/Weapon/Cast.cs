@@ -46,6 +46,7 @@ public class Cast : Item
 
     public override void Use()
     {
+        base.Use();
         if (timer > 0)
             return;
 

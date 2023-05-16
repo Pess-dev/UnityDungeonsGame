@@ -99,9 +99,17 @@ PrefabInstance:
       propertyPath: active
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 854860659740978695, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: attackDelay
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 1063077713628977325, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
       propertyPath: m_Name
       value: EnemySmall
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736431999121037255, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: m_Pitch
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2887242921618321516, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
       propertyPath: maxHP

@@ -7,6 +7,9 @@ using UnityEngine.Events;
 public class Architect : MonoBehaviour
 {
     [SerializeField]
+    private int firstLevel = 0;
+
+    [SerializeField]
     private int currentLevel = 0;
 
     public float changeDelay = 2f;
@@ -38,7 +41,7 @@ public class Architect : MonoBehaviour
 
     public void NewGame()
     {
-        currentLevel = -1;
+        currentLevel = firstLevel - 1;
         NextLevel();
     }
 
