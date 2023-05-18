@@ -9,12 +9,9 @@ public class Architect : MonoBehaviour
     [SerializeField]
     private int firstLevel = 0;
 
-    [SerializeField]
-    private int currentLevel = 0;
+    public int currentLevel = 0;
 
     public float changeDelay = 2f;
-
-    //private List<Object> usedLevelVariants = new List<Object>();
 
     public List<Level> levels = new List<Level>();
     [System.Serializable]
@@ -35,14 +32,18 @@ public class Architect : MonoBehaviour
 
     private void Start()
     {
-        //player.SetGameplay(true);
-        //ToLevel(currentLevel);
     }
 
     public void NewGame()
     {
         currentLevel = firstLevel - 1;
         NextLevel();
+    }
+
+    public void StartLevel(int level)
+    {
+        coroutine = SetLevelCoroutine(level);
+        StartCoroutine(coroutine);
     }
 
     public void ToLevel(int number)
@@ -52,16 +53,14 @@ public class Architect : MonoBehaviour
             return;
         DestroyNonPlayerObjects();
 
-        //currentLevelGameObject = ((GameObject)Instantiate(GetRandomChunk()));
         currentLevelGameObject = ((GameObject)Instantiate(levels[currentLevel].StartChunk)); 
         currentLevelGameObject.GetComponent<Chunk>().architect = this;
         currentLevelGameObject.GetComponent<Chunk>().remainingChunks = levels[currentLevel].ChunkCount;
 
-        //usedLevelVariants.Add(variants[randomLevel]);
-
         if (playerUnit != null)
         {
             playerUnit.transform.position = currentLevelGameObject.GetComponent<Chunk>().playerSpawner.position;
+            playerUnit.transform.rotation = currentLevelGameObject.GetComponent<Chunk>().playerSpawner.rotation;
             playerUnit.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }

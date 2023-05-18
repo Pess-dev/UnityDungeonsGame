@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+
+
     Unit unit;
 
     public float seekRadius = 50f;
@@ -42,6 +44,8 @@ public class Enemy : MonoBehaviour
         SmartDash,
     }
 
+    public static int enemyKilled = 0;
+
     [SerializeField]
     private State currentState;
 
@@ -49,6 +53,7 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+
         currentState = State.Idle;
 
         path = new NavMeshPath();
@@ -59,6 +64,8 @@ public class Enemy : MonoBehaviour
         unit = GetComponent<Unit>();
 
         unit.gameObject.GetComponent<Health>().hit.AddListener(() => { active = true; });
+        
+        unit.health.death.AddListener(() => { enemyKilled++; });
     }
 
     private void Update()

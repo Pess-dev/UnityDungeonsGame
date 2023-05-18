@@ -45,7 +45,13 @@ public class PlayerControl : MonoBehaviour
 
     public string leaderBoardData;
 
+    public int reachedLevel = 0;
+
     private float unitLifetime = 0;
+
+    bool writeProgress = true;
+
+
 
     public enum GameplayState
     {
@@ -282,6 +288,11 @@ public class PlayerControl : MonoBehaviour
 
     private void SyncWithGameplayState()
     {
+        if (architect.currentLevel > reachedLevel)
+        {
+            reachedLevel = architect.currentLevel;
+        }
+        
         cam.enabled = true;
         Time.timeScale = 1;
         switch (gameplayState)
@@ -319,8 +330,12 @@ public class PlayerControl : MonoBehaviour
 
     public void StartNewGame()
     {
+        Enemy.enemyKilled = 0;
+
         if (unit != null)
             Destroy(unit);
+
+        writeProgress = true;
 
         newGame.Invoke();
 
@@ -337,12 +352,33 @@ public class PlayerControl : MonoBehaviour
         unitSet.Invoke();
     }
 
+    public void StartLevel(int level)
+    {
+        if (unit != null)
+            Destroy(unit);
+
+        writeProgress = false;
+
+        newGame.Invoke();
+
+        unit = ((GameObject)Instantiate(playerUnitPrefab)).GetComponent<Unit>();
+
+        unit.GetComponent<Health>().death.AddListener(Defeat);
+
+        unit.SetControl();
+
+        architect.playerUnit = unit;
+
+        architect.StartLevel(level);
+
+        unitSet.Invoke();
+    }
+
     public void StartButton()
     {
         if (firstCutScene != null)
         {
             architect.DestroyNonPlayerObjects();
-
             coroutine = SetGameplayState(GameplayState.CutScene);
             StartCoroutine(coroutine);
         }
@@ -366,6 +402,7 @@ public class PlayerControl : MonoBehaviour
         coroutine = SetGameplayState(GameplayState.Pause);
         StartCoroutine(coroutine);
     }
+
     public void UnPause()
     {
         if (gameplayState != GameplayState.Pause)
@@ -395,19 +432,22 @@ public class PlayerControl : MonoBehaviour
 
         architect.DestroyNonPlayerObjects();
 
-        AddToLeaderBoard(true, unitLifetime);
+        if (writeProgress )
+            AddToLeaderBoard(true, unitLifetime);
 
         coroutine = SetGameplayState(GameplayState.Menu);
         StartCoroutine(coroutine);
     }
     private void Defeat()
     {
-        AddToLeaderBoard(false, unitLifetime);
-        coroutine = ShowDeadscreen();
+        if (writeProgress && Enemy.enemyKilled > 0)
+            AddToLeaderBoard(false, unitLifetime);
+
+        coroutine = DelayDefeat();
         StartCoroutine(coroutine);
     }
 
-    public IEnumerator ShowDeadscreen()
+    public IEnumerator DelayDefeat()
     {
         yield return new WaitForSeconds(deadscreenDelay);
 
@@ -430,9 +470,9 @@ public class PlayerControl : MonoBehaviour
         return gameplayState;
     }
 
-    public void SetVolume(float volume)
+    public void SetVolume(float newVolume)
     {
-        volume = Mathf.Clamp01(volume);
+        volume = Mathf.Clamp01(newVolume);
         AudioListener.volume = volume;
     }
 
@@ -452,7 +492,7 @@ public class PlayerControl : MonoBehaviour
         leaderBoardData = "";
         foreach (string data in lines)
         {
-            leaderBoardData += data+"\n";
+            leaderBoardData += data + "\n";
         }
     }
 
@@ -467,7 +507,7 @@ public class PlayerControl : MonoBehaviour
         int min = (int)Mathf.Floor(lifetime/60);
         int sec = (int)lifetime - min * 60; 
         System.DateTime dt = System.DateTime.Now;
-        leaderBoardData += min.ToString() + " m " + sec.ToString()+" s "+ dt.ToString("yyyy-MM-dd");
+        leaderBoardData += min.ToString() + " m " + sec.ToString()+" s, "+Enemy.enemyKilled + " killed goblins, " + dt.ToString("yyyy-MM-dd");
 
         leaderBoardData += "\n";
         UpdateLeaderboard();
@@ -484,7 +524,12 @@ public class PlayerControl : MonoBehaviour
         if (x_[2] == "victory" && y_[2] != "victory")
             return 2;
         if (x_[2] == "defeat" && y_[2] != "defeat")
-            return -2;
+        {
+            if (int.Parse(x_[8]) > int.Parse(y_[8]))
+                return 1;
+            else 
+                return -1;
+        }
         
         
         float Xseconds = float.Parse(x_[4]) * 60 + float.Parse(x_[6]);
@@ -501,12 +546,14 @@ public class PlayerControl : MonoBehaviour
         playerName = PlayerPrefs.GetString("PlayerName", "Noname");
         sensitivity = PlayerPrefs.GetFloat("Sensitivity", defaultSensitivity);
         volume = PlayerPrefs.GetFloat("Volume", 1);
+        reachedLevel = PlayerPrefs.GetInt("ReachedLevel", 0);
         leaderBoardData = PlayerPrefs.GetString("Leaderboard", "");
         SetVolume(volume);
     }
 
     private void SaveData()
     {
+        PlayerPrefs.SetInt("ReachedLevel", reachedLevel);
         PlayerPrefs.SetString("PlayerName", playerName);
         PlayerPrefs.SetFloat("Sensitivity", sensitivity);
         PlayerPrefs.SetFloat("Volume", volume);

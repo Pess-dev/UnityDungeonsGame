@@ -69,7 +69,7 @@ public class Unit : MonoBehaviour
     [SerializeField]
     public float interactDistance = 3f;
 
-    private Health health;
+    public Health health;
 
     private Rigidbody rb;
 
@@ -126,11 +126,17 @@ public class Unit : MonoBehaviour
         if (dashTimer < dashCooldown - dashDuration)
         {
             if (dashing && rb.velocity.magnitude > 0)
-                rb.velocity = (rb.velocity - rb.velocity.y*Vector3.up) * speed / rb.velocity.magnitude + rb.velocity.y * Vector3.up;
+                rb.velocity = (rb.velocity - rb.velocity.y * Vector3.up) * speed / rb.velocity.magnitude + rb.velocity.y * Vector3.up;
             dashing = false;
+            health.mortal = true;
         }
         else
+        {
+            health.mortal = false;
             dashing = true;
+            if (!isGrounded) 
+                dashVelocity -= Vector3.up*dashVelocity.y;
+        }
 
         if (jumpTimer > 0)
             jumpTimer -= Time.deltaTime; 
@@ -231,9 +237,9 @@ public class Unit : MonoBehaviour
     {
         if (dashTimer > 0 || moveDirection.magnitude == 0)
             return;
-        
-       if (isGrounded) 
-            moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
+        //// Quaternion.FromToRotation(Vector3.up, normalFloor) * newVelocity;
+        //if (isGrounded)
+        //    moveDirection = Quaternion.FromToRotation(Vector3.up, normalFloor) * moveDirection;
 
         dashVelocity = moveDirection.normalized * dashVelocityMagnitude;
         dashTimer = dashCooldown;
@@ -424,16 +430,6 @@ public class Unit : MonoBehaviour
             Destroy(firstItem.gameObject);
         if (secondItem != null)
             Destroy(secondItem.gameObject);
-    }
-
-    public float GetHP()
-    {
-        return health.GetHP();
-    }
-
-    public float GetMaxHP()
-    {
-        return health.GetMaxHP();
     }
 
     public float GetDashTimer()

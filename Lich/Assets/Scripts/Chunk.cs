@@ -15,6 +15,8 @@ public class Chunk : MonoBehaviour
 
     public int remainingChunks = 0;
 
+    public GameObject pastChunk = null;
+
     private bool nextSpawned = false;
 
     private void Start()
@@ -42,6 +44,10 @@ public class Chunk : MonoBehaviour
         MoveBy(newChunk.transform,newChunk.begin,end);
         nextSpawned = true;
 
+        newChunk.pastChunk = gameObject;
+
+        if (pastChunk != null)
+            Destroy(pastChunk);
     }
 
     private void MoveBy(Transform obj, Transform by, Transform to)

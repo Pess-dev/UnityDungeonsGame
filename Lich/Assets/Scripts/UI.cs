@@ -40,12 +40,20 @@ public class UI : MonoBehaviour
     [SerializeField]
     private Slider sensitivitySlider;
 
+    [SerializeField]
+    private Button secondLevel;
+    [SerializeField]
+    private Button thirdLevel;
+
 
     [SerializeField]
     private Image aim;
 
     private void Start()
     {
+        gameUI.SetActive(false);
+        menuUI.SetActive(false);
+        pauseUI.SetActive(false);
         player.newGame.AddListener(() => player.playerName = playerNameText.GetComponent<TMP_InputField>().text);
         player.unitSet.AddListener(SetUnit);
         player.gameplayStateChanged.AddListener(SyncWithGameplayState);
@@ -88,7 +96,7 @@ public class UI : MonoBehaviour
             return;
         }
 
-        hpBar.m_FillAmount = Mathf.Clamp01(player.unit.GetHP() / player.unit.GetMaxHP());
+        hpBar.m_FillAmount = Mathf.Clamp01(player.unit.health.GetHP() / player.unit.health.GetMaxHP());
 
         if (player.unit.firstItem != null)
             attackCooldownBar.m_FillAmount = Mathf.Clamp01(1 - player.unit.firstItem.GetTimer() / player.unit.firstItem.cooldown);
@@ -111,7 +119,6 @@ public class UI : MonoBehaviour
                     aim.gameObject.SetActive(true);
                     float newColor = Mathf.Clamp01(health.GetHP() / health.GetMaxHP());
                     aim.color = new Color(1, newColor, newColor, aim.color.a);
-                 
                 }
 
             if (item != null)
@@ -144,7 +151,8 @@ public class UI : MonoBehaviour
             case PlayerControl.GameplayState.Menu:
                 {
                     menuUI.SetActive(true);
-                    UpdateLeaderboard();
+                    SyncProgress();
+                    
                     break;
                 }
             case PlayerControl.GameplayState.Pause:
@@ -166,11 +174,21 @@ public class UI : MonoBehaviour
 
         playerNameText.GetComponent<TMP_InputField>().text = player.playerName;
 
-        UpdateLeaderboard();
+        SyncProgress();
     }
 
-    public void UpdateLeaderboard()
+    public void SyncProgress()
     {
+        if (player.reachedLevel == 2)
+            thirdLevel.interactable = true;
+        else 
+            thirdLevel.interactable = false;
+
+        if (player.reachedLevel == 1 || player.reachedLevel == 2)
+            secondLevel.interactable = true;
+        else
+            secondLevel.interactable = false;
+
         leaderboardText.text = player.leaderBoardData;
     }
 
@@ -184,9 +202,10 @@ public class UI : MonoBehaviour
         player.sensitivity = player.minSensitivity + (player.maxSensitivity - player.minSensitivity) * sensitivitySlider.value;
     }
 
-    public void ClearLeaderboard()
+    public void ClearProgress()
     {
-        player.leaderBoardData = ""; 
-        UpdateLeaderboard();
+        player.leaderBoardData = "";
+        player.reachedLevel = 0;
+        SyncProgress();
     }
 }
