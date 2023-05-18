@@ -268,7 +268,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c6d6f9174d4b74590d474af4735f6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 1
+  cooldown: 2
+  breaking: 1
   grabbable: 1
   grab: {fileID: 6044087564415457690}
   idleAnimationNumber: 2
@@ -292,10 +293,6 @@ MonoBehaviour:
   usedEvent:
     m_PersistentCalls:
       m_Calls: []
-  maxMana: 1
-  manaRecover: 0.1
-  mana: 0
-  manaPerCast: 0.5
   castObject: {fileID: 0}
   castPlace: {fileID: 1022742621689973715}
 --- !u!114 &2722680650212255435
@@ -311,7 +308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 0
-  maxHP: 100
+  maxHP: 50
   deathPrefab: {fileID: 0}
   deathPrefabPlace: {fileID: 0}
   mortal: 1

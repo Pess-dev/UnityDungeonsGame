@@ -11,7 +11,10 @@ public class ActivateEnemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Unit>() == null)
+        if (other.GetComponentInParent<Unit>() == null)
+            return;
+
+        if (other.GetComponentInParent<Enemy>() != null)
             return;
 
         Collider[] colliders = Physics.OverlapBox(position.position, halfExtends, position.rotation);

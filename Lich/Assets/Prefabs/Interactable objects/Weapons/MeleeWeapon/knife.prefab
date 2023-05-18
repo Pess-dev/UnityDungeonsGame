@@ -19,6 +19,22 @@ PrefabInstance:
       propertyPath: attackRadius
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2900990097254296160, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2900990097254296160, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 497e88a667424e04fac911bad4225c18, type: 2}
+    - target: {fileID: 2900990097254296160, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: ef2061b9bfd2f3d428566f3a3c5212c0, type: 2}
+    - target: {fileID: 2900990097254296160, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9a5b1b421035f4c49881a329b8486806, type: 2}
     - target: {fileID: 5372615005041016093, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: m_RootOrder
       value: 0

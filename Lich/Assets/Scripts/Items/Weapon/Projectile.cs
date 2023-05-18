@@ -10,13 +10,14 @@ public class Projectile : MonoBehaviour
     private float timer = 0f;
     public float knockback = 1f;
     public Vector3 velocity = Vector3.zero;
-    private float damagingRadius = 1;
+    public float damagingRadius = 1;
 
     Health health;
     Rigidbody rb;
 
     private void Start()
     {
+        setVelocity(transform.forward * speed);
         health = GetComponent<Health>();
         rb = GetComponent<Rigidbody>();
     }
@@ -71,5 +72,9 @@ public class Projectile : MonoBehaviour
             targetRb.AddForce(knockbackDirection * knockback, ForceMode.Force);
         }
         health.Kill();
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, damagingRadius);
     }
 }

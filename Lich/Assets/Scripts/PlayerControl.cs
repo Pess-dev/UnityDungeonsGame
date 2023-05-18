@@ -11,73 +11,66 @@ public class PlayerControl : MonoBehaviour
     public string playerName = "Noname";
 
     [SerializeField]
-    private Object playerPrefab;
+    private Object playerUnitPrefab;
 
-    //Look
-    public Camera cam; 
-    public float xSensitivity = 30f;
-    public float ySensitivity = 30f;
+    public Camera cam;
+    public float defaultSensitivity = 30f;
+    public float minSensitivity = 10f;
+    public float maxSensitivity = 50f;
+    public float sensitivity = 30f;
 
-    //interaction system
+    public float volume = 1f;
+
     public float interactionAngle=30;
     private Interactable visibleInteractable;
 
-    //UI
-    [SerializeField]
-    private TextMeshProUGUI promptText;
-    [SerializeField]
-    private CircularProgressBar hpBar;
-    [SerializeField]
-    private CircularProgressBar attackCooldownBar;
-    [SerializeField]
-    private CircularProgressBar dashCooldownBar;
-    [SerializeField]
-    private Animator uiAnim;
-    [SerializeField]
-    private GameObject menuUI;
-    [SerializeField]
-    private GameObject gameUI;
-    [SerializeField]
-    private GameObject pauseUI;
-
-    [SerializeField]
-    private TextMeshProUGUI playerNameText;
-
     [SerializeField]
     private Object menuBackground;
-    
-    private Animator cameraAnim;
-
+ 
     public Architect architect;
 
     public float fadeDelay = 2f;
 
+    public float deadscreenDelay = 3f;
+
     public Object firstCutScene;
 
     public UnityEvent skipEvent;
+
+    public UnityEvent unitSet;
+
+    public UnityEvent gameplayStateChanged;
+
+    public UnityEvent newGame;
+
+    public string leaderBoardData;
+
+    private float unitLifetime = 0;
 
     public enum GameplayState
     {
         Game,
         Menu,
         Pause,
-        CutScene1,
+        CutScene,
     }
 
     [SerializeField]
     private GameplayState gameplayState = GameplayState.Menu;
 
-    public bool fade = false;
+    public bool gameplayStateChanging = false;
+
+    private void Awake()
+    {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+        LoadData();
+        UpdateLeaderboard();
+    }
 
     private void Start()
-    {
-        cameraAnim = GetComponent<Animator>();
-        if (unit != null)
-        {
-            unit.SetControl();
-            unit.GetComponent<Health>().hit.AddListener(() => uiAnim.SetTrigger("hit")) ;
-        }
-        architect.end.AddListener(Win);
+    {   
+        architect.end.AddListener(Victory);
         architect.changeDelay = fadeDelay;
         architect.DestroyNonPlayerObjects();
 
@@ -93,26 +86,13 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     { 
         CheckInteractable();
-        UpdateAnimation();
-        updateBars();
+
+        if (unit != null)
+            unitLifetime = unit.GetLifeTime();
     }
     private void LateUpdate()
     {
         SyncWithUnit();
-    }
-
-    private void UpdateAnimation()
-    {
-        if (unit == null)
-        {
-            cameraAnim.SetBool("dash", false);
-        }
-
-        cameraAnim.SetBool("dash", unit.GetDashing());
-
-        uiAnim.SetBool("fade", fade);
-
-        uiAnim.SetBool("prompt", promptText.text != "" ? true : false);
     }
 
     private void ToggleCursor(bool visible)
@@ -141,34 +121,14 @@ public class PlayerControl : MonoBehaviour
         Quaternion newRotation = unit.transform.rotation;
         newRotation = Quaternion.Euler(newRotation.eulerAngles + Vector3.right * (-unit.xRotation - newRotation.eulerAngles.x));
         cam.transform.rotation = newRotation;
-
-    }
-
-    private void updateBars()
-    {
-        if (unit == null)
-        {
-            hpBar.m_FillAmount = 0;
-            attackCooldownBar.m_FillAmount = 0;
-            dashCooldownBar.m_FillAmount = 0;
-            return;
-        }
-
-        hpBar.m_FillAmount = unit.GetHP() / unit.GetMaxHP();
-
-        if (unit.firstItem != null)
-            attackCooldownBar.m_FillAmount = 1 - unit.firstItem.GetTimer() / unit.firstItem.cooldown;
-        else
-            attackCooldownBar.m_FillAmount = 0;
-
-        dashCooldownBar.m_FillAmount = 1 - unit.GetDashTimer() / unit.dashCooldown;
     }
 
     public void ProcessLook(Vector2 input)
     {
         if (unit == null)
             return; 
-        unit.RotateLocal(Vector3.up * (input.x * Time.deltaTime) * xSensitivity + Vector3.right * (-input.y * Time.deltaTime) * ySensitivity);
+
+        unit.RotateLocal(Vector3.up * (input.x * Time.deltaTime) * sensitivity + Vector3.right * (input.y * Time.deltaTime) * sensitivity);
     }
 
     public void ProcessMove(Vector2 input) 
@@ -197,6 +157,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (unit == null)
             return;
+
         unit.Jump();
     }
 
@@ -282,12 +243,6 @@ public class PlayerControl : MonoBehaviour
             visibleInteractable.setOutline(true);
             visibleInteractable.Viewed();
         }
-        if (promptText != null)
-            if (visibleInteractable != null)
-                promptText.text = visibleInteractable.promptMessage;
-            else
-                promptText.text = "";
-
 
     }
 
@@ -306,28 +261,27 @@ public class PlayerControl : MonoBehaviour
 
         if (gs != GameplayState.Pause && gameplayState != GameplayState.Pause)
         {
-            fade = true;
+            gameplayStateChanging = true;
             yield return new WaitForSeconds(fadeDelay / 2);
         }
         
         gameplayState = gs;
         SyncWithGameplayState();
+        gameplayStateChanged.Invoke();
 
         if (gs != GameplayState.Pause && gameplayState != GameplayState.Pause)
         {
             yield return new WaitForSeconds(fadeDelay / 2);
-            fade = false;
+            gameplayStateChanging = false;
         }
-
 
         yield break;
     }
 
+   
+
     private void SyncWithGameplayState()
     {
-        gameUI.SetActive(false);
-        menuUI.SetActive(false);
-        pauseUI.SetActive(false);
         cam.enabled = true;
         Time.timeScale = 1;
         switch (gameplayState)
@@ -335,24 +289,21 @@ public class PlayerControl : MonoBehaviour
             case GameplayState.Game:
                 {
                     ToggleCursor(false);
-                    gameUI.SetActive(true);
                     break;
                 }
             case GameplayState.Menu:
                 {
                     cam.enabled = false;
-                    menuUI.SetActive(true);
                     ToggleCursor(true);
                     Instantiate(menuBackground);
                     break;
                 }
             case GameplayState.Pause:
                 {
-                    pauseUI.SetActive(true);
                     Time.timeScale = 0;
                     break;
                 }
-            case GameplayState.CutScene1:
+            case GameplayState.CutScene:
                 {
                     ToggleCursor(false);
                     cam.enabled = false;
@@ -371,19 +322,19 @@ public class PlayerControl : MonoBehaviour
         if (unit != null)
             Destroy(unit);
 
-        playerName = playerNameText.text;
+        newGame.Invoke();
 
-        unit = ((GameObject)Instantiate(playerPrefab)).GetComponent<Unit>();
+        unit = ((GameObject)Instantiate(playerUnitPrefab)).GetComponent<Unit>();
 
         unit.GetComponent<Health>().death.AddListener(Defeat);
 
         unit.SetControl();
 
-        unit.GetComponent<Health>().hit.AddListener(() => uiAnim.SetTrigger("hit"));
-
         architect.playerUnit = unit;
 
         architect.NewGame();
+
+        unitSet.Invoke();
     }
 
     public void StartButton()
@@ -392,8 +343,7 @@ public class PlayerControl : MonoBehaviour
         {
             architect.DestroyNonPlayerObjects();
 
-
-            coroutine = SetGameplayState(GameplayState.CutScene1);
+            coroutine = SetGameplayState(GameplayState.CutScene);
             StartCoroutine(coroutine);
         }
         else
@@ -434,21 +384,33 @@ public class PlayerControl : MonoBehaviour
 
     public void Exit()
     {
+        SaveData();
         Application.Quit();
     }
 
-    private void Win()
+    private void Victory()
     {
         if (unit != null)
             Destroy(unit);
 
         architect.DestroyNonPlayerObjects();
+
+        AddToLeaderBoard(true, unitLifetime);
 
         coroutine = SetGameplayState(GameplayState.Menu);
         StartCoroutine(coroutine);
     }
     private void Defeat()
     {
+        AddToLeaderBoard(false, unitLifetime);
+        coroutine = ShowDeadscreen();
+        StartCoroutine(coroutine);
+    }
+
+    public IEnumerator ShowDeadscreen()
+    {
+        yield return new WaitForSeconds(deadscreenDelay);
+
         if (unit != null)
             Destroy(unit);
 
@@ -458,5 +420,101 @@ public class PlayerControl : MonoBehaviour
         StartCoroutine(coroutine);
     }
 
-    
+    public Interactable GetVisibleInteractable()
+    {
+        return visibleInteractable;
+    }
+
+    public GameplayState GetGameplayState()
+    {
+        return gameplayState;
+    }
+
+    public void SetVolume(float volume)
+    {
+        volume = Mathf.Clamp01(volume);
+        AudioListener.volume = volume;
+    }
+
+    private void UpdateLeaderboard()
+    {
+        List<string> lines = new List<string>(leaderBoardData.Split("\n"));
+        for (int i = 0; i < lines.Count; ++i)
+        {
+            if (lines[i] == "")
+            {
+                lines.RemoveAt(i);
+                i--;
+            }
+        }
+        lines.Sort(compareLeaderboard);
+        lines.Reverse();
+        leaderBoardData = "";
+        foreach (string data in lines)
+        {
+            leaderBoardData += data+"\n";
+        }
+    }
+
+    private void AddToLeaderBoard(bool victory, float lifetime)
+    {
+        if (playerName.Length == 0)
+        {
+            playerName = "Noname";
+        }
+        leaderBoardData += "\n";
+        leaderBoardData += playerName + " - " + (victory ? "victory" : "defeat")+" - ";
+        int min = (int)Mathf.Floor(lifetime/60);
+        int sec = (int)lifetime - min * 60; 
+        System.DateTime dt = System.DateTime.Now;
+        leaderBoardData += min.ToString() + " m " + sec.ToString()+" s "+ dt.ToString("yyyy-MM-dd");
+
+        leaderBoardData += "\n";
+        UpdateLeaderboard();
+    }
+
+    int compareLeaderboard(string x, string y)
+    {
+        if (x == "")
+            return 0;
+        if (y == "")
+            return 0;
+        string[] x_ = x.Split(' ');
+        string[] y_ = y.Split(' ');
+        if (x_[2] == "victory" && y_[2] != "victory")
+            return 2;
+        if (x_[2] == "defeat" && y_[2] != "defeat")
+            return -2;
+        
+        
+        float Xseconds = float.Parse(x_[4]) * 60 + float.Parse(x_[6]);
+        float Yseconds = float.Parse(y_[4]) * 60 + float.Parse(y_[6]);
+
+        if (Xseconds < Yseconds) 
+            return x_[2] == "victory" ? 1 : -1;
+        else
+            return x_[2] == "victory" ? -1 : 1;
+    }
+
+    private void LoadData()
+    {
+        playerName = PlayerPrefs.GetString("PlayerName", "Noname");
+        sensitivity = PlayerPrefs.GetFloat("Sensitivity", defaultSensitivity);
+        volume = PlayerPrefs.GetFloat("Volume", 1);
+        leaderBoardData = PlayerPrefs.GetString("Leaderboard", "");
+        SetVolume(volume);
+    }
+
+    private void SaveData()
+    {
+        PlayerPrefs.SetString("PlayerName", playerName);
+        PlayerPrefs.SetFloat("Sensitivity", sensitivity);
+        PlayerPrefs.SetFloat("Volume", volume);
+        PlayerPrefs.SetString("Leaderboard", leaderBoardData);
+    }
+
+    private void OnDestroy()
+    {
+        SaveData();
+    }
 }

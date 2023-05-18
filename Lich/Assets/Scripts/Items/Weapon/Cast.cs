@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class Cast : Item
 {
-    public float maxMana = 1;
-    public float manaRecover = 0.1f;
-    public float mana = 0f;
-    public float manaPerCast = 0.5f;
-
-
     [SerializeField]
     private Object castObject;
     
@@ -25,23 +19,18 @@ public class Cast : Item
 
     private void Start()
     {
-        mana = maxMana;
     }
 
     protected override void Update()
     {
         base.Update();
-        mana += manaRecover * Time.deltaTime;
-        if (mana > maxMana)
-            mana = maxMana;
 
         UpdateAnimations();
     }
     
     private void UpdateAnimations()
     {
-        if (GetComponent<Animator>() != null)
-            GetComponent<Animator>().SetFloat("modifier",mana/maxMana);
+        GetComponent<Animator>().SetFloat("modifier",1-timer/cooldown);
     }
 
     public override void Use()
@@ -53,11 +42,9 @@ public class Cast : Item
         if (castObject == null)
             return;
 
-        if (mana < manaPerCast)
-            return;
-         
+        health.Damage(breaking);
 
-        Projectile spawned = ((GameObject)Instantiate(castObject, castPlace.position, castPlace.rotation)).GetComponent<Projectile>();
+        GameObject spawned = ((GameObject)Instantiate(castObject, castPlace.position, castPlace.rotation));
 
         Vector3 direction = user.Head.forward;
 
@@ -70,7 +57,10 @@ public class Cast : Item
             direction = (hit.point - castPlace.position).normalized;
         }
 
-        spawned.setDirection(direction);
+        spawned.transform.rotation = Quaternion.LookRotation(direction);
+
+        Debug.DrawLine(castPlace.position, castPlace.position + direction);
+
         spawned.gameObject.tag = gameObject.tag;
         
         timer = cooldown;
@@ -78,9 +68,5 @@ public class Cast : Item
 
     private void OnDrawGizmosSelected()
     {
-        if (user != null)
-        {
-            Gizmos.DrawLine(castPlace.position, castPlace.position + user.Head.forward);
-        }
     }
 }

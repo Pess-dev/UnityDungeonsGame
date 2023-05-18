@@ -400,7 +400,7 @@ MonoBehaviour:
   HP: 0
   maxHP: 10
   deathPrefab: {fileID: 3431656869579231394, guid: 42184918605eed24bbb17a6b8d585b39, type: 3}
-  deathPrefabPlace: {fileID: 338364550505184569}
+  deathPrefabPlace: {fileID: 2722387717978091324}
   mortal: 1
   hit:
     m_PersistentCalls:
@@ -481,7 +481,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 16.398659
+  MaxDistance: 30
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -516,7 +516,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

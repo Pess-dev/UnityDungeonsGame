@@ -78,6 +78,8 @@ public class Unit : MonoBehaviour
     public UnityEvent attackEvent;
     public UnityEvent dashEvent;
 
+    private float lifeTime = 0;
+
     public enum Team
     {
         Neutral,
@@ -113,12 +115,14 @@ public class Unit : MonoBehaviour
 
     void Update()
     {
+        lifeTime += Time.deltaTime;
+
         if (dashTimer > 0 && (isGrounded || dashTimer > dashCooldown - dashDuration))
             dashTimer -= Time.deltaTime;
 
         if (dashTimer < dashCooldown - dashDuration)
         {
-            if (dashing)
+            if (dashing && rb.velocity.magnitude > 0)
                 rb.velocity = (rb.velocity - rb.velocity.y*Vector3.up) * speed / rb.velocity.magnitude + rb.velocity.y * Vector3.up;
             dashing = false;
         }
@@ -140,7 +144,7 @@ public class Unit : MonoBehaviour
 
     private void RotateHead()
     { 
-        Head.rotation = Quaternion.Euler(Head.rotation.eulerAngles + Vector3.right * (xRotation - Head.rotation.eulerAngles.x));
+        Head.rotation = Quaternion.Euler(Head.rotation.eulerAngles + Vector3.right * (-xRotation - Head.rotation.eulerAngles.x));
     }
 
     private void checkGround()
@@ -185,7 +189,7 @@ public class Unit : MonoBehaviour
     public void RotateLocal(Vector3 deltaEuler)
     {
         transform.Rotate(Vector3.up * deltaEuler.y);
-        xRotation -= deltaEuler.x;
+        xRotation += deltaEuler.x;
         xRotation = Mathf.Clamp(xRotation, -60f, 60f);
     }
 
@@ -436,5 +440,10 @@ public class Unit : MonoBehaviour
     public float GetDashTimer()
     {
         return dashTimer;
+    }
+
+    public float GetLifeTime()
+    {
+        return lifeTime;
     }
 }

@@ -64,13 +64,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 46076350146941484, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: speed
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 854860659740978695, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
       propertyPath: active
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 854860659740978695, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: tactic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 854860659740978695, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: retreatRadius
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1063077713628977325, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
       propertyPath: m_Name
       value: EnemyCrystalCaster
+      objectReference: {fileID: 0}
+    - target: {fileID: 1733465364335063631, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1733465364335063631, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1733465364335063631, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736431999121037255, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
+      propertyPath: m_Pitch
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7301622249694705157, guid: ea4fcea042bed8948841f18750cd7859, type: 3}
       propertyPath: m_RootOrder
@@ -139,6 +167,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: hat
       objectReference: {fileID: 0}
+    - target: {fileID: 2531619993114146227, guid: d7a40ac5d5b9e6d43a1f536442c99770, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c2bf49baa80620741a36d790fc182cc0, type: 2}
     - target: {fileID: 6203424981265605348, guid: d7a40ac5d5b9e6d43a1f536442c99770, type: 3}
       propertyPath: m_RootOrder
       value: 4

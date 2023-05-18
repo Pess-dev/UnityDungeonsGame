@@ -75,7 +75,7 @@ public class Health : MonoBehaviour
             Instantiate(dropPrefab, pos, transform.rotation);
         death.Invoke();
         gameObject.SetActive(false);
-        Destroy(gameObject, 2);
+        Destroy(gameObject);
     }
 
     private void OnDestroy()

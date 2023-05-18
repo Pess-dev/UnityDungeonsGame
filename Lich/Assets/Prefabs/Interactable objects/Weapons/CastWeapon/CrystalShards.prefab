@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3739574432509910969
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 928734647838395654, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: promptMessage
+      value: Crystal shards, the main thing is to aim well
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: castObject
+      value: 
+      objectReference: {fileID: 5372615005041016095, guid: 5346a958030b3214ca4251aa3e6226d0, type: 3}
+    - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: usedEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: usedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: usedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7755827093092565420}
+    - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: usedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: usedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySoundAtPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: usedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SoundController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: usedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: usedEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836995047757645634, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5372615005041016095, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: m_Name
+      value: CrystalShards
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361220692389715477, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: Sounds.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361220692389715477, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: Sounds.Array.data[1].SoundVariants.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361220692389715477, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: Sounds.Array.data[1].SoundVariants.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 939fe532f98904848b2fccb10d5b5c85, type: 3}
+    - target: {fileID: 6832462102182223130, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+      propertyPath: promptMessage
+      value: BALL LIGHTINING
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+--- !u!114 &7755827093092565420 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6361220692389715477, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
+  m_PrefabInstance: {fileID: 3739574432509910969}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780f9426c2d3b8945b8ec90a56949843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

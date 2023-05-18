@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2551755183075954272}
   - component: {fileID: 6664580584611758445}
   m_Layer: 0
-  m_Name: Small
+  m_Name: SmallRapier
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -47,6 +47,6 @@ MonoBehaviour:
   randomYRotation: 1
   objectsVariants:
   - prefab: {fileID: 6991322133048673573, guid: 8baa856ad4c312f4db6937e2d3934fae, type: 3}
-    probability: 3
-  - prefab: {fileID: 6980665577202946299, guid: a2a2a1f15c2160c4f9d5a7801ca5cabd, type: 3}
     probability: 1
+  - prefab: {fileID: 1063077713628977325, guid: ce524bc39e341db4bb108f35aca662ca, type: 3}
+    probability: 3

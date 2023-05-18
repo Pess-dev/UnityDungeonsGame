@@ -9,6 +9,8 @@ public class Item : MonoBehaviour
      
     protected float timer = 0f;
 
+    public float breaking = 0f;
+
     [SerializeField]
     protected bool grabbable = false;
 
@@ -31,6 +33,9 @@ public class Item : MonoBehaviour
 
     private string oldTag;
 
+    protected Health health;
+
+
     public enum ItemType
     {
         NonWeapon,
@@ -48,11 +53,9 @@ public class Item : MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (GetComponent<Interactable>() != null)
-            interactable = GetComponent<Interactable>();
-
-        if (GetComponent<Rigidbody>() != null)
-            rb = GetComponent<Rigidbody>();
+        interactable = GetComponent<Interactable>();
+        health = GetComponent<Health>();
+        rb = GetComponent<Rigidbody>();
 
         oldTag = gameObject.tag;
     }

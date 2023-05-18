@@ -19,6 +19,7 @@ public class Melee : Item
 
     private List<Health> damaged = new List<Health>();
 
+
     protected override void Awake()
     {
         base.Awake();
@@ -49,6 +50,8 @@ public class Melee : Item
         base.Use();
         if (timer > 0)
             return;
+
+        health.Damage(breaking);
 
         attackDurationTimer = attackDuration; 
         timer = cooldown;

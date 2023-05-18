@@ -10,7 +10,6 @@ public class Enemy : MonoBehaviour
     public float seekRadius = 50f;
 
     public float retreatRadius = 4f;
-    //public float retreatDistance = 1f;
 
     private NavMeshPath path;
 
@@ -58,6 +57,8 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         unit = GetComponent<Unit>();
+
+        unit.gameObject.GetComponent<Health>().hit.AddListener(() => { active = true; });
     }
 
     private void Update()
@@ -113,10 +114,10 @@ public class Enemy : MonoBehaviour
     {
         Vector3 direction = (point - unit.Head.position).normalized;
 
-        float dx = 90 - Vector3.Angle(direction, Vector3.up) + unit.xRotation;
+        float dx = unit.xRotation - 90 + Vector3.Angle(direction, Vector3.up);
         float dy = Vector3.SignedAngle(transform.forward, direction - Vector3.up * direction.y,Vector3.up);
 
-        Vector3 deltaEuler = new Vector3(dx*xRotatingModifier,dy*yRotatingModifier,0);
+        Vector3 deltaEuler = new Vector3(-dx*xRotatingModifier,dy*yRotatingModifier,0);
 
         unit.RotateLocal(deltaEuler * Time.deltaTime);
     }
@@ -146,6 +147,9 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Attack()
     {
+        if (!active)
+            yield break;
+
         yield return new WaitForSeconds(attackDelay);
         unit.UseItem();
         currentState = State.Chase;
@@ -203,7 +207,7 @@ public class Enemy : MonoBehaviour
         if (tactic == Tactic.Dash || tactic == Tactic.SmartDash)
             unit.Dash(retreatDirection);
 
-        NavMesh.CalculatePath(transform.position, transform.position + retreatDirection * retreatRadius, NavMesh.AllAreas, path);
+        NavMesh.CalculatePath(transform.position, transform.position + retreatDirection, NavMesh.AllAreas, path);
     }
 
     private void SeekWeapon()
@@ -247,7 +251,13 @@ public class Enemy : MonoBehaviour
     private void SeekTarget()
     {
         path.ClearCorners();
-        targetTransform = null;
+        
+        if (targetTransform != null)
+        {
+            NavMesh.CalculatePath(transform.position, targetTransform.position, NavMesh.AllAreas, path);
+            return;
+        }
+        
         Collider[] hits = Physics.OverlapSphere(transform.position, seekRadius);
         foreach (Collider collider in hits)
         {

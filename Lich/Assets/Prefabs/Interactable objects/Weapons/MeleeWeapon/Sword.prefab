@@ -13,7 +13,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 60286296791245820, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: damage
-      value: 4
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 60286296791245820, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: cooldown
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 60286296791245820, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: attackRadius
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 990461951418439850, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: promptMessage
