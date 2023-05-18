@@ -7,6 +7,7 @@ public class Bolt : MonoBehaviour
     public float damage = 5f;
     public float knockback = 1f;
     public float damagingRadius = 1;
+    public float ditanceDamaging = 5f;
 
     private void Start()
     {
@@ -19,7 +20,7 @@ public class Bolt : MonoBehaviour
     {
         Ray ray = new Ray(transform.position, transform.forward);
 
-        RaycastHit[] hits = Physics.SphereCastAll(ray, damagingRadius);
+        RaycastHit[] hits = Physics.SphereCastAll(ray, damagingRadius, ditanceDamaging);
 
         foreach (RaycastHit hit in hits)
         {

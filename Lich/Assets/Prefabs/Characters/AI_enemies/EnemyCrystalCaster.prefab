@@ -51,6 +51,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1515920986430491013, guid: 8c8bd4d04266f92409db133a23d5e4d7, type: 3}
+      propertyPath: breaking
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8749086441898107558, guid: 8c8bd4d04266f92409db133a23d5e4d7, type: 3}
       propertyPath: m_Name
       value: ballLightning

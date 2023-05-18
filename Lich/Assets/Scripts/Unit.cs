@@ -117,8 +117,11 @@ public class Unit : MonoBehaviour
     {
         lifeTime += Time.deltaTime;
 
-        if (dashTimer > 0 && (isGrounded || dashTimer > dashCooldown - dashDuration))
-            dashTimer -= Time.deltaTime;
+        if (dashTimer > 0) 
+            if (isGrounded || dashTimer > dashCooldown - dashDuration)
+                dashTimer -= Time.deltaTime;
+            else dashTimer -= Time.deltaTime*0.5f;
+
 
         if (dashTimer < dashCooldown - dashDuration)
         {
@@ -401,15 +404,11 @@ public class Unit : MonoBehaviour
     private void OnDrawGizmosSelected()
     {         
         Gizmos.color = Color.red; 
-        //if (attackPoint != null)
-        //    Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + normalFloor); 
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, transform.position + normalAllSurfaces); 
     }
-
-
 
     private void OnDeath()
     {
