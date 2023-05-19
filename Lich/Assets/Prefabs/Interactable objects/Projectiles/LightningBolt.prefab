@@ -47,7 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0.5
   knockback: 1000
-  damagingRadius: 1
+  damagingRadius: 0.5
+  ditanceDamaging: 5
 --- !u!114 &-1061846840713940611
 MonoBehaviour:
   m_ObjectHideFlags: 0

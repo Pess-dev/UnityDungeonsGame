@@ -1517,7 +1517,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: 1114a11ef240d8040af245b917a00348, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 5d44edc63dbfc0d4f8ae717b4c72f6e2, type: 2}
 --- !u!114 &8025352528980378991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1536,6 +1536,7 @@ MonoBehaviour:
   architect: {fileID: 0}
   endInteractable: {fileID: 3267263366835858542}
   remainingChunks: 0
+  pastChunk: {fileID: 0}
 --- !u!1001 &124395623133261372
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3984,7 +3985,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6451487810998097006, guid: 0fb2afc1498f5844d8a251af86d1ba9a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 8.390429
+      value: 5.592304
       objectReference: {fileID: 0}
     - target: {fileID: 6451487810998097006, guid: 0fb2afc1498f5844d8a251af86d1ba9a, type: 3}
       propertyPath: m_LocalScale.z
@@ -4000,7 +4001,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6451487810998097006, guid: 0fb2afc1498f5844d8a251af86d1ba9a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.66
+      value: 10.08
       objectReference: {fileID: 0}
     - target: {fileID: 6451487810998097006, guid: 0fb2afc1498f5844d8a251af86d1ba9a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8206,7 +8207,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 110111745054624603, guid: a8e808bda4679bd4d886d23b478743e9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.31
+      value: -8.602
       objectReference: {fileID: 0}
     - target: {fileID: 110111745054624603, guid: a8e808bda4679bd4d886d23b478743e9, type: 3}
       propertyPath: m_LocalPosition.y

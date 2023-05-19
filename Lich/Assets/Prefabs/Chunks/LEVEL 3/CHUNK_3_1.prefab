@@ -1445,6 +1445,7 @@ MonoBehaviour:
   architect: {fileID: 0}
   endInteractable: {fileID: 3267263366835858542}
   remainingChunks: 0
+  pastChunk: {fileID: 0}
 --- !u!1 &9081223122631156537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1510,7 +1511,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 14265
+  m_VersionIndex: 14268
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
