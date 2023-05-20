@@ -22,6 +22,8 @@ Undead, игра создана на игровом движке Unity.
 # Видео
 https://youtu.be/eigmM2blRnw
 
+https://youtu.be/s4fIC3bSOoU
+
 # Скачать
 Google drive
 
