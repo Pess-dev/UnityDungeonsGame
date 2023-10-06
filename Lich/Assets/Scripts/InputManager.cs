@@ -33,7 +33,7 @@ public class InputManager : MonoBehaviour
     {
         control.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
     }
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         control.ProcessLook(onFoot.Look.ReadValue<Vector2>());
     }

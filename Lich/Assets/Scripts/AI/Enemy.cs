@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-
-
     Unit unit;
 
     public float seekRadius = 50f;
@@ -25,6 +23,8 @@ public class Enemy : MonoBehaviour
     public bool active = true;
 
     public float attackDelay = 0.5f;
+
+    public float obstacleJumpDistance = 2f;
 
     public Tactic tactic = Tactic.Simple;
 
@@ -53,7 +53,6 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-
         currentState = State.Idle;
 
         path = new NavMeshPath();
@@ -68,9 +67,8 @@ public class Enemy : MonoBehaviour
         unit.health.death.AddListener(() => { enemyKilled++; });
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        
         switch (currentState)
         {
             case State.Idle:
@@ -104,7 +102,16 @@ public class Enemy : MonoBehaviour
         if (targetTransform != null && active)
         {
             if (path.corners.Length > 1)
+            {
                 MoveUnitTo(path.corners[1]);
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, (path.corners[1] - transform.position).normalized, out hit, obstacleJumpDistance))
+                    if (hit.transform.tag == "Obstacle")
+                        unit.Jump();
+            }
+            else
+                MoveUnitTo(targetTransform.position);
+
             RotateUnitTo(targetTransform.position);
         }
     }
@@ -114,7 +121,7 @@ public class Enemy : MonoBehaviour
 
         if (direction.magnitude < ignoreDistance)
             return;
-        unit.Move(direction.normalized);
+        unit.SetMoveDirection(direction.normalized);
     }
 
     private void RotateUnitTo(Vector3 point)
@@ -139,7 +146,6 @@ public class Enemy : MonoBehaviour
         SeekTarget();
         if (targetTransform == null)
             currentState = State.Idle;
-
     }
 
     private void Idle()

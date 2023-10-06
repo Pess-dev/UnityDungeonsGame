@@ -21,11 +21,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 45563653353145958, guid: 2854617fb38f6ab4b8724a4cb2673de6, type: 3}
       propertyPath: objectsVariants.Array.data[0].probability
-      value: 80
+      value: 95
       objectReference: {fileID: 0}
     - target: {fileID: 45563653353145958, guid: 2854617fb38f6ab4b8724a4cb2673de6, type: 3}
       propertyPath: objectsVariants.Array.data[1].probability
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9202297200199485800, guid: 2854617fb38f6ab4b8724a4cb2673de6, type: 3}
       propertyPath: m_Name

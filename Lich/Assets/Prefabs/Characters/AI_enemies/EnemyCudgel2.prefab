@@ -124,6 +124,10 @@ PrefabInstance:
       value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8026918453816463268, guid: 9652e0bb67d58f848947b21d9b179470, type: 3}
+      propertyPath: maxSpeed
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026918453816463268, guid: 9652e0bb67d58f848947b21d9b179470, type: 3}
       propertyPath: interactDistance
       value: 3
       objectReference: {fileID: 0}

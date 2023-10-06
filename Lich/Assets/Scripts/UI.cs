@@ -36,18 +36,14 @@ public class UI : MonoBehaviour
     private TextMeshProUGUI leaderboardText;
 
     [SerializeField]
-    private Slider volumeSlider;
-    [SerializeField]
-    private Slider sensitivitySlider;
-
-    [SerializeField]
     private Button secondLevel;
     [SerializeField]
     private Button thirdLevel;
 
-
     [SerializeField]
     private Image aim;
+
+    public UnityEvent sliderUpdated;
 
     private void Start()
     {
@@ -58,6 +54,7 @@ public class UI : MonoBehaviour
         player.unitSet.AddListener(SetUnit);
         player.gameplayStateChanged.AddListener(SyncWithGameplayState);
         SyncUI();
+
     }
 
     private void Update()
@@ -169,8 +166,8 @@ public class UI : MonoBehaviour
 
     public void SyncUI()
     {
-        sensitivitySlider.value = Mathf.Clamp01((player.sensitivity - player.minSensitivity) / (player.maxSensitivity - player.minSensitivity));
-        volumeSlider.value = player.volume;
+        player.volumeChanged.Invoke(player.volume);
+        player.sensetivityChanged.Invoke((player.sensitivity - player.minSensitivity) / player.maxSensitivity);
 
         playerNameText.GetComponent<TMP_InputField>().text = player.playerName;
 
@@ -190,16 +187,6 @@ public class UI : MonoBehaviour
             secondLevel.interactable = false;
 
         leaderboardText.text = player.leaderBoardData;
-    }
-
-    public void SetVolume()
-    {
-        player.SetVolume(volumeSlider.value); 
-    }
-
-    public void SetSensitivity()
-    {
-        player.sensitivity = player.minSensitivity + (player.maxSensitivity - player.minSensitivity) * sensitivitySlider.value;
     }
 
     public void ClearProgress()

@@ -79,5 +79,9 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: -1444460858095362738, guid: 98a67b50745d364438573c8b788243d4, type: 3}
+    - target: {fileID: 7400314256446101337, guid: 95a40cea6842b6443aaa97c15ee4b972, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95a40cea6842b6443aaa97c15ee4b972, type: 3}

@@ -63,6 +63,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1800751235717114680, guid: 95a40cea6842b6443aaa97c15ee4b972, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3939865711355918826, guid: 95a40cea6842b6443aaa97c15ee4b972, type: 3}
       propertyPath: m_Name
       value: barrel

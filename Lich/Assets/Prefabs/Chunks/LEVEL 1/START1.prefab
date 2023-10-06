@@ -5196,7 +5196,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "wasd - moving, lmb - attack\nL shift - dash\ne - interact  \nf - throw
-    weapon\nq - switch weapon\nspace - jump\ngood goblin - dead goblin"
+    weapon\nq - switch weapon\nspace - jump\nwhile dashing - immortal\ngood goblin
+    - dead goblin"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5223,8 +5224,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1.96
-  m_fontSizeBase: 1.96
+  m_fontSize: 1.78
+  m_fontSizeBase: 1.78
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5548,7 +5549,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
       propertyPath: m_Shadows.m_Type
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9091351300050507030, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
       propertyPath: m_Layer

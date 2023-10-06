@@ -18,6 +18,7 @@ public class PlayerControl : MonoBehaviour
     public float minSensitivity = 10f;
     public float maxSensitivity = 50f;
     public float sensitivity = 30f;
+    public float rotateInertion = 30f;
 
     public float volume = 1f;
 
@@ -34,6 +35,7 @@ public class PlayerControl : MonoBehaviour
     public float deadscreenDelay = 3f;
 
     public Object firstCutScene;
+    public Object secondCutScene;
 
     public UnityEvent skipEvent;
 
@@ -51,7 +53,8 @@ public class PlayerControl : MonoBehaviour
 
     bool writeProgress = true;
 
-
+    public UnityEvent<float> volumeChanged;
+    public UnityEvent<float> sensetivityChanged;
 
     public enum GameplayState
     {
@@ -59,6 +62,7 @@ public class PlayerControl : MonoBehaviour
         Menu,
         Pause,
         CutScene,
+        EndCutScene
     }
 
     [SerializeField]
@@ -123,18 +127,25 @@ public class PlayerControl : MonoBehaviour
             eye = unit.transform.position;
         else
             eye = unit.cameraPlace.position;
+
         cam.transform.position = eye;
         Quaternion newRotation = unit.transform.rotation;
         newRotation = Quaternion.Euler(newRotation.eulerAngles + Vector3.right * (-unit.xRotation - newRotation.eulerAngles.x));
         cam.transform.rotation = newRotation;
     }
 
+    private Vector3 deltaRotation = Vector3.zero;
+
     public void ProcessLook(Vector2 input)
     {
         if (unit == null)
-            return; 
+            return;
 
-        unit.RotateLocal(Vector3.up * (input.x * Time.deltaTime) * sensitivity + Vector3.right * (input.y * Time.deltaTime) * sensitivity);
+        Vector3 newForward = Vector3.up * (input.x * Time.fixedDeltaTime) * sensitivity + Vector3.right * (input.y * Time.fixedDeltaTime) * sensitivity;
+
+        deltaRotation = Vector3.Lerp(deltaRotation, newForward, rotateInertion * Time.fixedDeltaTime);
+
+        unit.RotateLocal(deltaRotation);
     }
 
     public void ProcessMove(Vector2 input) 
@@ -145,7 +156,7 @@ public class PlayerControl : MonoBehaviour
         Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.x;
         moveDirection.z = input.y;
-        unit.Move(unit.transform.TransformDirection(moveDirection));
+        unit.SetMoveDirection(unit.transform.TransformDirection(moveDirection));
     }
 
     public void Dash(Vector2 input) 
@@ -284,8 +295,6 @@ public class PlayerControl : MonoBehaviour
         yield break;
     }
 
-   
-
     private void SyncWithGameplayState()
     {
         if (architect.currentLevel > reachedLevel)
@@ -325,6 +334,17 @@ public class PlayerControl : MonoBehaviour
 
                     break;
                 }
+            case GameplayState.EndCutScene:
+                {
+                    ToggleCursor(false);
+                    cam.enabled = false;
+
+                    CutScene cs = ((GameObject)Instantiate(secondCutScene)).GetComponent<CutScene>();
+                    cs.end.AddListener(EndGame);
+                    skipEvent.AddListener(cs.EndInvoke);
+
+                    break;
+                }
         }
     }
 
@@ -352,6 +372,7 @@ public class PlayerControl : MonoBehaviour
         unitSet.Invoke();
     }
 
+
     public void StartLevel(int level)
     {
         if (unit != null)
@@ -372,6 +393,13 @@ public class PlayerControl : MonoBehaviour
         architect.StartLevel(level);
 
         unitSet.Invoke();
+    }
+
+    public void EndGame()
+    {
+        architect.DestroyNonPlayerObjects();
+        coroutine = SetGameplayState(GameplayState.Menu);
+        StartCoroutine(coroutine);
     }
 
     public void StartButton()
@@ -432,10 +460,13 @@ public class PlayerControl : MonoBehaviour
 
         architect.DestroyNonPlayerObjects();
 
-        if (writeProgress )
+        if (writeProgress)
             AddToLeaderBoard(true, unitLifetime);
-
-        coroutine = SetGameplayState(GameplayState.Menu);
+        
+      //  if (writeProgress)
+        coroutine = SetGameplayState(GameplayState.EndCutScene);
+      //  else
+      //      coroutine = SetGameplayState(GameplayState.Menu);
         StartCoroutine(coroutine);
     }
     private void Defeat()
@@ -474,6 +505,21 @@ public class PlayerControl : MonoBehaviour
     {
         volume = Mathf.Clamp01(newVolume);
         AudioListener.volume = volume;
+    }
+
+    public void SetSensitivity(float newValue)
+    {
+        sensitivity = minSensitivity + (maxSensitivity - minSensitivity) * newValue;
+    }
+
+    public float GetVolume()
+    {
+        return volume;
+    }
+
+    public float GetSensitivity()
+    {
+        return sensitivity;
     }
 
     private void UpdateLeaderboard()

@@ -41,10 +41,11 @@ public class Unit : MonoBehaviour
     public float jumpForce = 3f;
 
     //Movement
-    public float speed = 1f;
-    public float speedLerp = 0.1f;
-    public float airSpeedLerp = 0.1f;
+    public float maxSpeed = 1f;
+    public float movementForce = 0.1f;
+    public float airMovementForce = 0.1f;
     public float maxFloorAngle = 30;
+    private Vector3 moveDirection = Vector3.zero;
 
     //items
     [SerializeField]
@@ -126,7 +127,7 @@ public class Unit : MonoBehaviour
         if (dashTimer < dashCooldown - dashDuration)
         {
             if (dashing && rb.velocity.magnitude > 0)
-                rb.velocity = (rb.velocity - rb.velocity.y * Vector3.up) * speed / rb.velocity.magnitude + rb.velocity.y * Vector3.up;
+                rb.velocity = (rb.velocity - rb.velocity.y * Vector3.up) * maxSpeed / rb.velocity.magnitude + rb.velocity.y * Vector3.up;
             dashing = false;
             health.mortal = true;
         }
@@ -141,7 +142,6 @@ public class Unit : MonoBehaviour
         if (jumpTimer > 0)
             jumpTimer -= Time.deltaTime; 
 
-        checkGround();
         UpdateAnimation(); 
     }
 
@@ -149,6 +149,12 @@ public class Unit : MonoBehaviour
     {
         MoveItems();
         RotateHead();
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+        checkGround();
     }
 
     private void RotateHead()
@@ -172,27 +178,34 @@ public class Unit : MonoBehaviour
             jumpTimer = jumpCooldown; 
     }
 
-    public void Move(Vector3 moveDirection)
+    public void SetMoveDirection(Vector3 moveDirection)
     {
-        Vector3 newVelocity = moveDirection * speed;
+        this.moveDirection = moveDirection;
+    }
+    
+    public void Move()
+    {
+        Vector3 direction = Vector3.ProjectOnPlane(moveDirection, transform.up);
 
-        if (isGrounded)
+        Vector3 planeVelocity = Vector3.ProjectOnPlane(rb.velocity, transform.up);
+
+        Vector3 addVelocity = direction * movementForce / rb.mass * Time.fixedDeltaTime;
+
+        if ((planeVelocity + addVelocity).magnitude > maxSpeed)
         {
-            newVelocity = Quaternion.FromToRotation(Vector3.up, normalFloor) * newVelocity;
+            addVelocity = (planeVelocity + addVelocity).normalized * maxSpeed - planeVelocity;
         }
 
-
-        newVelocity += rb.velocity.y * Vector3.up;
-
+        if (addVelocity.magnitude == 0)
+        {
+            addVelocity = -planeVelocity.normalized * movementForce / rb.mass * Time.fixedDeltaTime;
+            if (Vector3.Dot(addVelocity + planeVelocity, planeVelocity) < 0) addVelocity = -planeVelocity;
+        }
 
         if (dashing)
             rb.velocity = Vector3.Lerp(rb.velocity, dashVelocity, dashLerp * Time.deltaTime);
         else
-            if (isGrounded)
-                rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, speedLerp * Time.deltaTime);
-            else
-                if (moveDirection.magnitude != 0)
-                    rb.velocity = Vector3.Lerp(rb.velocity, newVelocity, airSpeedLerp * Time.deltaTime);
+            rb.velocity += addVelocity;           
     }
 
     public void RotateLocal(Vector3 deltaEuler)

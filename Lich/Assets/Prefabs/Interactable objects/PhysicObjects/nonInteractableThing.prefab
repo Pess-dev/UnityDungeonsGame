@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: -9000899686540532976}
   m_Layer: 0
   m_Name: nonInteractableThing
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -175,7 +175,7 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3939865711355918826}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Shape: 1
   m_Extents: {x: 0.4, y: 0.5, z: 0.4}
@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 886029972025476604}
   m_Layer: 0
   m_Name: mesh
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
