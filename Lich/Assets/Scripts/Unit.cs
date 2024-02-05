@@ -55,7 +55,7 @@ public class Unit : MonoBehaviour
     public Item firstItem;
     public Item secondItem;
 
-    //drop place transform
+    //drop spawn place transform
     [SerializeField]
     private Transform drop;
 
@@ -121,8 +121,8 @@ public class Unit : MonoBehaviour
         if (dashTimer > 0) 
             if (isGrounded || dashTimer > dashCooldown - dashDuration)
                 dashTimer -= Time.deltaTime;
-            else dashTimer -= Time.deltaTime*0.5f;
-
+            else 
+                dashTimer -= Time.deltaTime*0.5f;
 
         if (dashTimer < dashCooldown - dashDuration)
         {
@@ -223,7 +223,6 @@ public class Unit : MonoBehaviour
             anim.SetBool("walking", false);
 
         anim.SetBool("grounded", isGrounded);
-
 
         if (firstItem != null)
         {
@@ -409,6 +408,7 @@ public class Unit : MonoBehaviour
         normalAllSurfaces.Normalize();
         normalFloor.Normalize();
     }
+
     private void OnCollisionExit(Collision collision)
     {
         int layer = collision.gameObject.layer;
@@ -418,7 +418,6 @@ public class Unit : MonoBehaviour
         normalFloor = Vector3.zero;
         normalAllSurfaces = Vector3.zero;
     }
-
 
     private void OnDrawGizmosSelected()
     {         

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class InputManager : MonoBehaviour
     private PlayerInput.OnFootActions onFoot;
 
     private PlayerControl control;
+
+    
+    [Header("Mobile support")]
+    public Joystick joystick;
+    
 
     void Awake()
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using Unity.VisualScripting;
 
 public class Architect : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Architect : MonoBehaviour
     public float changeDelay = 2f;
 
     public List<Level> levels = new List<Level>();
+
     [System.Serializable]
     public class Level
     {
@@ -23,16 +25,12 @@ public class Architect : MonoBehaviour
         public List<Object> ChunkVariants;
     }
 
-    private GameObject currentLevelGameObject = null;
+    private Chunk currentLevelGameObject = null;
 
     public Unit playerUnit;
 
     public UnityEvent end;
     public UnityEvent LevelChangeStart;
-
-    private void Start()
-    {
-    }
 
     public void NewGame()
     {
@@ -42,6 +40,7 @@ public class Architect : MonoBehaviour
 
     public void StartLevel(int level)
     {
+        //StopCoroutine(coroutine);
         coroutine = SetLevelCoroutine(level);
         StartCoroutine(coroutine);
     }
@@ -53,14 +52,15 @@ public class Architect : MonoBehaviour
             return;
         DestroyNonPlayerObjects();
 
-        currentLevelGameObject = ((GameObject)Instantiate(levels[currentLevel].StartChunk)); 
-        currentLevelGameObject.GetComponent<Chunk>().architect = this;
-        currentLevelGameObject.GetComponent<Chunk>().remainingChunks = levels[currentLevel].ChunkCount;
+        currentLevelGameObject = Instantiate(levels[currentLevel].StartChunk).GetComponent<Chunk>(); 
+        currentLevelGameObject.architect = this;
+        currentLevelGameObject.remainingChunks = levels[currentLevel].ChunkCount;
 
         if (playerUnit != null)
         {
-            playerUnit.transform.position = currentLevelGameObject.GetComponent<Chunk>().playerSpawner.position;
-            playerUnit.transform.rotation = currentLevelGameObject.GetComponent<Chunk>().playerSpawner.rotation;
+            //playerUnit.transform.SetPositionAndRotation(currentLevelGameObject.playerSpawner.position, currentLevelGameObject.playerSpawner.rotation);
+            playerUnit.GetComponent<Rigidbody>().MovePosition(currentLevelGameObject.playerSpawner.position);
+            playerUnit.GetComponent<Rigidbody>().MoveRotation(currentLevelGameObject.playerSpawner.rotation);
             playerUnit.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
@@ -74,8 +74,8 @@ public class Architect : MonoBehaviour
             end.Invoke();
             return;
         }
-        coroutine = SetLevelCoroutine(currentLevel + 1);
-        StartCoroutine(coroutine);
+        
+        StartLevel(currentLevel + 1);
     }
 
     private IEnumerator SetLevelCoroutine(int number)

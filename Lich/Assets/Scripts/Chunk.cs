@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Chunk : MonoBehaviour
 {
-    //begin and end points to spawn new chunks
     public Transform begin;
     public Transform end;
     
@@ -32,7 +31,7 @@ public class Chunk : MonoBehaviour
         {
             return;
         }
-        Object chunkObj = null;
+        Object chunkObj;
         if (remainingChunks == 0)
             chunkObj = architect.GetCurrentLevel().EndChunk;
         else 
@@ -46,11 +45,12 @@ public class Chunk : MonoBehaviour
 
         newChunk.pastChunk = gameObject;
 
+        //???
         if (pastChunk != null)
             Destroy(pastChunk);
     }
 
-    private void MoveBy(Transform obj, Transform by, Transform to)
+    static private void MoveBy(Transform obj, Transform by, Transform to)
     {
         obj.rotation = to.rotation * by.localRotation;
         Vector3 positionOffset = to.position - by.position;

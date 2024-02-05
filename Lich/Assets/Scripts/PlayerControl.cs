@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -98,8 +99,11 @@ public class PlayerControl : MonoBehaviour
         CheckInteractable();
 
         if (unit != null)
-            unitLifetime = unit.GetLifeTime();
+        {
+            unitLifetime = unit.GetLifeTime();    
+        }
     }
+
     private void LateUpdate()
     {
         SyncWithUnit();
@@ -141,9 +145,9 @@ public class PlayerControl : MonoBehaviour
         if (unit == null)
             return;
 
-        Vector3 newForward = Vector3.up * (input.x * Time.fixedDeltaTime) * sensitivity + Vector3.right * (input.y * Time.fixedDeltaTime) * sensitivity;
+        Vector3 newForward = Vector3.up * input.x * sensitivity + Vector3.right * input.y * sensitivity;
 
-        deltaRotation = Vector3.Lerp(deltaRotation, newForward, rotateInertion * Time.fixedDeltaTime);
+        deltaRotation = Vector3.Lerp(deltaRotation, newForward, rotateInertion);
 
         unit.RotateLocal(deltaRotation);
     }
@@ -233,6 +237,9 @@ public class PlayerControl : MonoBehaviour
             Interactable interactable = collision.transform.GetComponentInParent<Interactable>();
 
             if (interactable == null)
+                interactable =  collision.transform.GetComponent<Interactable>();
+            
+            if (interactable == null)
                 continue;
 
             if (!interactable.getActive())
@@ -271,7 +278,6 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-
     private IEnumerator coroutine;
     public IEnumerator SetGameplayState(GameplayState gs)
     {
@@ -295,6 +301,8 @@ public class PlayerControl : MonoBehaviour
         yield break;
     }
 
+//very bad code
+//todo: rewrite this in other script
     private void SyncWithGameplayState()
     {
         if (architect.currentLevel > reachedLevel)
@@ -348,18 +356,12 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    public void StartNewGame()
-    {
-        Enemy.enemyKilled = 0;
-
-        if (unit != null)
-            Destroy(unit);
-
-        writeProgress = true;
+    private void RespawnUnit(){
+         if (unit != null)
+            Destroy(unit.gameObject);
 
         newGame.Invoke();
-
-        unit = ((GameObject)Instantiate(playerUnitPrefab)).GetComponent<Unit>();
+        unit = ((GameObject)Instantiate(playerUnitPrefab,Vector3.zero,Quaternion.identity)).GetComponent<Unit>();
 
         unit.GetComponent<Health>().death.AddListener(Defeat);
 
@@ -367,32 +369,28 @@ public class PlayerControl : MonoBehaviour
 
         architect.playerUnit = unit;
 
-        architect.NewGame();
-
         unitSet.Invoke();
+    }
+
+    public void StartNewGame()
+    {
+        Enemy.enemyKilled = 0;
+
+        writeProgress = true;
+
+        RespawnUnit();
+
+        architect.NewGame();
     }
 
 
     public void StartLevel(int level)
     {
-        if (unit != null)
-            Destroy(unit);
-
         writeProgress = false;
 
-        newGame.Invoke();
-
-        unit = ((GameObject)Instantiate(playerUnitPrefab)).GetComponent<Unit>();
-
-        unit.GetComponent<Health>().death.AddListener(Defeat);
-
-        unit.SetControl();
-
-        architect.playerUnit = unit;
+        RespawnUnit();
 
         architect.StartLevel(level);
-
-        unitSet.Invoke();
     }
 
     public void EndGame()
