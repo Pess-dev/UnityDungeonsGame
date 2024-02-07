@@ -45,7 +45,7 @@ public class Unit : MonoBehaviour
     public float movementForce = 0.1f;
     public float airMovementForce = 0.1f;
     public float maxFloorAngle = 30;
-    private Vector3 moveDirection = Vector3.zero;
+    public Vector3 moveDirection {get; private set;}
 
     //items
     [SerializeField]

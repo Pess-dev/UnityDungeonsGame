@@ -163,15 +163,15 @@ public class PlayerControl : MonoBehaviour
         unit.SetMoveDirection(unit.transform.TransformDirection(moveDirection));
     }
 
-    public void Dash(Vector2 input) 
+    public void Dash() 
     {
         if (unit == null)
             return;
 
-        Vector3 moveDirection = Vector3.zero;
-        moveDirection.x = input.x;
-        moveDirection.z = input.y;
-        unit.Dash(unit.transform.TransformDirection(moveDirection));
+        // Vector3 moveDirection = Vector3.zero;
+        // moveDirection.x = input.x;
+        // moveDirection.z = input.y;
+        unit.Dash(unit.moveDirection);
     }
 
     public void Jump()

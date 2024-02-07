@@ -116,13 +116,22 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OneTap"",
+                    ""type"": ""Button"",
+                    ""id"": ""ab421aec-0736-4449-83b2-77104439b5fd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": ""WASD"",
                     ""id"": ""bab15893-f27a-4a7b-9085-36f073f82009"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -212,7 +221,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""id"": ""2f643bd6-2eb0-4134-bd6d-ec066a3688ef"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""ScaleVector2(x=0,y=0)"",
                     ""groups"": """",
                     ""action"": ""Look"",
                     ""isComposite"": false,
@@ -371,6 +380,28 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Quit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6ef488e-b35b-409c-9dd2-68e3f8211f40"",
+                    ""path"": ""*/{Back}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba948b0a-6be5-46ea-9162-9f019709b76a"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OneTap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -389,6 +420,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_OnFoot_AltFire = m_OnFoot.FindAction("AltFire", throwIfNotFound: true);
         m_OnFoot_Switch = m_OnFoot.FindAction("Switch", throwIfNotFound: true);
         m_OnFoot_Quit = m_OnFoot.FindAction("Quit", throwIfNotFound: true);
+        m_OnFoot_OneTap = m_OnFoot.FindAction("OneTap", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -460,6 +492,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_OnFoot_AltFire;
     private readonly InputAction m_OnFoot_Switch;
     private readonly InputAction m_OnFoot_Quit;
+    private readonly InputAction m_OnFoot_OneTap;
     public struct OnFootActions
     {
         private @PlayerInput m_Wrapper;
@@ -474,6 +507,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @AltFire => m_Wrapper.m_OnFoot_AltFire;
         public InputAction @Switch => m_Wrapper.m_OnFoot_Switch;
         public InputAction @Quit => m_Wrapper.m_OnFoot_Quit;
+        public InputAction @OneTap => m_Wrapper.m_OnFoot_OneTap;
         public InputActionMap Get() { return m_Wrapper.m_OnFoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -513,6 +547,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Quit.started += instance.OnQuit;
             @Quit.performed += instance.OnQuit;
             @Quit.canceled += instance.OnQuit;
+            @OneTap.started += instance.OnOneTap;
+            @OneTap.performed += instance.OnOneTap;
+            @OneTap.canceled += instance.OnOneTap;
         }
 
         private void UnregisterCallbacks(IOnFootActions instance)
@@ -547,6 +584,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Quit.started -= instance.OnQuit;
             @Quit.performed -= instance.OnQuit;
             @Quit.canceled -= instance.OnQuit;
+            @OneTap.started -= instance.OnOneTap;
+            @OneTap.performed -= instance.OnOneTap;
+            @OneTap.canceled -= instance.OnOneTap;
         }
 
         public void RemoveCallbacks(IOnFootActions instance)
@@ -576,5 +616,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnAltFire(InputAction.CallbackContext context);
         void OnSwitch(InputAction.CallbackContext context);
         void OnQuit(InputAction.CallbackContext context);
+        void OnOneTap(InputAction.CallbackContext context);
     }
 }
