@@ -38,7 +38,8 @@ public class Health : MonoBehaviour
     {
         if (mortal)
             HP -= value;
-        hit.Invoke();
+        if (value!=0)
+            hit.Invoke();
         CheckDeath();
     }
 

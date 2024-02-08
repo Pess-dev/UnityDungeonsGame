@@ -77,8 +77,10 @@ public class UI : MonoBehaviour
         uiAnim.SetBool("fade", player.gameplayStateChanging);
         uiAnim.SetBool("prompt", promptText.text != "" ? true : false);
 
-        if (player.unit == null && player.GetGameplayState() == PlayerControl.GameplayState.Game)
+        if (player.unit == null && player.GetGameplayState() == PlayerControl.GameplayState.Game){
             uiAnim.SetBool("dead", true);
+            gameUI.SetActive(false);
+        }
         else
             uiAnim.SetBool("dead", false);
     }

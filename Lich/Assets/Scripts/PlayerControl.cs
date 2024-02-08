@@ -74,7 +74,7 @@ public class PlayerControl : MonoBehaviour
     private void Awake()
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 600;
         LoadData();
         UpdateLeaderboard();
     }

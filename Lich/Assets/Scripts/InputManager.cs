@@ -58,6 +58,7 @@ public class InputManager : MonoBehaviour
     private void FixedUpdate()
     {
         control.ProcessLook(onFoot.Look.ReadValue<Vector2>()+lookInput);
+        lookInput= Vector2.zero;
     }
 
     private void OnEnable()
