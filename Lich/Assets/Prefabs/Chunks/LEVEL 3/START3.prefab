@@ -12853,6 +12853,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: ceiling lamp (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
+      propertyPath: m_Range
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
+      propertyPath: m_Intensity
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
+      propertyPath: m_Lightmapping
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 9091351300050507030, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -13328,6 +13340,18 @@ PrefabInstance:
     - target: {fileID: 8137359146207091371, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
       propertyPath: m_Name
       value: ceiling lamp (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
+      propertyPath: m_Range
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
+      propertyPath: m_Intensity
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
+      propertyPath: m_Lightmapping
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9091351300050507030, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
       propertyPath: m_Layer
@@ -17685,6 +17709,18 @@ PrefabInstance:
     - target: {fileID: 8137359146207091371, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
       propertyPath: m_Name
       value: ceiling lamp (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
+      propertyPath: m_Range
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
+      propertyPath: m_Intensity
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8291809311288087415, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
+      propertyPath: m_Lightmapping
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9091351300050507030, guid: 1d0903786e849304aa696b6e44af5cd2, type: 3}
       propertyPath: m_Layer

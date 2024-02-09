@@ -11,13 +11,12 @@ public class ItemInteractable : Interactable
         item = GetComponent<Item>();
     }
 
-    public override void Interact(Unit user = null)
-    {
+    public override void Interact(Unit user = null){
         base.Interact(user);
         if (user == null)
             return;
         if (item == null)
-            return;
+            return; 
         user.GrabItem(item);
     }
 }

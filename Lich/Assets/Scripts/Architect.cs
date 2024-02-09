@@ -24,6 +24,8 @@ public class Architect : MonoBehaviour
         public int ChunkCount = 1;
         public List<Object> ChunkVariants;
     }
+    
+    private List<Object> usedChunks = new List<Object>();
 
     private Chunk currentLevelGameObject = null;
 
@@ -51,6 +53,8 @@ public class Architect : MonoBehaviour
         if (currentLevel >= levels.Count)
             return;
         DestroyNonPlayerObjects();
+
+        usedChunks.Clear();
 
         currentLevelGameObject = Instantiate(levels[currentLevel].StartChunk).GetComponent<Chunk>(); 
         currentLevelGameObject.architect = this;
@@ -90,10 +94,17 @@ public class Architect : MonoBehaviour
     public Object GetRandomChunk()
     {
         List<Object> variants = new List<Object>(levels[currentLevel].ChunkVariants);
+        List<Object> newVariants = new List<Object>();
+        foreach (Object obj in variants){
+            if (!usedChunks.Contains(obj))
+                newVariants.Add(obj);
+        }
 
-        int randomLevel = Random.Range(0, variants.Count);
 
-        return variants[randomLevel];
+        int randomLevel = Random.Range(0, newVariants.Count);
+
+        usedChunks.Add(newVariants[randomLevel]);
+        return newVariants[randomLevel];
     }
 
 

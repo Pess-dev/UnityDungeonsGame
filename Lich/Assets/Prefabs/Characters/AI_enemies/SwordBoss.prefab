@@ -1019,12 +1019,16 @@ PrefabInstance:
       value: Sword
       objectReference: {fileID: 0}
     - target: {fileID: 5835700771010237693, guid: 627098c903e4b894f8b8cdb8a4c98637, type: 3}
-      propertyPath: cooldown
+      propertyPath: damage
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5835700771010237693, guid: 627098c903e4b894f8b8cdb8a4c98637, type: 3}
+      propertyPath: cooldown
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5835700771010237693, guid: 627098c903e4b894f8b8cdb8a4c98637, type: 3}
       propertyPath: attackRadius
-      value: 3
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

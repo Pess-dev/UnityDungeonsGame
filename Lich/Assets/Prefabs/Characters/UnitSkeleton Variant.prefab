@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 338364550505184569, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
@@ -122,6 +123,10 @@ PrefabInstance:
     - target: {fileID: 1314515707455558729, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: dashEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1747911588983510785, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1799091036347020611, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_Mesh
@@ -243,6 +248,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: -3981065676529349206, guid: 5e5774e5735480042abee59e8cd16086, type: 3}
+    - target: {fileID: 3951836267750652649, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4210058090398888135, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -386,6 +395,10 @@ PrefabInstance:
     - target: {fileID: 7141330991616698613, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7264636287801554942, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.056
       objectReference: {fileID: 0}
     - target: {fileID: 7722001400427726511, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
       propertyPath: m_Layer
@@ -632,6 +645,9 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f3bbc5d238513b46b42f3263f0a3842, type: 3}
 --- !u!114 &2409327600949208543 stripped
 MonoBehaviour:

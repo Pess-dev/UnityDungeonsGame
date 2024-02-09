@@ -6953,7 +6953,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8092630851456612352, guid: a8e808bda4679bd4d886d23b478743e9, type: 3}
       propertyPath: m_Range
-      value: 69.47
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092630851456612352, guid: a8e808bda4679bd4d886d23b478743e9, type: 3}
+      propertyPath: m_Intensity
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092630851456612352, guid: a8e808bda4679bd4d886d23b478743e9, type: 3}
+      propertyPath: m_Lightmapping
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7179,7 +7187,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8092630851456612352, guid: a8e808bda4679bd4d886d23b478743e9, type: 3}
       propertyPath: m_Range
-      value: 69.47
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092630851456612352, guid: a8e808bda4679bd4d886d23b478743e9, type: 3}
+      propertyPath: m_Intensity
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092630851456612352, guid: a8e808bda4679bd4d886d23b478743e9, type: 3}
+      propertyPath: m_Lightmapping
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

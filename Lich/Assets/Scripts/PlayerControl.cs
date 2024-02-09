@@ -56,6 +56,7 @@ public class PlayerControl : MonoBehaviour
 
     public UnityEvent<float> volumeChanged;
     public UnityEvent<float> sensetivityChanged;
+    public UnityEvent<bool> interactableVisibleChanged;
 
     public enum GameplayState
     {
@@ -74,13 +75,15 @@ public class PlayerControl : MonoBehaviour
     private void Awake()
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 600;
+        Application.targetFrameRate = 60;
         LoadData();
         UpdateLeaderboard();
     }
 
     private void Start()
     {   
+        
+        interactableVisibleChanged.Invoke(false);
         architect.end.AddListener(Victory);
         architect.changeDelay = fadeDelay;
         architect.DestroyNonPlayerObjects();
@@ -232,6 +235,8 @@ public class PlayerControl : MonoBehaviour
         if (visibleInteractable != null)
             visibleInteractable.setOutline(false);
 
+        Interactable old = visibleInteractable;
+
         visibleInteractable = null;
 
         foreach (Collider collision in collisions)
@@ -269,6 +274,11 @@ public class PlayerControl : MonoBehaviour
             visibleInteractable.setOutline(true);
             visibleInteractable.Viewed();
         }
+
+        if (old == null && visibleInteractable != null)
+            interactableVisibleChanged.Invoke(true);
+        else if (old != null && visibleInteractable == null)
+            interactableVisibleChanged.Invoke(false);
 
     }
 

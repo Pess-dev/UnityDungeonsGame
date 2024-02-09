@@ -287,8 +287,9 @@ public class Unit : MonoBehaviour
         if (!item.GetGrabbable())
             return;
         DiscardItem();
-
+        
         firstItem = item;
+        firstItem.gameObject.GetComponentInChildren<MeshRenderer>().gameObject.layer = 8;
         item.Grab(this);
     }
 
@@ -296,7 +297,7 @@ public class Unit : MonoBehaviour
     {
         if (firstItem == null)
             return;
-
+        firstItem.gameObject.GetComponentInChildren<MeshRenderer>().gameObject.layer = 7;
         firstItem.Release();
         firstItem = null;
     }

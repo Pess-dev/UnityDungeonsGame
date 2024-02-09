@@ -92,6 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 818941239778299991}
   - component: {fileID: 7934120553369918221}
+  - component: {fileID: 7369013577424404871}
   m_Layer: 0
   m_Name: Point Light (2)
   m_TagString: Untagged
@@ -108,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 1531335326648060455}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.43, y: 10.06, z: 2.83}
+  m_LocalPosition: {x: 0.43, y: 8.35, z: 4.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -125,9 +126,9 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.6603774, g: 0.65050584, b: 0.40806338, a: 1}
-  m_Intensity: 2.58
-  m_Range: 40
+  m_Color: {r: 0.9972153, g: 1, b: 0.7688679, a: 1}
+  m_Intensity: 20
+  m_Range: 100
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -167,8 +168,8 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 2
   m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_AreaSize: {x: 11.062738, y: 12.756536}
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -176,6 +177,29 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &7369013577424404871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1531335326648060455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &2400631410570172790
 GameObject:
   m_ObjectHideFlags: 0
@@ -4610,6 +4634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3800425064937947690}
   - component: {fileID: 468863215645066438}
+  - component: {fileID: 8302038761536657068}
   m_Layer: 0
   m_Name: Point Light (1)
   m_TagString: Untagged
@@ -4626,7 +4651,7 @@ Transform:
   m_GameObject: {fileID: 7916633759059800760}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.17, y: 9.37, z: 18.14}
+  m_LocalPosition: {x: -0.17, y: 7.35, z: 15.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4643,9 +4668,9 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.6603774, g: 0.65050584, b: 0.40806338, a: 1}
-  m_Intensity: 2.58
-  m_Range: 40
+  m_Color: {r: 0.9972153, g: 1, b: 0.7688679, a: 1}
+  m_Intensity: 20
+  m_Range: 100
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -4685,8 +4710,8 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 2
   m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_AreaSize: {x: 11.062738, y: 12.756536}
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -4694,6 +4719,29 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &8302038761536657068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7916633759059800760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1001 &28938248977677977
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5163,8 +5211,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 599268855991133013}
   m_SourcePrefab: {fileID: 100100000, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+--- !u!1 &1013052516640098701 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+  m_PrefabInstance: {fileID: 299662002570767991}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &599268855991133013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013052516640098701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!4 &1013052518221927960 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 731703982414067823, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
@@ -5927,8 +6006,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8556301463111833489}
   m_SourcePrefab: {fileID: 100100000, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+--- !u!1 &3095477562120155723 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+  m_PrefabInstance: {fileID: 2365182089916224945}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8556301463111833489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3095477562120155723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!4 &3095477563021454814 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 731703982414067823, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
@@ -7346,13 +7456,44 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5554235686301082177}
   m_SourcePrefab: {fileID: 100100000, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
 --- !u!4 &6820168450632357254 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 731703982414067823, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
   m_PrefabInstance: {fileID: 6089310860260666857}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6820168451668855315 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+  m_PrefabInstance: {fileID: 6089310860260666857}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5554235686301082177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6820168451668855315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1001 &6220488177629086989
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7514,8 +7655,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2300307530654525460}
   m_SourcePrefab: {fileID: 100100000, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+--- !u!1 &6723879812470536658 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+  m_PrefabInstance: {fileID: 6302662291103309352}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2300307530654525460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6723879812470536658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!4 &6723879813313013319 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 731703982414067823, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
@@ -8957,13 +9129,44 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3552268605989127186}
   m_SourcePrefab: {fileID: 100100000, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
 --- !u!4 &7433814014238925783 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 731703982414067823, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
   m_PrefabInstance: {fileID: 7858146452890934200}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7433814014880185410 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+  m_PrefabInstance: {fileID: 7858146452890934200}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3552268605989127186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7433814014880185410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1001 &8074756617964537343
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9729,8 +9932,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1068070182065800429}
   m_SourcePrefab: {fileID: 100100000, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+--- !u!1 &8164798882918175878 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 731703983458985978, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
+  m_PrefabInstance: {fileID: 8892561657056179068}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1068070182065800429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164798882918175878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!4 &8164798883752364819 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 731703982414067823, guid: 35734de379d861342bcae3f83dc208a7, type: 3}
