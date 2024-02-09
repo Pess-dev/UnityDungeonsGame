@@ -1,22 +1,26 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
-public class VirtualTouchZone : MonoBehaviour, IDragHandler, IPointerDownHandler
-{
-    [System.Serializable]
-    public class Event : UnityEvent<Vector2> { }
+public class VirtualTouchZone : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
+{   
+    private float tapTimer;
 
     [Header("Rect Reference")]
     public RectTransform containerRect;
 
     [Header("Output")]
-    public Event touchZoneOutputEvent;
+    public UnityEvent<Vector2> touchZoneOutputEvent;
+    public UnityEvent tapOutputEvent;
 
-    public Vector2 delta;
+    public Vector2 delta{get; private set;}
 
     private Vector2 previousPosition;
 
+    void Update(){
+        tapTimer = tapTimer>0?tapTimer-Time.deltaTime:0;
+    }
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -26,12 +30,18 @@ public class VirtualTouchZone : MonoBehaviour, IDragHandler, IPointerDownHandler
         // Сохраняем текущее положение для использования в следующем кадре
         previousPosition = eventData.position;
         touchZoneOutputEvent.Invoke(delta);
-        print(delta);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {   
-        print("begin drag");
         previousPosition = eventData.position;
+        tapTimer = InputSystem.settings.defaultTapTime;
+    }
+    
+    public void OnPointerUp(PointerEventData eventData)
+    {   
+        previousPosition = eventData.position;
+        if (tapTimer > 0)
+            tapOutputEvent.Invoke();
     }
 }

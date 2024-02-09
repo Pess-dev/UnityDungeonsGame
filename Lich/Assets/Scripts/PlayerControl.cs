@@ -167,11 +167,13 @@ public class PlayerControl : MonoBehaviour
     {
         if (unit == null)
             return;
-
-        // Vector3 moveDirection = Vector3.zero;
-        // moveDirection.x = input.x;
-        // moveDirection.z = input.y;
-        unit.Dash(unit.moveDirection);
+        Vector3 direction = Vector3.zero;
+        if (unit.moveDirection == Vector3.zero)
+            direction = transform.forward;
+        else
+            direction = unit.moveDirection;
+        direction.y = 0;
+        unit.Dash(direction);
     }
 
     public void Jump()

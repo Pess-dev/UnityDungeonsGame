@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler, IPointerMoveHandler, IPointerExitHandler
 {
     [System.Serializable]
     public class Event : UnityEvent<Vector2> { }
@@ -32,15 +32,15 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
             UpdateHandleRectPosition(Vector2.zero);
         }
     }
+    public void RejectJoystick(){
+        OutputPointerEventValue(Vector2.zero);
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        OnDrag(eventData);
+        if(handleRect)
+        {
+             UpdateHandleRectPosition(Vector2.zero);
+        }
     }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-
+    public void UpdateJoystick(PointerEventData eventData){
         RectTransformUtility.ScreenPointToLocalPointInRectangle(containerRect, eventData.position, eventData.pressEventCamera, out Vector2 position);
         
         position = ApplySizeDelta(position);
@@ -55,18 +55,33 @@ public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler,
         {
             UpdateHandleRectPosition(clampedPosition * joystickRange);
         }
-        
     }
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        OutputPointerEventValue(Vector2.zero);
-
-        if(handleRect)
-        {
-             UpdateHandleRectPosition(Vector2.zero);
-        }
+    public void OnPointerDown(PointerEventData eventData){
+        UpdateJoystick(eventData);
     }
+    public void OnDrag(PointerEventData eventData){
+        UpdateJoystick(eventData);
+    }
+
+    public void OnPointerMove(PointerEventData eventData){
+        UpdateJoystick(eventData);
+    }
+
+    public void OnDrop(PointerEventData eventData){
+        RejectJoystick();
+    }
+
+    public void OnPointerExit(PointerEventData eventData){
+        RejectJoystick();
+    }
+
+    public void OnPointerUp(PointerEventData eventData){   
+        RejectJoystick();
+    }
+
+
+
 
     private void OutputPointerEventValue(Vector2 pointerPosition)
     {
