@@ -9,7 +9,7 @@ public class Item : MonoBehaviour
      
     protected float timer = 0f;
 
-    public float breaking = 0f;
+    //public float breaking = 0f;
 
     [SerializeField]
     protected bool grabbable = false;

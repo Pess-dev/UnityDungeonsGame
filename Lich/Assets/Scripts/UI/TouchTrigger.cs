@@ -36,6 +36,15 @@ public class TouchTrigger : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         SetActiveHandle(false);
     }
 
+    public void OnDisable(){
+        print("up");
+        SetActiveHandle(false);
+    }
+
+    // public override void SetActive(bool value){
+
+    // }
+
     private void SetActiveHandle(bool active){
         handleCanvasGroup.alpha = active ? 1f : 0f;
         handleCanvasGroup.blocksRaycasts = active? true : false;

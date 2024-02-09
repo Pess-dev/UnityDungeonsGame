@@ -42,7 +42,7 @@ public class Cast : Item
         if (castObject == null)
             return;
 
-        health.Damage(breaking);
+        //health.Damage(breaking);
 
         GameObject spawned = ((GameObject)Instantiate(castObject, castPlace.position, castPlace.rotation));
 

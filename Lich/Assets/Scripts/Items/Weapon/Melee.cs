@@ -51,7 +51,7 @@ public class Melee : Item
         if (timer > 0)
             return;
 
-        health.Damage(breaking);
+        //health.Damage(breaking);
 
         attackDurationTimer = attackDuration; 
         timer = cooldown;
