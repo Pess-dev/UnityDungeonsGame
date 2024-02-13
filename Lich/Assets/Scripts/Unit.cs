@@ -289,7 +289,8 @@ public class Unit : MonoBehaviour
         DiscardItem();
         
         firstItem = item;
-        firstItem.gameObject.GetComponentInChildren<MeshRenderer>().gameObject.layer = 8;
+        foreach (MeshRenderer obj in firstItem.gameObject.GetComponentsInChildren<MeshRenderer>())
+            obj.gameObject.layer = 8;
         item.Grab(this);
     }
 
@@ -297,7 +298,8 @@ public class Unit : MonoBehaviour
     {
         if (firstItem == null)
             return;
-        firstItem.gameObject.GetComponentInChildren<MeshRenderer>().gameObject.layer = 7;
+        foreach (MeshRenderer obj in firstItem.gameObject.GetComponentsInChildren<MeshRenderer>())
+            obj.gameObject.layer = 7;
         firstItem.Release();
         firstItem = null;
     }
