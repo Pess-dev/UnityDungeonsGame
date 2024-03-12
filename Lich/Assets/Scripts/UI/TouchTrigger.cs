@@ -21,7 +21,7 @@ public class TouchTrigger : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     }
 
     public void OnPointerDown(PointerEventData eventData){
-        print("down");
+       // print("down");
         SetActiveHandle(true);
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(containerRect, eventData.position, eventData.pressEventCamera, out Vector2 position);
@@ -32,12 +32,12 @@ public class TouchTrigger : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     }
 
     public void OnPointerUp(PointerEventData eventData){
-        print("up");
+        //print("up");
         SetActiveHandle(false);
     }
 
     public void OnDisable(){
-        print("up");
+        //print("up");
         SetActiveHandle(false);
     }
 

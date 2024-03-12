@@ -193,6 +193,7 @@ public class UI : MonoBehaviour
 
     public void ClearProgress()
     {
+        SSTools.ShowMessage("Progress cleared", SSTools.Position.bottom, SSTools.Time.oneSecond);
         player.leaderBoardData = "";
         player.reachedLevel = 0;
         SyncProgress();
