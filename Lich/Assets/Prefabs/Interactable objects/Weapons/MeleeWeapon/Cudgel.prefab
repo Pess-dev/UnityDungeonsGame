@@ -5,11 +5,20 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -4709158677115536933, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: promptMessage
       value: Cudgel, the weapon of the dim-witted...
+      objectReference: {fileID: 0}
+    - target: {fileID: 60286296791245820, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: cooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 60286296791245820, guid: c73087c764a074f409925af7ad34d891, type: 3}
+      propertyPath: attackAngle
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 990461951418439850, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: promptMessage
@@ -160,4 +169,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -8685952482060562060, guid: 98a67b50745d364438573c8b788243d4, type: 3}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c73087c764a074f409925af7ad34d891, type: 3}

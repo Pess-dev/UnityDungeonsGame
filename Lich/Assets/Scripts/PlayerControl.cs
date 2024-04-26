@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -71,6 +72,12 @@ public class PlayerControl : MonoBehaviour
     private GameplayState gameplayState = GameplayState.Menu;
 
     public bool gameplayStateChanging = false;
+
+    private IEnumerator targetCoroutine;
+    [SerializeField]
+    private float targetRotationSpeed = 1;
+    [SerializeField]
+    private float targetRotationTime = 0.5f;
 
     private void Awake()
     {
@@ -193,6 +200,28 @@ public class PlayerControl : MonoBehaviour
             return;
 
         unit.UseItem();
+
+        //starting a coroutine to look at nearest enemy
+        Transform enemy = GetNearestEnemy();
+        if (enemy != null)
+            StartCoroutine(RotateToTarget(enemy, targetRotationSpeed, targetRotationTime));
+
+    }
+
+    public IEnumerator RotateToTarget(Transform target, float speed, float time){
+        while (time > 0){
+            if (target == null)
+                break;
+            time -= Time.deltaTime;
+
+            Vector3 rotationAngles = Vector3.up*Vector3.SignedAngle(Vector3.ProjectOnPlane(transform.forward,Vector3.up), Vector3.ProjectOnPlane(target.position - transform.position, Vector3.up), Vector3.up) 
+            - Vector3.right*Vector3.SignedAngle(Vector3.ProjectOnPlane(transform.forward,transform.right), Vector3.ProjectOnPlane(target.position - transform.position,transform.right), transform.right);
+            
+            Debug.Log(rotationAngles);
+            rotationAngles *= Time.deltaTime*speed;
+            unit.RotateLocal( Vector3.up*100*Time.deltaTime);
+            yield return null;
+        }
     }
 
     public void Interact()
@@ -223,6 +252,35 @@ public class PlayerControl : MonoBehaviour
     public void Skip()
     {
         skipEvent.Invoke();
+    }
+
+    Transform GetNearestEnemy()
+    {
+        if (unit == null)
+            return null;
+        
+        Collider[] collisions = Physics.OverlapSphere(unit.cameraPlace.position, unit.interactDistance);
+
+        Transform nearestEnemy = null;
+
+        foreach (Collider collision in collisions)
+        {
+            Unit unit = collision.transform.GetComponentInParent<Unit>();
+            if (unit == null) 
+                continue;
+            if (Vector3.Dot(collision.transform.position - cam.transform.position, cam.transform.forward) <= 0)
+                continue;
+            if (unit.side != Unit.Team.Goblin)
+                continue;
+            if (nearestEnemy == null)
+                nearestEnemy = unit.transform;
+            else
+            {
+                if ((unit.transform.position - cam.transform.position).sqrMagnitude < (nearestEnemy.position - cam.transform.position).sqrMagnitude)
+                    nearestEnemy = unit.transform;
+            }
+        }
+        return nearestEnemy;
     }
 
     void CheckInteractable()
@@ -313,8 +371,7 @@ public class PlayerControl : MonoBehaviour
         yield break;
     }
 
-//very bad code
-//todo: rewrite this in other script
+//lock stock and two smoking barrels
     private void SyncWithGameplayState()
     {
         if (architect.currentLevel > reachedLevel)

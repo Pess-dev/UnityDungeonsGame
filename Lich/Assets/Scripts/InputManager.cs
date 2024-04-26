@@ -70,7 +70,6 @@ public class InputManager : MonoBehaviour
         onFoot.Disable();
     }
 
-
     public void SetLookDelta(Vector2 delta){
         lookInput = delta;
     }

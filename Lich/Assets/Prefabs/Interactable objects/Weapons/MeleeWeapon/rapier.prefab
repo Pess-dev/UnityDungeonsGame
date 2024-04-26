@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 60286296791245820, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: cooldown
-      value: 0.8
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 60286296791245820, guid: c73087c764a074f409925af7ad34d891, type: 3}
       propertyPath: attackRadius

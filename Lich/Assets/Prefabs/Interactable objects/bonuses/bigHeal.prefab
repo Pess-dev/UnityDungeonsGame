@@ -143,7 +143,7 @@ MonoBehaviour:
   viewed:
     m_PersistentCalls:
       m_Calls: []
-  hpAdd: 3
+  hpAdd: 6
 --- !u!82 &8325061441247560969
 AudioSource:
   m_ObjectHideFlags: 0

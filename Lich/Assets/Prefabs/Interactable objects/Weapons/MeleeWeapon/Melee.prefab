@@ -187,7 +187,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 1
-  breaking: 0
   grabbable: 1
   grab: {fileID: 6044087564415457690}
   idleAnimationNumber: 1
@@ -228,7 +227,7 @@ MonoBehaviour:
   attackDelay: 0.1
   damage: 1
   attackRadius: 2
-  attackAngle: 25
+  attackAngle: 45
 --- !u!114 &2722680650212255435
 MonoBehaviour:
   m_ObjectHideFlags: 0

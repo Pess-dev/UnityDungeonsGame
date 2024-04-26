@@ -156,11 +156,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  damage: 1.5
+  damage: 3
   lifetime: 10
   knockback: 200
   velocity: {x: 0, y: 0, z: 0}
-  damagingRadius: 1
+  damagingRadius: 2
 --- !u!114 &1182637991692451277
 MonoBehaviour:
   m_ObjectHideFlags: 0

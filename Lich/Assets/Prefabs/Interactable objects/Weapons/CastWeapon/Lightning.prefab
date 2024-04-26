@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 928734647838395654, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
@@ -13,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
       propertyPath: cooldown
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2804618011789301308, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
       propertyPath: castObject
@@ -140,6 +141,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 5e591e1f95e4c5244864089ce1e66497, type: 2}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28d233a3e6f52ec4aa06fd01b8a3a04c, type: 3}
 --- !u!114 &6630288322009015944 stripped
 MonoBehaviour:
