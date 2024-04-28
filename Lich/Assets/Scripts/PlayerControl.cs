@@ -20,7 +20,6 @@ public class PlayerControl : MonoBehaviour
     public float minSensitivity = 10f;
     public float maxSensitivity = 50f;
     public float sensitivity = 30f;
-    public float rotateInertion = 30f;
 
     public float volume = 1f;
 
@@ -135,20 +134,18 @@ public class PlayerControl : MonoBehaviour
             return; 
         }
 
-        Vector3 eye;
+        Vector3 eyePosition;
 
         if (unit.cameraPlace == null)
-            eye = unit.transform.position;
+            eyePosition = unit.transform.position;
         else
-            eye = unit.cameraPlace.position;
+            eyePosition = unit.cameraPlace.position;
 
-        cam.transform.position = eye;
+        cam.transform.position = eyePosition;
         Quaternion newRotation = unit.transform.rotation;
         newRotation = Quaternion.Euler(newRotation.eulerAngles + Vector3.right * (-unit.xRotation - newRotation.eulerAngles.x));
         cam.transform.rotation = newRotation;
     }
-
-    private Vector3 deltaRotation = Vector3.zero;
 
     public void ProcessLook(Vector2 input)
     {
@@ -157,9 +154,7 @@ public class PlayerControl : MonoBehaviour
 
         Vector3 newForward = Vector3.up * input.x * sensitivity + Vector3.right * input.y * sensitivity;
 
-        deltaRotation = Vector3.Lerp(deltaRotation, newForward, rotateInertion);
-
-        unit.RotateLocal(deltaRotation);
+        unit.RotateLocal(newForward);
     }
 
     public void ProcessMove(Vector2 input) 
@@ -204,8 +199,12 @@ public class PlayerControl : MonoBehaviour
         //starting a coroutine to look at nearest enemy
         Transform enemy = GetNearestEnemy();
         if (enemy != null)
-            StartCoroutine(RotateToTarget(enemy, targetRotationSpeed, targetRotationTime));
-
+        {
+            if (targetCoroutine != null)
+            StopCoroutine(targetCoroutine);
+            targetCoroutine = RotateToTarget(enemy, targetRotationSpeed, targetRotationTime);
+            StartCoroutine(targetCoroutine);
+        }
     }
 
     public IEnumerator RotateToTarget(Transform target, float speed, float time){
@@ -214,12 +213,22 @@ public class PlayerControl : MonoBehaviour
                 break;
             time -= Time.deltaTime;
 
-            Vector3 rotationAngles = Vector3.up*Vector3.SignedAngle(Vector3.ProjectOnPlane(transform.forward,Vector3.up), Vector3.ProjectOnPlane(target.position - transform.position, Vector3.up), Vector3.up) 
-            - Vector3.right*Vector3.SignedAngle(Vector3.ProjectOnPlane(transform.forward,transform.right), Vector3.ProjectOnPlane(target.position - transform.position,transform.right), transform.right);
-            
-            Debug.Log(rotationAngles);
-            rotationAngles *= Time.deltaTime*speed;
-            unit.RotateLocal( Vector3.up*100*Time.deltaTime);
+            Vector3 targetEuler = Quaternion.LookRotation(target.position - cam.transform.position, Vector3.up).eulerAngles;
+
+            float yRotation = targetEuler.y - cam.transform.rotation.eulerAngles.y;
+            float xRotation = -targetEuler.x + cam.transform.rotation.eulerAngles.x;
+            if (xRotation > 180)
+                xRotation -= 360;
+            if (yRotation > 180) 
+                yRotation -= 360;
+            if (xRotation < -180)
+                xRotation += 360;
+            if (yRotation < -180)
+                yRotation += 360;
+            //Debug.Log($"yRotation: {yRotation}, xRotation: {xRotation}, time left: {time}");
+            yRotation*=Time.deltaTime*speed;
+            xRotation*=Time.deltaTime*speed;
+            unit.RotateLocal(new Vector3(xRotation, yRotation, 0));
             yield return null;
         }
     }
@@ -273,11 +282,11 @@ public class PlayerControl : MonoBehaviour
             if (unit.side != Unit.Team.Goblin)
                 continue;
             if (nearestEnemy == null)
-                nearestEnemy = unit.transform;
+                nearestEnemy = unit.Head;
             else
             {
-                if ((unit.transform.position - cam.transform.position).sqrMagnitude < (nearestEnemy.position - cam.transform.position).sqrMagnitude)
-                    nearestEnemy = unit.transform;
+                if ((unit.Head.position - cam.transform.position).sqrMagnitude < (nearestEnemy.position - cam.transform.position).sqrMagnitude)
+                    nearestEnemy = unit.Head;
             }
         }
         return nearestEnemy;

@@ -210,7 +210,7 @@ public class Unit : MonoBehaviour
 
     public void RotateLocal(Vector3 deltaEuler)
     {
-        transform.Rotate(Vector3.up * deltaEuler.y);
+        rb.MoveRotation(Quaternion.Euler(rb.rotation.eulerAngles + Vector3.up * deltaEuler.y));
         xRotation += deltaEuler.x;
         xRotation = Mathf.Clamp(xRotation, -60f, 60f);
     }
