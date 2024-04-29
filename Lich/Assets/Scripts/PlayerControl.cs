@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.InputSystem;
-using Unity.VisualScripting;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -197,19 +196,30 @@ public class PlayerControl : MonoBehaviour
         unit.UseItem();
 
         //starting a coroutine to look at nearest enemy
-        Transform enemy = GetNearestEnemy();
-        if (enemy != null)
-        {
-            if (targetCoroutine != null)
-            StopCoroutine(targetCoroutine);
-            targetCoroutine = RotateToTarget(enemy, targetRotationSpeed, targetRotationTime);
-            StartCoroutine(targetCoroutine);
+        Melee melee = unit.firstItem.GetComponent<Melee>();
+        Item item = unit.firstItem.GetComponent<Item>();
+        if (item != null){
+            float distance = unit.interactDistance + (item.transform.position-cam.transform.position).magnitude;
+
+            if (melee != null)
+                distance = melee.attackRadius + (item.transform.position-cam.transform.position).magnitude;
+
+            Transform enemy = GetNearestEnemy(distance);
+            if (enemy != null)
+            {
+                if (targetCoroutine != null)
+                StopCoroutine(targetCoroutine);
+                targetCoroutine = RotateToTarget(enemy, targetRotationSpeed, targetRotationTime, distance);
+                StartCoroutine(targetCoroutine);
+            }
         }
     }
 
-    public IEnumerator RotateToTarget(Transform target, float speed, float time){
+    public IEnumerator RotateToTarget(Transform target, float speed, float time, float distance){
         while (time > 0){
             if (target == null)
+                break;
+            if (Vector3.Distance(target.position, cam.transform.position) > distance)
                 break;
             time -= Time.deltaTime;
 
@@ -263,12 +273,12 @@ public class PlayerControl : MonoBehaviour
         skipEvent.Invoke();
     }
 
-    Transform GetNearestEnemy()
+    Transform GetNearestEnemy(float distance)
     {
         if (unit == null)
             return null;
         
-        Collider[] collisions = Physics.OverlapSphere(unit.cameraPlace.position, unit.interactDistance);
+        Collider[] collisions = Physics.OverlapSphere(unit.cameraPlace.position, distance);
 
         Transform nearestEnemy = null;
 
@@ -319,7 +329,9 @@ public class PlayerControl : MonoBehaviour
             if (!interactable.getActive())
                 continue;
 
-            if (Vector3.Angle(collision.transform.position - cam.transform.position, cam.transform.forward) >= interactionAngle)
+            Vector3 camOffsetPos = cam.transform.position - Vector3.ProjectOnPlane(cam.transform.forward,Vector3.up).normalized*1.0f;
+
+            if (Vector3.Angle(collision.transform.position - camOffsetPos, cam.transform.forward) >= interactionAngle)
                 continue;
 
             if (visibleInteractable == null)
