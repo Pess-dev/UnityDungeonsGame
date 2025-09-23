@@ -9,6 +9,11 @@ Undead, игра создана на игровом движке Unity.
 В процессе прохождения появляются случайные комнаты с случайными противниками и предметами, что позволяет разнообразить забеги.
 
 # Скриншоты
+<img width="2400" height="1080" alt="Screenshot_20250923-224623" src="https://github.com/user-attachments/assets/e0705bf5-0810-43b0-847e-341eb15bde3e" />
+<img width="2400" height="1080" alt="Screenshot_20250923-224642" src="https://github.com/user-attachments/assets/02d11683-e3f9-49f9-a546-7a733efbe1f7" />
+<img width="2400" height="1080" alt="Screenshot_20250923-224815" src="https://github.com/user-attachments/assets/5e125100-e434-41b3-941c-638375a34263" />
+
+
 ![Screenshot_1](/Screenshots/screenshot1.png)
 ![Screenshot_2](/Screenshots/screenshot2.png)
 ![Screenshot_3](/Screenshots/screenshot3.png)
